@@ -88,9 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                         LoginResponse loginResponse = mapper.readValue(responseBody, LoginResponse.class);
                         runOnUiThread(() -> {
 
-                            // Rediriger vers le Dashboard (ou l'écran principal)
-                            //Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                            //startActivity(intent);
+
                         });
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
