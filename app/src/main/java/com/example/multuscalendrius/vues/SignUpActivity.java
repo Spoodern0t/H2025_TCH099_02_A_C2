@@ -11,9 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.multuscalendrius.R;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -29,7 +31,9 @@ public class SignUpActivity extends AppCompatActivity {
     private TextView textViewLogin;
     private OkHttpClient client;
     private ObjectMapper objectMapper;
-    private static final String SIGNUP_URL = "https://api.example.com/register"; // Remplacez par l'URL de votre API
+
+    // URL de l'API d'inscription (à adapter à votre serveur)
+    private static final String SIGNUP_URL = "https://api.example.com/register";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,7 @@ public class SignUpActivity extends AppCompatActivity {
         buttonSignUp = findViewById(R.id.buttonSignUp);
         textViewLogin = findViewById(R.id.textViewLogin);
 
+        // Initialisation d'OkHttp et de Jackson ObjectMapper
         client = new OkHttpClient();
         objectMapper = new ObjectMapper();
 
@@ -58,11 +63,12 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
+        // Récupération des données saisies
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
-        // Vérification des champs
+        // Vérification des champs obligatoires
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
             return;
@@ -72,22 +78,22 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        // Préparation des données d'inscription sous forme de Map
-        Map<String, String> signUpData = new HashMap<>();
-        signUpData.put("email", email);
-        signUpData.put("password", password);
-
-        String jsonBody;
+        // Création d'un objet JSON pour les données d'inscription
+        JSONObject jsonSignUp = new JSONObject();
         try {
-            jsonBody = objectMapper.writeValueAsString(signUpData);
-        } catch (JsonProcessingException e) {
+            jsonSignUp.put("email", email);
+            jsonSignUp.put("password", password);
+        } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Erreur de sérialisation", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Erreur lors de la création du JSON", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Création de la requête HTTP POST avec OKHTTP
-        RequestBody body = RequestBody.create(jsonBody, MediaType.get("application/json; charset=utf-8"));
+        // Préparation du corps de la requête avec le type MIME JSON
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(jsonSignUp.toString(), JSON);
+
+        // Construction de la requête HTTP POST
         Request request = new Request.Builder()
                 .url(SIGNUP_URL)
                 .post(body)
@@ -104,15 +110,32 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    // Inscription réussie
-                    runOnUiThread(() -> {
-                        Toast.makeText(SignUpActivity.this, "Inscription réussie", Toast.LENGTH_SHORT).show();
-                        // Redirection vers la page de connexion
-                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    });
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseBody = response.body().string();
+                    try {
+                        // Mapping de la réponse JSON vers un objet LoginResponse à l'aide de Jackson
+                        LoginResponse loginResponse = objectMapper.readValue(responseBody, LoginResponse.class);
+
+                        // Vérification de la validité du token retourné
+                        if (loginResponse.getToken()) {
+                            runOnUiThread(() -> {
+                                Toast.makeText(SignUpActivity.this, "Inscription réussie", Toast.LENGTH_SHORT).show();
+                                // Redirection vers la page de connexion
+                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            });
+                        } else {
+                            runOnUiThread(() ->
+                                    Toast.makeText(SignUpActivity.this, "Inscription échouée: token invalide", Toast.LENGTH_SHORT).show()
+                            );
+                        }
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                        runOnUiThread(() ->
+                                Toast.makeText(SignUpActivity.this, "Erreur de parsing", Toast.LENGTH_SHORT).show()
+                        );
+                    }
                 } else {
                     runOnUiThread(() ->
                             Toast.makeText(SignUpActivity.this, "Échec de l'inscription", Toast.LENGTH_SHORT).show()
