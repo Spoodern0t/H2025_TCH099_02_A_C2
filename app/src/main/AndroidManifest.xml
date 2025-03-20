@@ -13,13 +13,10 @@
         android:theme="@style/Theme.MultusCalendrius"
         tools:targetApi="31">
         <activity
-            android:name=".SignUpActivity"
+            android:name=".vues.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".vues.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

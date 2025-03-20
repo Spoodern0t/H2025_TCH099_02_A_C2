@@ -1,46 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:importantForAutofill="no"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="24dp"
+    tools:context=".vues.SignUpActivity">
 
     <EditText
         android:id="@+id/editTextEmailSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Adresse courriel"
-        android:inputType="textEmailAddress" />
+        android:hint="@string/adresse_courriel"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:textColorHint="@color/black" />
 
     <EditText
         android:id="@+id/editTextPasswordSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Mot de passe"
+        android:layout_marginTop="16dp"
+        android:hint="@string/mot_de_passe"
+        android:importantForAutofill="no"
         android:inputType="textPassword"
-        android:layout_marginTop="16dp" />
+        android:minHeight="48dp"
+        android:textColorHint="@color/black" />
 
     <EditText
         android:id="@+id/editTextConfirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Confirmer le mot de passe"
+        android:layout_marginTop="16dp"
+        android:hint="@string/confirmer_le_mot_de_passe"
+        android:importantForAutofill="no"
         android:inputType="textPassword"
-        android:layout_marginTop="16dp" />
+        android:minHeight="48dp"
+        android:textColorHint="@color/black" />
 
     <Button
         android:id="@+id/buttonSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="S'inscrire"
+        android:text="@string/inscrire"
         android:layout_marginTop="24dp" />
 
     <TextView
         android:id="@+id/textViewLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Déjà inscrit ? Se connecter"
+        android:text="@string/deja_inscrit_se_connecter"
         android:textColor="@color/purple_500"
         android:layout_marginTop="16dp" />
 </LinearLayout>
