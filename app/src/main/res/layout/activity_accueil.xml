@@ -9,7 +9,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:background="@color/black"/>
+        android:background="@color/black" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,9 +24,9 @@
             android:id="@+id/imgBtnCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/menu_de_creation"
             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
             android:src="@drawable/add_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,21 +59,20 @@
 
 
     <me.jlurena.revolvingweekview.WeekView
-        android:id="@+id/revolving_weekview"
+        android:id="@+id/weekView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="8"
+        app:dayBackgroundColor="#05000000"
         app:eventTextColor="@android:color/white"
-        app:hourHeight="60dp"
+        app:headerColumnBackground="#ffefefef"
         app:headerColumnPadding="8dp"
         app:headerColumnTextColor="#8f000000"
-        app:headerRowPadding="12dp"
-        app:noOfVisibleDays="3"
         app:headerRowBackgroundColor="#ffefefef"
-        app:dayBackgroundColor="#05000000"
-        app:todayBackgroundColor="#1848adff"
-        app:headerColumnBackground="#ffefefef"
-        android:layout_weight="8"
-        />
+        app:headerRowPadding="12dp"
+        app:hourHeight="60dp"
+        app:noOfVisibleDays="3"
+        app:todayBackgroundColor="#1848adff" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -81,16 +80,15 @@
         android:layout_weight="1"
         android:background="@color/design_default_color_secondary"
         android:paddingHorizontal="15dp"
-        android:paddingVertical="10dp"
-        >
+        android:paddingVertical="10dp">
 
         <ImageButton
             android:id="@+id/imgBtnMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/hint_menu"
             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
             android:src="@drawable/calendar_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -100,9 +98,9 @@
             android:id="@+id/imgBtnPlanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/aller_au_plannificateur"
             android:scaleType="fitCenter"
-            android:background="@android:color/transparent"
             android:src="@drawable/planner_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
