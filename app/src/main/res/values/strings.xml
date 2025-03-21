@@ -6,4 +6,11 @@
     <string name="mot_de_passe">Mot de passe</string>
     <string name="adresse_courriel">Adresse courriel</string>
     <string name="se_connecter">Se connecter</string>
+    <string name="dates_limites">Dates limites :</string>
+    <string name="hint_photo_de_profil">Photo de profil</string>
+    <string name="hint_menu">MENU</string>
+    <string name="hint_logo">LOGO</string>
+    <string name="rv_heures">Heures</string>
+    <string name="rv_dates_limites">Dates Limites</string>
+    <string name="rv_dates">Dates</string>
 </resources>
