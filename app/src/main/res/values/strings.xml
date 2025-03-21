@@ -15,4 +15,7 @@
     <string name="rv_dates">Dates</string>
     <string name="aller_au_plannificateur">Aller au plannificateur</string>
     <string name="menu_de_creation">Menu de création</string>
+    <string name="liste_des_calendriers_partagee">Liste des calendriers partagée :</string>
+    <string name="liste_des_calendriers">Liste des calendriers :</string>
+    <string name="liste_des_calendriers_personnels">Liste des calendriers personnels :</string>
 </resources>
