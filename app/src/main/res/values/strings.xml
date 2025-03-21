@@ -13,4 +13,6 @@
     <string name="rv_heures">Heures</string>
     <string name="rv_dates_limites">Dates Limites</string>
     <string name="rv_dates">Dates</string>
+    <string name="aller_au_plannificateur">Aller au plannificateur</string>
+    <string name="menu_de_creation">Menu de création</string>
 </resources>
