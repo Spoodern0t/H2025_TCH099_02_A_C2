@@ -37,9 +37,12 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation(libs.jackson.databind)
+    implementation(libs.okhttp)
+    implementation("me.jlurena:revolvingweekview:1.0.0") {
+        exclude(group = "com.android.support")
+    }
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.16.0")
 }
