@@ -16,7 +16,7 @@
             android:name=".vues.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".vues.LoginActivity"
+            android:name=".vues.AccueilActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
