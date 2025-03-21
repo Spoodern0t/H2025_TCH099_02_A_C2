@@ -1,5 +1,6 @@
 package com.example.multuscalendrius.vues;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -60,7 +61,9 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         } else if (v.equals(imgBtnPhotoProfil)) {
             // TODO: Offrir les fonctionnalités de modif de compte et déconnexion
         } else if (v.equals(imgBtnMenu)) {
-            // TODO: Renvoyer à l'interface Menu des calendriers
+
+            Intent intent = new Intent(this, MenuCalendriersActivity.class);
+            startActivity(intent);
         } else if (v.equals(imgBtnPlanner)) {
             // TODO: Renvoyer à l'interface Planner
         }
