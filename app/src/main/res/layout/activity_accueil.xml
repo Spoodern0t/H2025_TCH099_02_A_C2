@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,11 +11,10 @@
         android:layout_height="20dp"
         android:background="@color/black"/>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_weight="2"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@android:color/transparent"
         android:paddingHorizontal="15dp"
         android:paddingVertical="7dp">
@@ -24,42 +22,45 @@
 
         <ImageButton
             android:id="@+id/imgBtnCreate"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="@string/menu_de_creation"
-            android:scaleType="fitStart"
-            app:srcCompat="@android:drawable/ic_menu_more" />
+            android:src="@android:drawable/ic_menu_more"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/imgBtnLogo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="@string/hint_logo"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
+            android:src="@drawable/ic_launcher_foreground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imgBtnPhotoProfil"
+            app:layout_constraintStart_toEndOf="@+id/imgBtnCreate"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/imgBtnPhotoProfil"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="@string/hint_photo_de_profil"
-            android:scaleType="fitEnd"
             android:src="@android:drawable/ic_dialog_info"
-            tools:srcCompat="@android:drawable/ic_dialog_info" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <me.jlurena.revolvingweekview.WeekView
         android:id="@+id/revolving_weekview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:eventTextColor="@android:color/white"
         app:hourHeight="60dp"
         app:headerColumnPadding="8dp"
@@ -70,36 +71,39 @@
         app:todayBackgroundColor="#1848adff"
         app:headerRowBackgroundColor="@android:color/transparent"
         app:headerColumnBackground="@android:color/transparent"
-        android:layout_weight="0.5"
+        android:layout_weight="8"
         />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:orientation="horizontal"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/design_default_color_secondary"
         android:paddingHorizontal="15dp"
-        android:paddingVertical="10dp">
+        android:paddingVertical="10dp"
+        >
 
         <ImageButton
             android:id="@+id/imgBtnMenu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/hint_menu"
-            android:scaleType="fitStart"
-            tools:srcCompat="@android:drawable/ic_menu_agenda" />
+            android:src="@android:drawable/ic_menu_more"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/imgBtnPlanner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/aller_au_plannificateur"
-            android:scaleType="fitEnd"
-            tools:srcCompat="@android:drawable/ic_menu_agenda" />
+            android:scaleType="fitCenter"
+            android:src="@android:drawable/ic_menu_more"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
