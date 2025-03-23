@@ -7,9 +7,12 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.multuscalendrius.R;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 import okhttp3.*;
 
@@ -57,10 +60,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
             }
 
-            // TODO: Envoyer vers l'interface d'accueil
-
-            /*
-
 
             JSONObject jsonLogin = new JSONObject();
             try {
@@ -89,6 +88,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             LoginResponse loginResponse = mapper.readValue(responseBody, LoginResponse.class);
                             runOnUiThread(() -> {
 
+                                //CONNEXION VERS MENU PRINCIPALE
+
 
                             });
                         } catch (JsonProcessingException e) {
@@ -103,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             catch (IOException e){
                 e.printStackTrace();
             }
-             */
+
         } else if (v.equals(textViewSignUp)) {
 
             Intent intent = new Intent(this, SignUpActivity.class);
