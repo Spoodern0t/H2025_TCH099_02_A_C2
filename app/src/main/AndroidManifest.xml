@@ -16,6 +16,12 @@
             android:name=".vues.SignUpActivity"
             android:exported="false" />
         <activity
+            android:name=".vues.AccueilActivity"
+            android:exported="false" />
+        <activity
+            android:name=".vues.MenuCalendriersActivity"
+            android:exported="false" />
+        <activity
             android:name=".vues.LoginActivity"
             android:exported="true">
             <intent-filter>
