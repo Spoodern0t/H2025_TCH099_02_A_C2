@@ -51,11 +51,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
-        Intent intent = new Intent(LoginActivity.this, MenuCalendriersActivity.class);
-        startActivity(intent);
-
-        /*
-
         if (v.equals(buttonLogin)) {
 
             String email = editTextEmail.getText().toString().trim();
@@ -70,6 +65,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             try {
                 jsonLogin.put("email", email);
                 jsonLogin.put("password", password);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Erreur JSON", Toast.LENGTH_SHORT).show();
@@ -117,6 +113,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             startActivity(intent);
         }
 
-         */
     }
 }
