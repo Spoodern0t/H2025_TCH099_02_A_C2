@@ -1,4 +1,6 @@
 package com.example.multuscalendrius.modeles.entitees;
+import androidx.annotation.Nullable;
+
 import java.util.Date;
 
 public class Calendrier {
@@ -12,7 +14,7 @@ public class Calendrier {
     public Calendrier() {}
 
     // Constructeur complet
-    public Calendrier(Long id, String name, String description, Date createdAt, Date updatedAt) {
+    public Calendrier(Long id, String name, String description, @Nullable Date createdAt, @Nullable Date updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;

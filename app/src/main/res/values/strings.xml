@@ -15,7 +15,17 @@
     <string name="rv_dates">Dates</string>
     <string name="aller_au_plannificateur">Aller au plannificateur</string>
     <string name="menu_de_creation">Menu de création</string>
-    <string name="liste_des_calendriers_partagee">Liste des calendriers partagée :</string>
+    <string name="liste_des_calendriers_partages">Liste des calendriers partagés :</string>
     <string name="liste_des_calendriers">Liste des calendriers :</string>
     <string name="liste_des_calendriers_personnels">Liste des calendriers personnels :</string>
+    <string name="planificateur">Planificateur</string>
+    <string name="menu">Menu</string>
+    <string name="calendrier">Calendrier</string>
+    <string name="creer">Créer</string>
+    <string name="filtre">Filtre</string>
+    <string name="aller_au_calendrier">Aller au calendrier</string>
+    <string name="aller_au_planificateur">Aller au planificateur</string>
+    <string name="partager_le_calendrier">Partager le calendrier</string>
+    <string name="menu_du_calendrier">Menu du calendrier</string>
+    <string name="filtrer_les_elements">Filtrer les éléments</string>
 </resources>

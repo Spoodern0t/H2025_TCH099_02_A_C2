@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/calendrier"
+        android:title="@string/calendrier"
+        android:icon="@drawable/calendar_icon"/>
+    <item
+        android:id="@+id/menu"
+        android:title="@string/menu"
+        android:icon="@drawable/add_icon"/>
+    <item
+        android:id="@+id/planificateur"
+        android:title="@string/planificateur"
+        android:icon="@drawable/planner_icon"/>
+</menu>
