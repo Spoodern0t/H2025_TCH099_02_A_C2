@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_margin="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:orientation="vertical"
-        android:layout_marginHorizontal="10dp">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvCalendriers"
+            android:id="@+id/tvCalendriersPersonnels"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:paddingBottom="10dp"
             android:text="@string/liste_des_calendriers"
-            android:textSize="16sp"
-            android:paddingBottom="5dp"/>
+            android:textSize="22sp"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ListView
-            android:id="@+id/lvCalendriers"
+        <com.example.multuscalendrius.costumlayout.NonScrollListView
+            android:id="@+id/lvCalendriersPersonnels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
-    </LinearLayout>
 
     <View
         android:id="@+id/breakLine"
@@ -37,26 +34,21 @@
         android:layout_marginVertical="10dp"/>
 
 
-    <LinearLayout
-        android:id="@+id/llCalendriersPartages"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical"
-        android:layout_marginHorizontal="10dp" >
-
         <TextView
+            android:id="@+id/tvCalendriersPartages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_gravity="center"
-            android:text="@string/liste_des_calendriers_partagee"
-            android:textSize="16sp"
-            android:paddingBottom="5dp"/>
+            android:paddingBottom="10dp"
+            android:text="@string/liste_des_calendriers_partages"
+            android:textSize="22sp"/>
 
-        <ListView
+        <com.example.multuscalendrius.costumlayout.NonScrollListView
             android:id="@+id/lvCalendriersPartages"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
     </LinearLayout>
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

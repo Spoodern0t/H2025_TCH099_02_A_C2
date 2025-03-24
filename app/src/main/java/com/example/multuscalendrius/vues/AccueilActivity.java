@@ -6,66 +6,88 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.fragment.app.Fragment;
 import com.example.multuscalendrius.R;
+import com.example.multuscalendrius.vues.fragments.CalendrierFragment;
+import com.example.multuscalendrius.vues.fragments.PlanificateurFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-import java.util.List;
+public class AccueilActivity extends AppCompatActivity implements View.OnClickListener {
 
-import me.jlurena.revolvingweekview.WeekView;
-import me.jlurena.revolvingweekview.WeekViewEvent;
-
-public class AccueilActivity extends AppCompatActivity implements View.OnClickListener, WeekView.WeekViewLoader {
-
-    private ImageButton imgBtnCreate, imgBtnLogo, imgBtnPhotoProfil, imgBtnMenu, imgBtnPlanner;
-    private WeekView mWeekView;
+    private ImageButton imgBtnCreate, imgBtnPhotoProfil;
+    private BottomNavigationView bottomNavigationView;
+    private long calendrierId;
+    private Fragment calendrierFragment, planificateurFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accueil);
 
-        imgBtnCreate = (ImageButton) findViewById(R.id.imgBtnCreate);
-        imgBtnLogo = (ImageButton) findViewById(R.id.imgBtnLogo);
-        imgBtnPhotoProfil = (ImageButton) findViewById(R.id.imgBtnPhotoProfil);
-        imgBtnMenu = (ImageButton) findViewById(R.id.imgBtnMenu);
-        imgBtnPlanner = (ImageButton) findViewById(R.id.imgBtnPlanner);
-        mWeekView = (WeekView) findViewById(R.id.weekView);
-
-        // Set le chargement des events.
-        mWeekView.setWeekViewLoader(this);
+        imgBtnCreate = findViewById(R.id.imgBtnCreate);
+        imgBtnPhotoProfil = findViewById(R.id.imgBtnPhotoProfil);
 
         imgBtnCreate.setOnClickListener(this);
-        imgBtnLogo.setOnClickListener(this);
         imgBtnPhotoProfil.setOnClickListener(this);
-        imgBtnMenu.setOnClickListener(this);
-        imgBtnPlanner.setOnClickListener(this);
-        imgBtnCreate.setOnClickListener(this);
+
+        // Initier la barre de navigation
+        initNavView();
     }
 
-    @Override
-    public List<? extends WeekViewEvent> onWeekViewLoad() {
-        List<WeekViewEvent> elements = new ArrayList<>();
-
-        // TODO: Get les éléments et les ajouter à la liste
-
-        return elements;
+    // Changer la vue du frame
+    private void setCurrentFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.flFragment, fragment)
+                .commit();
     }
 
+    // Les boutons de la barre du haut
     @Override
     public void onClick(View v) {
-        if (v.equals(imgBtnCreate)) {
-            // TODO: Renvoyer à l'interface de création
-        } else if (v.equals(imgBtnLogo)) {
-            // TODO: Fonction maybe
-        } else if (v.equals(imgBtnPhotoProfil)) {
-            // TODO: Offrir les fonctionnalités de modif de compte et déconnexion
-        } else if (v.equals(imgBtnMenu)) {
-
-            Intent intent = new Intent(this, MenuCalendriersActivity.class);
-            startActivity(intent);
-        } else if (v.equals(imgBtnPlanner)) {
-            // TODO: Renvoyer à l'interface Planner
+        if (v == imgBtnCreate) {
+            // TODO: Vers interface de création
+        } else if (v == imgBtnPhotoProfil) {
+            // TODO: Menu de l'utilisateur
         }
+    }
+
+    // Initier la barre de navigation
+    public void initNavView() {
+
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        // Les vues qui vont apparaitre dans le frame
+        calendrierFragment = new CalendrierFragment();
+        planificateurFragment = new PlanificateurFragment();
+
+        Intent intent = getIntent();
+        int fragmentNo = intent.getIntExtra("FRAGMENT", 0);
+        calendrierId = intent.getLongExtra("ID", 0);
+
+        // Envoyer vers la vue choisie
+        if (fragmentNo == 0) {
+            setCurrentFragment(calendrierFragment);
+            bottomNavigationView.setSelectedItemId(R.id.calendrier);
+        } else {
+            setCurrentFragment(planificateurFragment);
+            bottomNavigationView.setSelectedItemId(R.id.planificateur);
+        }
+
+        // Les actions des boutons de la barre de navigation
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int ItemId = item.getItemId();
+            if (ItemId == R.id.menu) {
+                finish();
+                return true;
+            } else if (ItemId == R.id.calendrier) {
+                setCurrentFragment(calendrierFragment);
+                return true;
+            } else if (ItemId == R.id.planificateur) {
+                setCurrentFragment(planificateurFragment);
+                return true;
+            }
+            return false;
+        });
     }
 }
