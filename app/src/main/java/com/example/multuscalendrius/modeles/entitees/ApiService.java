@@ -1,5 +1,6 @@
 package com.example.multuscalendrius.modeles.entitees;
 
+import com.example.multuscalendrius.vues.LoginResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,25 +33,17 @@ public class ApiService {
     // Utilisateur (inscription, connexion)
     // --------------------------
 
-    public void register(String email, String username, String password, String confirmPassword, ApiCallback<LoginResponse> callback) {
+    public void register(String email, String password, ApiCallback<LoginResponse> callback) {
         try {
-            // Création d'un objet JSON avec les informations d'inscription
             JSONObject json = new JSONObject();
-            json.put("adresse-courriel", email);
-            json.put("nom-utilisateur", username);
-            json.put("mot-de-passe", password);
-            json.put("conf-mdp", confirmPassword);
-
-            // Préparation du corps de la requête avec le type MIME JSON
+            json.put("courriel", email);
+            json.put("motDePasse", password);
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
-
-            // Construction de la requête HTTP POST vers l'endpoint /register
             Request request = new Request.Builder()
                     .url(BASE_URL + "/register")
                     .post(body)
                     .build();
 
-            // Exécution asynchrone de la requête
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -58,10 +51,9 @@ public class ApiService {
                 }
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful() && response.body() != null) {
+                    if(response.isSuccessful() && response.body() != null) {
                         String responseBody = response.body().string();
                         try {
-                            // Mapping de la réponse JSON vers un objet LoginResponse via Jackson
                             LoginResponse loginResponse = mapper.readValue(responseBody, LoginResponse.class);
                             callback.onSuccess(loginResponse);
                         } catch (JsonProcessingException e) {
@@ -77,24 +69,16 @@ public class ApiService {
         }
     }
 
-
-    public void login(String email, String username, String password, String confirmPassword, ApiCallback<LoginResponse> callback) {
+    public void login(String email, String password, ApiCallback<LoginResponse> callback) {
         try {
-            // Création d'un objet JSON avec toutes les informations de connexion
             JSONObject json = new JSONObject();
-            json.put("adresse-courriel", email);
-            json.put("nom-utilisateur", username);
-            json.put("mot-de-passe", password);
-            json.put("conf-mdp", confirmPassword);
-
-            // Préparation du corps de la requête en JSON
+            json.put("courriel", email);
+            json.put("motDePasse", password);
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
                     .url(BASE_URL + "/login")
                     .post(body)
                     .build();
-
-            // Exécution asynchrone de la requête
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -102,7 +86,7 @@ public class ApiService {
                 }
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful() && response.body() != null) {
+                    if(response.isSuccessful() && response.body() != null) {
                         String responseBody = response.body().string();
                         try {
                             LoginResponse loginResponse = mapper.readValue(responseBody, LoginResponse.class);
@@ -115,11 +99,10 @@ public class ApiService {
                     }
                 }
             });
-        } catch (Exception e) {
+        } catch(Exception e) {
             callback.onFailure("Erreur lors de la création de la requête: " + e.getMessage());
         }
     }
-
 
     // --------------------------
     // Calendriers

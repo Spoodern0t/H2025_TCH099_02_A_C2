@@ -20,16 +20,6 @@
         android:textColorHint="@color/black" />
 
     <EditText
-        android:id="@+id/editTextUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Nom d'utilisateur"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:textColorHint="@color/black" />
-
-    <EditText
         android:id="@+id/editTextPasswordSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
