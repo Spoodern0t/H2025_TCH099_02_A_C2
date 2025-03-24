@@ -51,6 +51,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
+        Intent intent = new Intent(LoginActivity.this, MenuCalendriersActivity.class);
+        startActivity(intent);
+
+        /*
+
         if (v.equals(buttonLogin)) {
 
             String email = editTextEmail.getText().toString().trim();
@@ -88,7 +93,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             LoginResponse loginResponse = mapper.readValue(responseBody, LoginResponse.class);
                             runOnUiThread(() -> {
 
-                                //CONNEXION VERS MENU PRINCIPALE
+                                Intent intent = new Intent(LoginActivity.this, MenuCalendriersActivity.class);
+                                startActivity(intent);
 
 
                             });
@@ -110,5 +116,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Intent intent = new Intent(this, SignUpActivity.class);
             startActivity(intent);
         }
+
+         */
     }
 }
