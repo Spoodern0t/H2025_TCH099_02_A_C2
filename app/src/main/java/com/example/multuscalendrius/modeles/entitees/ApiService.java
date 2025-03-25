@@ -19,7 +19,7 @@ import okhttp3.Response;
 
 public class ApiService {
 
-    private static final String BASE_URL = "https://api.example.com";
+    private static final String BASE_URL = "http://10.0.2.2/H2025_TCH099_02_A_API/index.php";
     private OkHttpClient client;
     private ObjectMapper mapper;
 
@@ -90,7 +90,7 @@ public class ApiService {
             // Préparation du corps de la requête en JSON
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/login")
+                    .url(BASE_URL + "/connexion")
                     .post(body)
                     .build();
 
