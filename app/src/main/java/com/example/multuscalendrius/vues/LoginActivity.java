@@ -25,9 +25,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // Liaison des vues depuis le layout XML
         editTextEmail = findViewById(R.id.editTextEmail);
-        editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
-        editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
         textViewSignUp = findViewById(R.id.textViewSignUp);
 
@@ -44,18 +42,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (v.equals(buttonLogin)) {
             // Récupération des données saisies par l'utilisateur
             String email = editTextEmail.getText().toString().trim();
-            String username = editTextUsername.getText().toString().trim();
             String password = editTextPassword.getText().toString().trim();
-            String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
             // Vérification que tous les champs sont remplis
-            if (email.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             // Appel de l'API via ApiService.login en passant tous les champs requis
-            apiService.login(email, username, password, confirmPassword, new ApiCallback<LoginResponse>() {
+            apiService.login(email, password, new ApiCallback<LoginResponse>() {
                 @Override
                 public void onSuccess(LoginResponse result) {
                     // Vérifier que le token est valide
