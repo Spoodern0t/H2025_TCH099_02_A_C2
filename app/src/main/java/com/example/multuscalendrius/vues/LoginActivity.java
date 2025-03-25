@@ -5,118 +5,83 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.multuscalendrius.R;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.*;
+import com.example.multuscalendrius.modeles.entitees.ApiCallback;
+import com.example.multuscalendrius.modeles.entitees.ApiService;
+import com.example.multuscalendrius.modeles.entitees.LoginResponse;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText editTextEmail, editTextPassword;
+    private EditText editTextEmail, editTextUsername, editTextPassword, editTextConfirmPassword;
     private Button buttonLogin;
     private TextView textViewSignUp;
-    private OkHttpClient client;
-    private JSONObject obj;
-    private ObjectMapper mapper;
-    private static final String LOGIN_URL = "https://api.exemple.com/login"; // Remplacer URL d'API
+
+    private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Liaison des vues depuis le layout XML
         editTextEmail = findViewById(R.id.editTextEmail);
+        editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
+        editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
         textViewSignUp = findViewById(R.id.textViewSignUp);
 
-        client = new OkHttpClient();
-        obj = new JSONObject();
-        mapper =  new ObjectMapper();
+        // Initialisation de l'ApiService
+        apiService = new ApiService();
 
-        // Action du bouton de connexion
+        // Définir les écouteurs de clic
         buttonLogin.setOnClickListener(this);
-
-        // Action pour accéder à la page d'inscription
         textViewSignUp.setOnClickListener(this);
     }
 
-
     @Override
     public void onClick(View v) {
-
-        Intent intent = new Intent(LoginActivity.this, MenuCalendriersActivity.class);
-        startActivity(intent);
-
-        /*
-
         if (v.equals(buttonLogin)) {
-
+            // Récupération des données saisies par l'utilisateur
             String email = editTextEmail.getText().toString().trim();
+            String username = editTextUsername.getText().toString().trim();
             String password = editTextPassword.getText().toString().trim();
+            String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
-            if (email.isEmpty() || password.isEmpty()) {
+            // Vérification que tous les champs sont remplis
+            if (email.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
-            }
-
-
-            JSONObject jsonLogin = new JSONObject();
-            try {
-                jsonLogin.put("email", email);
-                jsonLogin.put("password", password);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Erreur JSON", Toast.LENGTH_SHORT).show();
                 return;
             }
-            MediaType JSON = MediaType.get("application/json; charset=utf-8");
-            RequestBody body = RequestBody.create(jsonLogin.toString(), JSON);
 
-            Request request = new Request.Builder()
-                    .url(LOGIN_URL)
-                    .post(body)
-                    .build();
-
-
-            try(Response response = client.newCall(request).execute()){
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        String responseBody = response.body().string();
-                        try {
-                            // Supposons que l'API renvoie un objet JSON avec un champ "token"
-                            LoginResponse loginResponse = mapper.readValue(responseBody, LoginResponse.class);
-                            runOnUiThread(() -> {
-
-                                Intent intent = new Intent(LoginActivity.this, MenuCalendriersActivity.class);
-                                startActivity(intent);
-
-
-                            });
-                        } catch (JsonProcessingException e) {
-                            e.printStackTrace();
-                            runOnUiThread(() -> Toast.makeText(LoginActivity.this, "Erreur de parsing", Toast.LENGTH_SHORT).show());
-                        }
+            // Appel de l'API via ApiService.login en passant tous les champs requis
+            apiService.login(email, username, password, confirmPassword, new ApiCallback<LoginResponse>() {
+                @Override
+                public void onSuccess(LoginResponse result) {
+                    // Vérifier que le token est valide
+                    if (result.getToken()) {
+                        runOnUiThread(() -> {
+                            Intent intent = new Intent(LoginActivity.this, MenuCalendriersActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
                     } else {
-                        runOnUiThread(() -> Toast.makeText(LoginActivity.this, "Échec de la connexion", Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() ->
+                                Toast.makeText(LoginActivity.this, "Connexion échouée: token invalide", Toast.LENGTH_SHORT).show()
+                        );
                     }
                 }
-            }
-            catch (IOException e){
-                e.printStackTrace();
-            }
-
+                @Override
+                public void onFailure(String errorMessage) {
+                    runOnUiThread(() ->
+                            Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show()
+                    );
+                }
+            });
         } else if (v.equals(textViewSignUp)) {
-
-            Intent intent = new Intent(this, SignUpActivity.class);
+            // Redirection vers l'activité d'inscription
+            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(intent);
         }
-
-         */
     }
 }
