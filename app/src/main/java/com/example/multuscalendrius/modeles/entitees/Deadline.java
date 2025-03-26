@@ -6,12 +6,9 @@ import java.time.LocalDateTime;
 public class Deadline extends Element {
     private LocalDateTime deadlineDateTime;
 
-    public Deadline() {
-        super();
-    }
 
-    public Deadline(String id, String nom, String description, Evenement evenement, LocalDateTime deadlineDateTime) {
-        super(id, nom, description, evenement);
+    public Deadline(String id, String calendrierId, String nom, String description, Evenement evenement, LocalDateTime deadlineDateTime) {
+        super(id, calendrierId, nom, description, evenement);
         this.deadlineDateTime = deadlineDateTime;
     }
 

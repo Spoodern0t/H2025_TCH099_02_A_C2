@@ -2,15 +2,16 @@ package com.example.multuscalendrius.modeles.entitees;
 
 public abstract class Element {
     private String id;
+    private String calendrierId;
     private String nom;
     private String description;
     private Evenement evenement;
 
-    public Element() {
-    }
 
-    public Element(String id, String nom, String description, Evenement evenement) {
+
+    public Element(String id, String calendrierId, String nom, String description, Evenement evenement) {
         this.id = id;
+        this.calendrierId = calendrierId;
         this.nom = nom;
         this.description = description;
         this.evenement = evenement;
@@ -42,6 +43,14 @@ public abstract class Element {
     }
     public void setEvenement(Evenement evenement) {
         this.evenement = evenement;
+    }
+
+    public String getCalendrierId() {
+        return calendrierId;
+    }
+
+    public void setCalendrierId(String calendrierId) {
+        this.calendrierId = calendrierId;
     }
 }
 

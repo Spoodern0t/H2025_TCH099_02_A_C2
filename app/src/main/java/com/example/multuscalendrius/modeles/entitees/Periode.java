@@ -6,12 +6,10 @@ public class Periode extends Element {
     private LocalDateTime dateDebut;
     private LocalDateTime dateFin;
 
-    public Periode() {
-        super();
-    }
 
-    public Periode(String id, String nom, String description, Evenement evenement, LocalDateTime dateDebut, LocalDateTime dateFin) {
-        super(id, nom, description, evenement);
+
+    public Periode(String id,String calendrierId, String nom, String description, Evenement evenement, LocalDateTime dateDebut, LocalDateTime dateFin) {
+        super(id, calendrierId, nom, description, evenement);
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
     }
