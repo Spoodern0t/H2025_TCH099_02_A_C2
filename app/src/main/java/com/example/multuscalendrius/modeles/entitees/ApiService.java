@@ -243,7 +243,7 @@ public class ApiService {
     }
 
     // --------------------------
-    // Evenements
+    // Evenements => CHANGER PAR USER ET USERCALENDAR
     // --------------------------
 
     public void getEvenements(String calendrierId, String userToken, ApiCallback<List<Evenement>> callback) {

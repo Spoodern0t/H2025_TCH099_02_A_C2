@@ -1,22 +1,29 @@
 package com.example.multuscalendrius.modeles.entitees;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     private Long id;
     private String email;
     private String password;
-    private String name;
+    private String username;
+    private LoginResponse token;
+    private List<UserCalendar> userCalendars;
 
-    public User() {}
+    public User() {
+        this.userCalendars = new ArrayList<>();
+    }
 
-    // Constructeur complet
-    public User(Long id, String email, String password, String name) {
+    public User(Long id, String email, String password, String name, LoginResponse token, List<UserCalendar> userCalendars) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.name = name;
+        this.username = name;
+        this.token = token;
+        this.userCalendars = userCalendars;
     }
 
-    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -35,11 +42,24 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public LoginResponse getToken() {
+        return token;
+    }
+    public void setToken(LoginResponse token) {
+        this.token = token;
+    }
+    public List<UserCalendar> getUserCalendars() {
+        return userCalendars;
+    }
+    public void setUserCalendars(List<UserCalendar> userCalendars) {
+        this.userCalendars = userCalendars;
     }
 }
+
 

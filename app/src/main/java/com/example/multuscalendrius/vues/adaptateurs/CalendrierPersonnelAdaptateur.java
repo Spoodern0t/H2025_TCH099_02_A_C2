@@ -58,7 +58,7 @@ public class CalendrierPersonnelAdaptateur extends ArrayAdapter<Calendrier> {
             final ImageButton imgBtnCalendrier = view.findViewById(R.id.imgBtnCalendrier);
             final ImageButton imgBtnPlanificateur = view.findViewById(R.id.imgBtnPlanificateur);
 
-            nom.setText(calendrier.getName());
+            nom.setText(calendrier.getAuteur());
 
             imgBtnCalendrier.setOnClickListener(v -> {
 
