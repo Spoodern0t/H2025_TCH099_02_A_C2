@@ -2,7 +2,6 @@ package com.example.multuscalendrius.modeles.entitees;
 
 
 public class UserCalendar {
-    private Long id;
     private Long userId;
     private Long calendarId;
     private UserRole role;
@@ -12,19 +11,13 @@ public class UserCalendar {
 
     // Constructeur complet
     public UserCalendar(Long id, Long userId, Long calendarId, UserRole role) {
-        this.id = id;
         this.userId = userId;
         this.calendarId = calendarId;
         this.role = role;
     }
 
     // Getters et Setters
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+
     public Long getUserId() {
         return userId;
     }
