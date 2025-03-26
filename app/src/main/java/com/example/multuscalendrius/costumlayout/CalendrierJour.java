@@ -16,6 +16,7 @@ import com.example.multuscalendrius.modeles.entitees.Element;
 
 import java.util.Calendar;
 import java.util.Date;
+import androidx.annotation.Nullable;
 
 public class CalendrierJour extends View {
 
@@ -39,7 +40,7 @@ public class CalendrierJour extends View {
         init();
     }
 
-    public CalendrierJour(Context context, AttributeSet attrs) {
+    public CalendrierJour(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
