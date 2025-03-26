@@ -19,7 +19,7 @@ import okhttp3.Response;
 
 public class ApiService {
 
-    private static final String BASE_URL = "https://api.example.com";
+    private static final String BASE_URL = "http://10.0.2.2:80/H2025_TCH099_02_A_API/index.php";
     private OkHttpClient client;
     private ObjectMapper mapper;
 
@@ -46,7 +46,7 @@ public class ApiService {
 
             // Construction de la requête HTTP POST vers l'endpoint /register
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/register")
+                    .url(BASE_URL + "/inscription")
                     .post(body)
                     .build();
 
@@ -78,19 +78,17 @@ public class ApiService {
     }
 
 
-    public void login(String email, String username, String password, String confirmPassword, ApiCallback<LoginResponse> callback) {
+    public void login(String email, String password, ApiCallback<LoginResponse> callback) {
         try {
             // Création d'un objet JSON avec toutes les informations de connexion
             JSONObject json = new JSONObject();
             json.put("adresse-courriel", email);
-            json.put("nom-utilisateur", username);
             json.put("mot-de-passe", password);
-            json.put("conf-mdp", confirmPassword);
 
             // Préparation du corps de la requête en JSON
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/login")
+                    .url(BASE_URL + "/connexion")
                     .post(body)
                     .build();
 

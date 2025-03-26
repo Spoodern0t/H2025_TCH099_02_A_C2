@@ -18,32 +18,12 @@
         android:textColorHint="@color/black" />
 
     <EditText
-        android:id="@+id/editTextUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nom d'utilisateur"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:textColorHint="@color/black"
-        android:layout_marginTop="16dp" />
-
-    <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autofillHints="password"
         android:hint="@string/mot_de_passe"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
-        android:textColorHint="@color/black" />
-
-    <EditText
-        android:id="@+id/editTextConfirmPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Confirmer le mot de passe"
         android:inputType="textPassword"
         android:minHeight="48dp"
         android:textColorHint="@color/black" />
