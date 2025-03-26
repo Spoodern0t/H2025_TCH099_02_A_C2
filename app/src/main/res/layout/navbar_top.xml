@@ -4,39 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/design_default_color_secondary"
-    android:paddingHorizontal="15dp"
-    android:paddingVertical="7dp">
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp">
 
         <ImageButton
-            android:id="@+id/imgBtnCreate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/imgBtnMenu"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/menu_de_creation"
+            android:contentDescription="@string/menu_des_calendriers"
             android:scaleType="fitCenter"
-            android:src="@drawable/add_icon"
+            android:src="@drawable/menu_burger_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/hint_logo"
             android:src="@drawable/logo_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imgBtnPhotoProfil"
-            app:layout_constraintStart_toEndOf="@+id/imgBtnCreate"
+            app:layout_constraintStart_toEndOf="@+id/imgBtnMenu"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/imgBtnPhotoProfil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/hint_photo_de_profil"
-            android:src="@drawable/user_icon"
+            android:src="@drawable/user_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

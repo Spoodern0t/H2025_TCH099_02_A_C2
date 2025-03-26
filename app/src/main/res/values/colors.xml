@@ -3,4 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="purple_500">#6200EE</color>
+
+    <color name="couleur_primaire">#C09AE0</color>
+    <color name="couleur_background">#FDFDFD</color>
+    <color name="couleur_icon">#999999</color>
+    <color name="couleur_bouton">#6200EE</color>
 </resources>
