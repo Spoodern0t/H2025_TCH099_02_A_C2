@@ -68,7 +68,7 @@ public class CalendrierJour extends View {
 
         dessinerBloc(canvas);
 
-        dessinerElement(canvas);
+        //dessinerElement(canvas);
     }
 
     private void dessinerBloc(Canvas canvas) {
