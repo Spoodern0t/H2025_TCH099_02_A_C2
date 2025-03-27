@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".vues.AccueilActivity">
 
+    <com.example.multuscalendrius.costumlayout.CalendrierJour
+        android:id="@+id/calendrierJour"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <!--
     <me.jlurena.revolvingweekview.WeekView
         android:id="@+id/weekView"
         android:layout_width="match_parent"
@@ -22,5 +28,6 @@
         app:hourHeight="60dp"
         app:noOfVisibleDays="1"
         app:todayBackgroundColor="#1848adff" />
+        -->
 
-</LinearLayout>
+</ScrollView>
