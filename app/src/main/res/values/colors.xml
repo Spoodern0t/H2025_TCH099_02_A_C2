@@ -6,6 +6,6 @@
 
     <color name="couleur_primaire">#C09AE0</color>
     <color name="couleur_background">#FDFDFD</color>
-    <color name="couleur_icon">#999999</color>
+    <color name="couleur_icon">#3C3C3C</color>
     <color name="couleur_bouton">#6200EE</color>
 </resources>
