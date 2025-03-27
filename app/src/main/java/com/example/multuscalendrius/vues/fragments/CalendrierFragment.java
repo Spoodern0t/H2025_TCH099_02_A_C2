@@ -27,11 +27,15 @@ public class CalendrierFragment extends Fragment implements WeekView.WeekViewLoa
         // Mettre toutes les intéractions de la vue içi
         View view = inflater.inflate(R.layout.fragment_calendrier, container, false);
 
+        /*
         mWeekView = view.findViewById(R.id.weekView);
 
         // TODO: Observer les requetes du calendrier
         // Set le chargement des events.
         mWeekView.setWeekViewLoader(this);
+        */
+
+        view.findViewById(R.id.calendrierJour);
 
         return view;
     }
