@@ -43,7 +43,7 @@ public class Calendrier {
 
     // ----------- API WRAPPERS -----------
 
-    public static void fetchById(Long id, ApiCallback<Calendrier> callback) {
+    public static void fetchById(int id, ApiCallback<Calendrier> callback) {
         ApiService api = new ApiService();
         api.getCalendrier(id, new ApiCallback<Calendrier>() {
             @Override
