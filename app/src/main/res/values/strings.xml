@@ -28,4 +28,6 @@
     <string name="partager_le_calendrier">Partager le calendrier</string>
     <string name="menu_du_calendrier">Menu du calendrier</string>
     <string name="filtrer_les_elements">Filtrer les éléments</string>
+    <string name="menu_des_calendriers">Menu des calendriers</string>
+    <string name="bouton_de_creation">Bouton de création</string>
 </resources>

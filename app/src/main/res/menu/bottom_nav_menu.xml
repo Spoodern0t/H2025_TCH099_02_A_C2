@@ -5,9 +5,9 @@
         android:title="@string/calendrier"
         android:icon="@drawable/calendar_icon"/>
     <item
-        android:id="@+id/menu"
-        android:title="@string/menu"
-        android:icon="@drawable/add_icon"/>
+        android:enabled="false"
+        android:icon="@android:color/transparent"
+        android:title="" />
     <item
         android:id="@+id/planificateur"
         android:title="@string/planificateur"

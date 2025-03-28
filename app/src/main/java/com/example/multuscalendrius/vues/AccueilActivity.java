@@ -24,7 +24,7 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accueil);
 
-        imgBtnCreate = findViewById(R.id.imgBtnCreate);
+        imgBtnCreate = findViewById(R.id.imgBtnMenu);
         imgBtnPhotoProfil = findViewById(R.id.imgBtnPhotoProfil);
 
         imgBtnCreate.setOnClickListener(this);
@@ -77,10 +77,7 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         // Les actions des boutons de la barre de navigation
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             int ItemId = item.getItemId();
-            if (ItemId == R.id.menu) {
-                finish();
-                return true;
-            } else if (ItemId == R.id.calendrier) {
+            if (ItemId == R.id.calendrier) {
                 setCurrentFragment(calendrierFragment);
                 return true;
             } else if (ItemId == R.id.planificateur) {
