@@ -3,7 +3,7 @@ package com.example.multuscalendrius.modeles.entitees;
 import java.time.LocalDateTime;
 
 public class Element {
-    private String id;
+    private int id;
     private String calendrierId;
     private String nom;
     private String description;
