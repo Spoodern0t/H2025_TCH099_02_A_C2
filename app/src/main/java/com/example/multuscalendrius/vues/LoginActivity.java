@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
             // Appel de l'API via ApiService.login en passant tous les champs requis
-            apiService.login(email, password, new ApiCallback<LoginResponse>() {
+            /*apiService.login(email, password, new ApiCallback<LoginResponse>() {
                 @Override
                 public void onSuccess(LoginResponse result) {
                     // Vérifier que le token est valide
@@ -78,6 +78,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // Redirection vers l'activité d'inscription
             Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(intent);
+
+             */
         }
     }
 }

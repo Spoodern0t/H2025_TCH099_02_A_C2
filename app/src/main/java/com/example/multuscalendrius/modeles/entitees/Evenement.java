@@ -5,7 +5,12 @@ import java.time.LocalDateTime;
 
 public class Evenement {
 
-    private String id;
+    private int id;
+    private String calendrierId;
+    private String description;
+    private String description;
+    private String description;
+    private String description;
 
     private String titre;
 
@@ -15,8 +20,9 @@ public class Evenement {
     }
 
     // Constructeur complet
-    public Evenement(String id, String titre, String description, LocalDateTime startTime, LocalDateTime endTime, String type, int priority, boolean completed) {
+    public Evenement(String id, String calendrierId, String titre, String description) {
         this.id = id;
+        this.calendrierId=calendrierId;
         this.titre = titre;
         this.description = description;
     }
@@ -45,4 +51,11 @@ public class Evenement {
     }
 
 
+    public int getCalendrierId() {
+        return calendrierId;
+    }
+
+    public void setCalendrierId(int calendrierId) {
+        this.calendrierId = calendrierId;
+    }
 }
