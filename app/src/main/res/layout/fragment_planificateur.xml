@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <androidx.appcompat.widget.SearchView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+        </androidx.appcompat.widget.SearchView>
+
+        <ImageButton
+            android:id="@+id/imgBtnFiltre"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/filtrer_les_elements"
+            android:src="@drawable/filter_icon"
+            android:scaleType="fitCenter"
+            android:background="@android:color/transparent"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/voyagesListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:entries="@array/Elements"/>
+
+</LinearLayout>

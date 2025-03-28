@@ -1,4 +1,4 @@
-package com.example.multuscalendrius.vues;
+package com.example.multuscalendrius.modeles.entitees;
 
 public class LoginResponse {
     private Boolean token;
