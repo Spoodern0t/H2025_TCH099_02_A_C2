@@ -10,6 +10,7 @@ public class Evenement {
     private String description;
     private String description;
     private String description;
+    private String description;
 
     private String titre;
 
