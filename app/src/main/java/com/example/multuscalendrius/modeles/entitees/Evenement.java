@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public class Evenement {
 
-    private String id;
+    private int id;
     private String calendrierId;
 
     private String titre;
