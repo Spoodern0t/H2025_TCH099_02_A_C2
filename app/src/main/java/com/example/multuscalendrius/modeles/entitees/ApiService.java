@@ -247,7 +247,7 @@ public class ApiService {
 
             // Construction de la requête DELETE en envoyant l'objet JSON dans le body
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/calendriers/delete")
+                    .url(BASE_URL + "/calendrier/delete")
                     .delete(body)
                     .build();
 
