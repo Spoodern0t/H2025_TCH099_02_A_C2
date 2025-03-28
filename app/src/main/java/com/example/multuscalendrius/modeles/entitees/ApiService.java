@@ -124,7 +124,7 @@ public class ApiService {
     // Calendriers
     // --------------------------
 
-    public void getCalendrier(Long calendrierId, ApiCallback<Calendrier> callback) {
+    public void getCalendrier(int calendrierId, ApiCallback<Calendrier> callback) {
         try {
             Request request = new Request.Builder()
                     .url(BASE_URL + "/calendrier/" + calendrierId) // Requête GET classique avec ID dans l’URL

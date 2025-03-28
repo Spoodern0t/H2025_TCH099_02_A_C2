@@ -8,14 +8,14 @@ public class User {
     private String email;
     private String password;
     private String username;
-    private LoginResponse token;
+    private String token;
     private List<UserCalendar> userCalendars;
 
     public User() {
         this.userCalendars = new ArrayList<>();
     }
 
-    public User(Long id, String email, String password, String name, LoginResponse token, List<UserCalendar> userCalendars) {
+    public User(Long id, String email, String password, String name, String token, List<UserCalendar> userCalendars) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -48,10 +48,10 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-    public LoginResponse getToken() {
+    public String getToken() {
         return token;
     }
-    public void setToken(LoginResponse token) {
+    public void setToken(String token) {
         this.token = token;
     }
     public List<UserCalendar> getUserCalendars() {

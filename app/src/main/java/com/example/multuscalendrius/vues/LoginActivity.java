@@ -1,14 +1,11 @@
 package com.example.multuscalendrius.vues;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.multuscalendrius.R;
-import com.example.multuscalendrius.modeles.entitees.ApiCallback;
 import com.example.multuscalendrius.modeles.entitees.ApiService;
-import com.example.multuscalendrius.modeles.entitees.LoginResponse;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 

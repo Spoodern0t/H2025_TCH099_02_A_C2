@@ -1,26 +1,17 @@
 package com.example.multuscalendrius.modeles.entitees;
 
-import java.time.LocalDateTime;
-
-
 public class Evenement {
 
     private int id;
-    private String calendrierId;
+    private int calendrierId;
     private String description;
-    private String description;
-    private String description;
-    private String description;
-
     private String titre;
-
-    private String description;
 
     public Evenement() {
     }
 
     // Constructeur complet
-    public Evenement(String id, String calendrierId, String titre, String description) {
+    public Evenement(int id, int calendrierId, String titre, String description) {
         this.id = id;
         this.calendrierId=calendrierId;
         this.titre = titre;
@@ -29,10 +20,10 @@ public class Evenement {
 
     // Getters et Setters
 
-    public String getId() {
+    public int getId() {
         return id;
     }
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

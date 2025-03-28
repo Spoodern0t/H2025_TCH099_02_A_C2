@@ -1,5 +1,6 @@
 package com.example.multuscalendrius.modeles.entitees;
 
+
 import android.util.Log;
 
 import java.time.LocalDateTime;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Calendrier {
-    private Long id;
+    private int id;
     private String nom;
     private String description;
     private String auteur;
@@ -130,7 +131,7 @@ public class Calendrier {
             @Override
             public void onSuccess(Boolean success) {
                 if (success != null && success) {
-                    id = null;
+                    id = Integer.parseInt(null);
                     nom = null;
                     description = null;
                     auteur = null;

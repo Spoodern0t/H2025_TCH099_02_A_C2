@@ -99,6 +99,8 @@ public class SignUpActivity extends AppCompatActivity {
                 .post(body)
                 .build();
 
+        /*
+
         // Exécution asynchrone de la requête
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -140,8 +142,12 @@ public class SignUpActivity extends AppCompatActivity {
                     runOnUiThread(() ->
                             Toast.makeText(SignUpActivity.this, "Échec de l'inscription", Toast.LENGTH_SHORT).show()
                     );
+
+
                 }
             }
         });
+
+         */
     }
 }
