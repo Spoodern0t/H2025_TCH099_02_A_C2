@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Element {
     private int id;
-    private String calendrierId;
+    private int calendrierId;
     private String nom;
     private String description;
     private Evenement evenement;
