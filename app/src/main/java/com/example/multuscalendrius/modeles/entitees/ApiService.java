@@ -79,7 +79,7 @@ public class ApiService {
     }
 
 
-    public void login(String username, String password, ApiCallback<User> callback) {
+    public void login(String email, String password, ApiCallback<User> callback) {
         try {
             // Création d'un objet JSON avec toutes les informations de connexion
             JSONObject json = new JSONObject();
