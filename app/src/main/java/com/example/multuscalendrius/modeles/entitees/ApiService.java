@@ -89,7 +89,7 @@ public class ApiService {
             // Préparation du corps de la requête en JSON
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/login")
+                    .url(BASE_URL + "/connexion")
                     .post(body)
                     .build();
 
