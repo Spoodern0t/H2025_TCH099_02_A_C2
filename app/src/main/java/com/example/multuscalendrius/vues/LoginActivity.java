@@ -2,141 +2,84 @@ package com.example.multuscalendrius.vues;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.multuscalendrius.R;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.multuscalendrius.modeles.entitees.ApiCallback;
+import com.example.multuscalendrius.modeles.entitees.ApiService;
+import com.example.multuscalendrius.modeles.entitees.LoginResponse;
 
-import org.json.JSONObject;
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-import java.io.IOException;
-import okhttp3.*;
-
-public class LoginActivity extends AppCompatActivity {
-
-    // Déclaration des composants UI
     private EditText editTextEmail, editTextPassword;
     private Button buttonLogin;
     private TextView textViewSignUp;
 
-    // Objets pour les requêtes réseau et le traitement JSON
-    private OkHttpClient client;
-    private JSONObject obj;
-    private ObjectMapper mapper;
-    private LoginResponse rep;
-
-    // URL de l'API (à adapter)
-    private static final String LOGIN_URL = "https://api.exemple.com/login";
+    private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Liaison des vues depuis le layout
+        // Liaison des vues depuis le layout XML
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
         textViewSignUp = findViewById(R.id.textViewSignUp);
 
-        // Initialisation des objets nécessaires
-        client = new OkHttpClient();
-        obj = new JSONObject();
-        mapper = new ObjectMapper();
-        rep = new LoginResponse();
+        // Initialisation de l'ApiService
+        apiService = new ApiService();
 
-        // Définir l'action du bouton de connexion
-        buttonLogin.setOnClickListener(v -> login());
-
-        // Rediriger vers la page d'inscription en cas de clic sur "S'inscrire"
-        textViewSignUp.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-            startActivity(intent);
-        });
+        // Définir les écouteurs de clic
+        buttonLogin.setOnClickListener(this);
+        textViewSignUp.setOnClickListener(this);
     }
 
-    private void login() {
-        // Récupération et vérification des données saisies
-        String email = editTextEmail.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
+    @Override
+    public void onClick(View v) {
+        if (v.equals(buttonLogin)) {
+            // Récupération des données saisies par l'utilisateur
+            String email = editTextEmail.getText().toString().trim();
+            String password = editTextPassword.getText().toString().trim();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Création d'un objet JSON pour les informations de connexion
-        JSONObject jsonLogin = new JSONObject();
-        try {
-            jsonLogin.put("email", email);
-            jsonLogin.put("password", password);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Erreur JSON", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Préparation du corps de la requête avec le type MIME JSON
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(jsonLogin.toString(), JSON);
-
-        // Construction de la requête POST
-        Request request = new Request.Builder()
-                .url(LOGIN_URL)
-                .post(body)
-                .build();
-
-        // Exécution asynchrone de la requête pour éviter le blocage du thread principal
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                // Mise à jour de l'UI en cas d'erreur réseau
-                runOnUiThread(() ->
-                        Toast.makeText(LoginActivity.this, "Erreur réseau", Toast.LENGTH_SHORT).show()
-                );
+            // Vérification que tous les champs sont remplis
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                // Traitement de la réponse du serveur
-                if (response.isSuccessful() && response.body() != null) {
-                    String responseBody = response.body().string();
-                    try {
-                        // Désérialisation de la réponse JSON en objet LoginResponse
-                        rep = mapper.readValue(responseBody, LoginResponse.class);
-
-                        // Vérification de la présence d'un token indiquant une connexion réussie
-                        if (rep.getToken()) {
-                            // Mise à jour de l'UI sur le thread principal
-                            runOnUiThread(() -> {
-                                /*
-
-                                // Création de l'Intent pour rediriger vers l'activité principale
-                                Intent intent = new Intent(LoginActivity.this, com.example.multuscalendrius.vues.MenuCalendrierActivity.class);
-                                startActivity(intent);
-                                finish(); // Fermer LoginActivity
-
-                                 */
-                            });
-                        } else {
-                            runOnUiThread(() ->
-                                    Toast.makeText(LoginActivity.this, "Token manquant", Toast.LENGTH_SHORT).show()
-                            );
-                        }
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
+            // Appel de l'API via ApiService.login en passant tous les champs requis
+            /*apiService.login(email, password, new ApiCallback<LoginResponse>() {
+                @Override
+                public void onSuccess(LoginResponse result) {
+                    // Vérifier que le token est valide
+                    if (result.getToken()) {
+                        runOnUiThread(() -> {
+                            Intent intent = new Intent(LoginActivity.this, MenuCalendriersActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
+                    } else {
                         runOnUiThread(() ->
-                                Toast.makeText(LoginActivity.this, "Erreur de parsing", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(LoginActivity.this, "Connexion échouée: token invalide", Toast.LENGTH_SHORT).show()
                         );
                     }
-                } else {
+                }
+                @Override
+                public void onFailure(String errorMessage) {
                     runOnUiThread(() ->
-                            Toast.makeText(LoginActivity.this, "Échec de la connexion", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show()
                     );
                 }
-            }
-        });
+            });
+        } else if (v.equals(textViewSignUp)) {
+            // Redirection vers l'activité d'inscription
+            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+            startActivity(intent);
+
+             */
+        }
     }
 }
