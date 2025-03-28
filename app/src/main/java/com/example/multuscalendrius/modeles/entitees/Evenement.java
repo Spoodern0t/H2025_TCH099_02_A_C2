@@ -9,6 +9,7 @@ public class Evenement {
     private String calendrierId;
     private String description;
     private String description;
+    private String description;
 
     private String titre;
 
