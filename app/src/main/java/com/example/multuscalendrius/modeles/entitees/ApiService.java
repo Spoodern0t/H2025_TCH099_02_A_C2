@@ -47,7 +47,7 @@ public class ApiService {
 
             // Construction de la requête HTTP POST vers l'endpoint /register
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/register")
+                    .url(BASE_URL + "/inscription")
                     .post(body)
                     .build();
 
