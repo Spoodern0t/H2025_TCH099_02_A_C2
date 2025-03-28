@@ -53,7 +53,7 @@ public class Element {
         this.evenement = evenement;
     }
 
-    public String getCalendrierId() {
+    public int getCalendrierId() {
         return calendrierId;
     }
 
