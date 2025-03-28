@@ -57,7 +57,7 @@ public class Element {
         return calendrierId;
     }
 
-    public void setCalendrierId(String calendrierId) {
+    public void setCalendrierId(int calendrierId) {
         this.calendrierId = calendrierId;
     }
 
