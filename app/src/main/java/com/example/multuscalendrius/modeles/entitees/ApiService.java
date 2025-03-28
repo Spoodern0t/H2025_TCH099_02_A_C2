@@ -83,7 +83,7 @@ public class ApiService {
         try {
             // Création d'un objet JSON avec toutes les informations de connexion
             JSONObject json = new JSONObject();
-            json.put("nom-utilisateur", username);
+            json.put("email", email);
             json.put("mot-de-passe", password);
 
             // Préparation du corps de la requête en JSON
