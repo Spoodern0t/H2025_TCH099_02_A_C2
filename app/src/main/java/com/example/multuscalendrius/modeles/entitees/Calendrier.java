@@ -23,7 +23,7 @@ public class Calendrier {
 
 
     // Getters & Setters
-    public Long getId() { return id; }
+    public int getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getNom() { return nom; }
