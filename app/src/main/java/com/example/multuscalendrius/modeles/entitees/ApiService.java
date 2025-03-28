@@ -170,7 +170,7 @@ public class ApiService {
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/calendriers")
+                    .url(BASE_URL + "/calendrier")
                     .post(body)
                     .build();
 
