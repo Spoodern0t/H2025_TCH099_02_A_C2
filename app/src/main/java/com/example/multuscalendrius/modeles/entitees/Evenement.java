@@ -47,7 +47,7 @@ public class Evenement {
     }
 
 
-    public String getCalendrierId() {
+    public int getCalendrierId() {
         return calendrierId;
     }
 
