@@ -25,7 +25,7 @@ public class Element {
         this.dateFin=dateFin;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
     public void setId(String id) {
