@@ -7,6 +7,7 @@ public class Evenement {
 
     private int id;
     private String calendrierId;
+    private String description;
 
     private String titre;
 
