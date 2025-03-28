@@ -14,7 +14,7 @@ public class Element {
 
 
 
-    public Element(String id, String calendrierId, String nom, String description,
+    public Element(int id, int calendrierId, String nom, String description,
                    Evenement evenement, LocalDateTime dateDebut, LocalDateTime dateFin) {
         this.id = id;
         this.calendrierId = calendrierId;
