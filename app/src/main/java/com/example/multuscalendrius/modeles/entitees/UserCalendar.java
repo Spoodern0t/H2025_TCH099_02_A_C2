@@ -5,9 +5,11 @@ public class UserCalendar {
     private Long userId;
     private Long calendarId;
     private Boolean estMembre;
-    private Boolean invitationAccepté;
+    private Boolean inviteAccepted;
+    private String auteur;
 
     // Constructeur par défaut
+
     public UserCalendar() {}
 
     // Constructeur complet
@@ -39,12 +41,20 @@ public class UserCalendar {
         this.estMembre = estMembre;
     }
 
-    public Boolean getInvitationAccepté() {
-        return invitationAccepté;
+    public Boolean getInviteAccepted() {
+        return inviteAccepted;
     }
 
-    public void setInvitationAccepté(Boolean invitationAccepté) {
-        this.invitationAccepté = invitationAccepté;
+    public void setInviteAccepted(Boolean inviteAccepted) {
+        this.inviteAccepted = inviteAccepted;
+    }
+
+    public String getAuteur() {
+        return auteur;
+    }
+
+    public void setAuteur(String auteur) {
+        this.auteur = auteur;
     }
 }
 

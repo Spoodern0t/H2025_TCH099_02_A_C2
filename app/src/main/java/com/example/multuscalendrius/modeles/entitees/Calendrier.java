@@ -1,6 +1,7 @@
 package com.example.multuscalendrius.modeles.entitees;
 
 
+import android.accounts.AuthenticatorException;
 import android.util.Log;
 
 import java.time.LocalDateTime;
@@ -44,9 +45,9 @@ public class Calendrier {
 
     // ----------- API WRAPPERS -----------
 
-    public static void fetchById(int id, ApiCallback<Calendrier> callback) {
+    public static void fetchById(int id, String token,  ApiCallback<Calendrier> callback) {
         ApiService api = new ApiService();
-        api.getCalendrier(id, new ApiCallback<Calendrier>() {
+        api.getCalendrier(id, token, new ApiCallback<Calendrier>() {
             @Override
             public void onSuccess(Calendrier calendrier) {
                 callback.onSuccess(calendrier);
@@ -105,15 +106,18 @@ public class Calendrier {
         });
     }
 
-    public void syncUpdate(String leNom, String laDescription, String leAuteurString) {
-        this.setAuteur(leAuteurString);
-        this.setDescription(laDescription);
-        this.setNom(leNom);
-        apiService.updateCalendrier(this, new ApiCallback<Boolean>() {
+    public void syncUpdate(String leNom, String laDescription, String leAuteurString,String token) {
+
+        apiService.updateCalendrier(this,token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
                 if (success != null && success) {
                     Log.d("Calendrier", "Mise à jour réussie");
+                    auteur = leAuteurString;
+                    description = laDescription;
+                    nom = leNom;
+
+
                 } else {
                     Log.e("Calendrier", "Échec de la mise à jour");
                 }
@@ -126,8 +130,8 @@ public class Calendrier {
         });
     }
 
-    public void syncDelete() {
-        apiService.deleteCalendrier(this, new ApiCallback<Boolean>() {
+    public void syncDelete(String token) {
+        apiService.deleteCalendrier(this, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
                 if (success != null && success) {
@@ -151,8 +155,8 @@ public class Calendrier {
         });
     }
 
-    public void addEvenement(String titre, String description) {
-        apiService.createEvenement(this, titre, description, new ApiCallback<Evenement>() {
+    public void addEvenement(String titre, String description, String token) {
+        apiService.createEvenement(this, titre, description, token, new ApiCallback<Evenement>() {
             @Override
             public void onSuccess(Evenement evenement) {
                 if (evenement != null) {
@@ -170,14 +174,15 @@ public class Calendrier {
         });
     }
 
-    public void updateEvenement(Evenement evenement, String titre, String description) {
-        evenement.setTitre(titre);
-        evenement.setDescription(description);
-        apiService.updateEvenement(evenement, new ApiCallback<Boolean>() {
+    public void updateEvenement(Evenement evenement, String titre, String description, String token) {
+
+        apiService.updateEvenement(evenement, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
                 if (success != null && success) {
                     Log.d("Calendrier", "Événement mis à jour");
+                    evenement.setTitre(titre);
+                    evenement.setDescription(description);
                 } else {
                     Log.e("Calendrier", "Échec de la mise à jour de l'événement");
                 }
@@ -190,8 +195,8 @@ public class Calendrier {
         });
     }
 
-    public void deleteEvenement(Evenement evenement) {
-        apiService.deleteEvenement(evenement, new ApiCallback<Boolean>() {
+    public void deleteEvenement(Evenement evenement, String token) {
+        apiService.deleteEvenement(evenement, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
                 if (success != null && success) {
@@ -210,8 +215,8 @@ public class Calendrier {
     }
 
     public void addElement(String nom, String description, Evenement evenement, LocalDateTime dateDebut,
-                           LocalDateTime dateFin) {
-        apiService.createElement(this, nom, description, evenement, dateDebut, dateFin, new ApiCallback<Element>() {
+                           LocalDateTime dateFin, String token) {
+        apiService.createElement(this, nom, description, evenement, dateDebut, dateFin, token,new ApiCallback<Element>() {
             @Override
             public void onSuccess(Element element) {
                 if (element != null) {
@@ -229,14 +234,15 @@ public class Calendrier {
         });
     }
 
-    public void updateElement(Element element,String nom, String description, Evenement evenement ) {
-        element.setNom(nom);
-        element.setDescription(description);
-        element.setEvenement(evenement);
-        apiService.updateElement(element, new ApiCallback<Boolean>() {
+    public void updateElement(Element element,String nom, String description, Evenement evenement, String token) {
+
+        apiService.updateElement(element, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
                 if (success != null && success) {
+                    element.setNom(nom);
+                    element.setDescription(description);
+                    element.setEvenement(evenement);
                     Log.d("Calendrier", "Élément mis à jour");
                 } else {
                     Log.e("Calendrier", "Échec de la mise à jour de l'élément");
@@ -250,8 +256,8 @@ public class Calendrier {
         });
     }
 
-    public void deleteElement(Element element) {
-        apiService.deleteElement(element, new ApiCallback<Boolean>() {
+    public void deleteElement(Element element,String token) {
+        apiService.deleteElement(element, token,new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
                 if (success != null && success) {

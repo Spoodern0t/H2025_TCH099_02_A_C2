@@ -33,7 +33,7 @@ public class ApiService {
     // Utilisateur (inscription, connexion)
     // --------------------------
 
-    public void register(String email, String username, String password, String confirmPassword, ApiCallback<LoginResponse> callback) {
+    public void inscription(String email, String username, String password, String confirmPassword, ApiCallback<LoginResponse> callback) {
         try {
             // Création d'un objet JSON avec les informations d'inscription
             JSONObject json = new JSONObject();
@@ -79,12 +79,13 @@ public class ApiService {
     }
 
 
-    public void login(String email, String password, ApiCallback<User> callback) {
+    public void connexion(String email, String password, ApiCallback<User> callback) {
         try {
             // Création d'un objet JSON avec toutes les informations de connexion
             JSONObject json = new JSONObject();
             json.put("email", email);
             json.put("mot-de-passe", password);
+
 
             // Préparation du corps de la requête en JSON
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
@@ -119,15 +120,86 @@ public class ApiService {
         }
     }
 
+    public void decoUser(String token, ApiCallback<Boolean> callback) {
+        try {
+            // Création d'un objet JSON contenant l'ID du calendrier
+            JSONObject json = new JSONObject();
+            json.put("token", token);
+
+            RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
+
+            // Construction de la requête DELETE en envoyant l'objet JSON dans le body
+            Request request = new Request.Builder()
+                    .url(BASE_URL + "/deconnexion")
+                    .delete(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                }
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.code() == 200 || response.code() == 204) {
+                        callback.onSuccess(true);
+                    } else {
+                        callback.onFailure("Échec de la suppression: " + response.code());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            callback.onFailure("Erreur lors de la création du JSON: " + e.getMessage());
+        }
+    }
+
+    // --------------------------
+    // UserCalendar
+    // --------------------------
+
+    public void getUserCalendar(String token, ApiCallback<List<UserCalendar>> callback) {
+        try {
+            Request request = new Request.Builder()
+                    .url(BASE_URL + "/usercalendars/" + token)
+                    .get()
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                }
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if(response.isSuccessful() && response.body() != null) {
+                        String responseBody = response.body().string();
+                        try {
+                            List<UserCalendar> calendars = mapper.readValue(responseBody, new TypeReference<List<UserCalendar>>() {});
+                            callback.onSuccess(calendars);
+                        } catch (JsonProcessingException e) {
+                            callback.onFailure("Erreur de parsing JSON: " + e.getMessage());
+                        }
+                    } else {
+                        callback.onFailure("Échec de la connexion: " + response.code());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            callback.onFailure("Erreur lors de la création de la requête: " + e.getMessage());
+        }
+    }
+
+
+
 
     // --------------------------
     // Calendriers
     // --------------------------
 
-    public void getCalendrier(int calendrierId, ApiCallback<Calendrier> callback) {
+    public void getCalendrier(int calendrierId, String token, ApiCallback<Calendrier> callback) {
         try {
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/calendrier/" + calendrierId) // Requête GET classique avec ID dans l’URL
+                    .url(BASE_URL + "/calendrier/" + calendrierId + "/token/"+ token) // Requête GET classique avec ID dans l’URL
                     .get()
                     .build();
 
@@ -160,13 +232,13 @@ public class ApiService {
 
 
 
-    public void createCalendrier(String nom, String description, String auteur, ApiCallback<Calendrier> callback) {
+    public void createCalendrier(String nom, String description, String token, ApiCallback<Calendrier> callback) {
         try {
             // Création d'un objet JSON contenant les paramètres
             JSONObject json = new JSONObject();
             json.put("nom", nom);
             json.put("description", description);
-            json.put("auteur", auteur);
+            json.put("token", token);
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
@@ -199,15 +271,15 @@ public class ApiService {
         }
     }
 
+    //PREND A PARAMETRE LE CALENDRIER PRÉ-MODIFIER
 
-    public void updateCalendrier(Calendrier calendrier, ApiCallback<Boolean> callback) {
+    public void updateCalendrier(Calendrier calendrier, String token, ApiCallback<Boolean> callback) {
         try {
             // Création d'un objet JSON en extrayant les champs nécessaires du calendrier
             JSONObject json = new JSONObject();
-            json.put("id", calendrier.getId());
             json.put("nom", calendrier.getNom());
             json.put("description", calendrier.getDescription());
-            json.put("auteur", calendrier.getAuteur());
+            json.put("token", token);
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
@@ -237,17 +309,17 @@ public class ApiService {
 
 
 
-    public void deleteCalendrier(Calendrier calendrier, ApiCallback<Boolean> callback) {
+    public void deleteCalendrier(Calendrier calendrier,String token, ApiCallback<Boolean> callback) {
         try {
             // Création d'un objet JSON contenant l'ID du calendrier
             JSONObject json = new JSONObject();
-            json.put("id", calendrier.getId());
+            json.put("token", token);
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
 
             // Construction de la requête DELETE en envoyant l'objet JSON dans le body
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/calendrier/delete")
+                    .url(BASE_URL + "/calendrier/"+ calendrier.getId())
                     .delete(body)
                     .build();
 
@@ -273,17 +345,18 @@ public class ApiService {
 
     // ---------- Evenements ----------
 
-    public void createEvenement(Calendrier calendrier, String titre, String description, ApiCallback<Evenement> callback) {
+    public void createEvenement(Calendrier calendrier, String titre, String description, String token, ApiCallback<Evenement> callback) {
         try {
             // Extraction de l'ID du calendrier et création d'un objet JSON avec les informations de l'événement
             JSONObject json = new JSONObject();
             json.put("calendrierId", calendrier.getId());
             json.put("titre", titre);
             json.put("description", description);
+            json.put("token", token);
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/calendriers/" + calendrier.getId() + "/evenements")
+                    .url(BASE_URL + "/calendrier/" + calendrier.getId() + "/evenement")
                     .post(body)
                     .build();
 
@@ -313,18 +386,18 @@ public class ApiService {
     }
 
    //On modifie l'evenement avant et le place en parametre pour pouvoir effectuer ce changement
-    public void updateEvenement(Evenement evenement, ApiCallback<Boolean> callback) {
+    public void updateEvenement(Evenement evenement, String token, ApiCallback<Boolean> callback) {
         try {
             // Création d'un objet JSON en extrayant les données de l'objet Evenement
             JSONObject json = new JSONObject();
-            json.put("id", evenement.getId());
+            json.put("token",token);
             json.put("calendrierId", evenement.getCalendrierId());
             json.put("titre", evenement.getTitre());
             json.put("description", evenement.getDescription());
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/calendriers/" + evenement.getCalendrierId() + "/evenements/" + evenement.getId())
+                    .url(BASE_URL + "/evenements/" + evenement.getId())
                     .put(body)
                     .build();
 
@@ -349,16 +422,16 @@ public class ApiService {
     }
 
 
-    public void deleteEvenement(Evenement evenement, ApiCallback<Boolean> callback) {
+    public void deleteEvenement(Evenement evenement, String token, ApiCallback<Boolean> callback) {
         try {
             // Créer un objet JSON contenant l'id de l'événement et l'id du calendrier
             JSONObject json = new JSONObject();
-            json.put("id", evenement.getId());
+            json.put("token", token);
             json.put("calendrierId", evenement.getCalendrierId());
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/calendriers/" + evenement.getCalendrierId() + "/evenements/" + evenement.getId())
+                    .url(BASE_URL + "/evenements/" + evenement.getId())
                     .delete(body)
                     .build();
 
@@ -385,11 +458,11 @@ public class ApiService {
 
     // Fonction pour créer une nouvelle element dans un calendrier
     public void createElement(Calendrier calendrier, String nom, String description, Evenement evenement, LocalDateTime dateDebut,
-            LocalDateTime dateFin, ApiCallback<Element> callback) {
+            LocalDateTime dateFin, String token, ApiCallback<Element> callback) {
         try {
             // Création d'un objet JSON avec les informations de la deadline
             JSONObject json = new JSONObject();
-            json.put("calendrierId", calendrier.getId());
+            json.put("token", token);
             json.put("nom",nom );
             json.put("description",description );
             // Convertir l'objet Evenement en JSON via le mapper
@@ -400,7 +473,7 @@ public class ApiService {
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/calendriers/" + calendrier.getId() + "/deadline")
+                    .url(BASE_URL + "/calendrier/" + calendrier.getId() + "/element")
                     .post(body)
                     .build();
 
@@ -429,12 +502,12 @@ public class ApiService {
         }
     }
 
-    // Fonction pour mettre à jour une Deadline existant
-    public void updateElement(Element element, ApiCallback<Boolean> callback) {
+    // Fonction pour mettre à jour un element existant
+    public void updateElement(Element element, String token, ApiCallback<Boolean> callback) {
         try {
             // Création d'un objet JSON en extrayant les données de l'objet Deadline
             JSONObject json = new JSONObject();
-            json.put("id", element.getId());
+            json.put("token", token);
             json.put("calendrierId", element.getCalendrierId());
             json.put("nom", element.getNom());
             json.put("description", element.getDescription());
@@ -444,7 +517,7 @@ public class ApiService {
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/calendriers/" + element.getCalendrierId() + "/deadline/" + element.getId())
+                    .url(BASE_URL + "/element/" + element.getId())
                     .put(body)
                     .build();
 
@@ -469,16 +542,16 @@ public class ApiService {
     }
 
     // Fonction pour supprimer un element
-    public void deleteElement(Element element, ApiCallback<Boolean> callback) {
+    public void deleteElement(Element element, String token, ApiCallback<Boolean> callback) {
         try {
             // Création d'un objet JSON contenant l'id et le calendrierId de la deadline
             JSONObject json = new JSONObject();
-            json.put("id", element.getId());
+            json.put("token", token);
             json.put("calendrierId", element.getCalendrierId());
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/calendriers/" + element.getCalendrierId() + "/deadline/" + element.getId())
+                    .url(BASE_URL + "/element/" + element.getId())
                     .delete(body)
                     .build();
 
