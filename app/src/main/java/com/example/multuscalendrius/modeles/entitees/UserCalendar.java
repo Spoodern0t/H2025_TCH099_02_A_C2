@@ -4,16 +4,18 @@ package com.example.multuscalendrius.modeles.entitees;
 public class UserCalendar {
     private Long userId;
     private Long calendarId;
-    private UserRole role;
+    private Boolean estMembre;
+    private Boolean inviteAccepted;
+    private String auteur;
 
     // Constructeur par défaut
+
     public UserCalendar() {}
 
     // Constructeur complet
-    public UserCalendar(Long id, Long userId, Long calendarId, UserRole role) {
+    public UserCalendar(Long id, Long userId, Long calendarId) {
         this.userId = userId;
         this.calendarId = calendarId;
-        this.role = role;
     }
 
     // Getters et Setters
@@ -30,11 +32,29 @@ public class UserCalendar {
     public void setCalendarId(Long calendarId) {
         this.calendarId = calendarId;
     }
-    public UserRole getRole() {
-        return role;
+
+    public Boolean getEstMembre() {
+        return estMembre;
     }
-    public void setRole(UserRole role) {
-        this.role = role;
+
+    public void setEstMembre(Boolean estMembre) {
+        this.estMembre = estMembre;
+    }
+
+    public Boolean getInviteAccepted() {
+        return inviteAccepted;
+    }
+
+    public void setInviteAccepted(Boolean inviteAccepted) {
+        this.inviteAccepted = inviteAccepted;
+    }
+
+    public String getAuteur() {
+        return auteur;
+    }
+
+    public void setAuteur(String auteur) {
+        this.auteur = auteur;
     }
 }
 

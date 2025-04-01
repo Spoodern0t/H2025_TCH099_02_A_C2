@@ -1,5 +1,7 @@
 package com.example.multuscalendrius.modeles.entitees;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,21 +10,16 @@ public class User {
     private String email;
     private String password;
     private String username;
-    private LoginResponse token;
+    private String token;
     private List<UserCalendar> userCalendars;
+    private ApiService api;
 
     public User() {
         this.userCalendars = new ArrayList<>();
+        this.api = new ApiService();
     }
 
-    public User(Long id, String email, String password, String name, LoginResponse token, List<UserCalendar> userCalendars) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.username = name;
-        this.token = token;
-        this.userCalendars = userCalendars;
-    }
+
 
     public Long getId() {
         return id;
@@ -48,10 +45,10 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-    public LoginResponse getToken() {
+    public String getToken() {
         return token;
     }
-    public void setToken(LoginResponse token) {
+    public void setToken(String token) {
         this.token = token;
     }
     public List<UserCalendar> getUserCalendars() {
@@ -60,6 +57,52 @@ public class User {
     public void setUserCalendars(List<UserCalendar> userCalendars) {
         this.userCalendars = userCalendars;
     }
+    // ----------- API WRAPPERS -----------
+
+    public void syncUserCalendars(String token) {
+        api.getUserCalendar(token, new ApiCallback<List<UserCalendar>>() {
+            @Override
+            public void onSuccess(List<UserCalendar> result) {
+                if (result != null) {
+                    setUserCalendars(result);
+                    Log.d("User", "Récupération des userCalendars réussie: " + result.size() + " éléments");
+                } else {
+                    Log.e("User", "Réponse vide lors de la récupération des userCalendars");
+                }
+            }
+            @Override
+            public void onFailure(String errorMessage) {
+                Log.e("User", "Erreur lors de la récupération des userCalendars: " + errorMessage);
+            }
+        });
+    }
+
+
+    public void syncLogin(String email, String password) {
+
+        api.connexion(email, password, new ApiCallback<User>() {
+            @Override
+            public void onSuccess(User result) {
+                if (result != null) {
+                    setId(result.getId());
+                    setEmail(result.getEmail());
+                    setPassword(result.getPassword());
+                    setUsername(result.getUsername());
+                    setToken(result.getToken());
+                    setUserCalendars(result.getUserCalendars());
+                    Log.d("User", "Login réussi: ID=" + id);
+                } else {
+                    Log.e("User", "Réponse vide lors du login");
+                }
+            }
+            @Override
+            public void onFailure(String errorMessage) {
+                Log.e("User", "Erreur lors du login: " + errorMessage);
+            }
+        });
+    }
+
+
 }
 
 

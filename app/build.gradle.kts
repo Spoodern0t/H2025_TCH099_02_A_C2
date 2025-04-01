@@ -29,6 +29,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    packaging {
+        resources.pickFirsts.add("META-INF/INDEX.LIST")
+        resources.pickFirsts.add("META-INF/DEPENDENCIES")
+        resources.pickFirsts.add("META-INF/io.netty.versions.properties")
+    }
 }
 
 dependencies {
@@ -42,6 +47,7 @@ dependencies {
     implementation("me.jlurena:revolvingweekview:1.0.0") {
         exclude(group = "com.android.support")
     }
+    implementation(libs.firebase.appdistribution.gradle)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
