@@ -1,5 +1,12 @@
-package com.example.multuscalendrius.modeles.entitees;
+package com.example.multuscalendrius.modeles;
 
+import com.example.multuscalendrius.modeles.entitees.LoginResponse;
+import com.example.multuscalendrius.modeles.entitees.Calendrier;
+import com.example.multuscalendrius.modeles.entitees.Element;
+import com.example.multuscalendrius.modeles.entitees.Evenement;
+import com.example.multuscalendrius.modeles.entitees.User;
+import com.example.multuscalendrius.modeles.entitees.UserCalendar;
+import com.example.multuscalendrius.vuemodele.ApiCallback;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

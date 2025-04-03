@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.multuscalendrius.R;
-import com.example.multuscalendrius.modeles.entitees.ApiService;
+import com.example.multuscalendrius.modeles.ApiService;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 

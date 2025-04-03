@@ -7,18 +7,20 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.multuscalendrius.R;
+import com.example.multuscalendrius.costumlayout.CalendrierJour;
+import com.example.multuscalendrius.modeles.dao.DaoJour;
+import com.example.multuscalendrius.vues.AccueilActivity;
+import com.example.multuscalendrius.vues.adaptateurs.JourAdaptateur;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import me.jlurena.revolvingweekview.WeekView;
-import me.jlurena.revolvingweekview.WeekViewEvent;
+public class CalendrierFragment extends Fragment {
 
-public class CalendrierFragment extends Fragment implements WeekView.WeekViewLoader {
-
-    private WeekView mWeekView;
+    private RecyclerView rvJours;
+    private CalendrierJour calendrierJour;
 
     @Nullable
     @Override
@@ -27,21 +29,14 @@ public class CalendrierFragment extends Fragment implements WeekView.WeekViewLoa
         // Mettre toutes les intéractions de la vue içi
         View view = inflater.inflate(R.layout.fragment_calendrier, container, false);
 
-        mWeekView = view.findViewById(R.id.weekView);
+        rvJours = view.findViewById(R.id.rvJours);
+        calendrierJour = view.findViewById(R.id.calendrierJour);
 
-        // TODO: Observer les requetes du calendrier
-        // Set le chargement des events.
-        mWeekView.setWeekViewLoader(this);
+        List<String> jours = DaoJour.getInstance().getJours();
+
+        JourAdaptateur adaptateur = new JourAdaptateur(jours);
+        rvJours.setAdapter(adaptateur);
 
         return view;
-    }
-
-    @Override
-    public List<? extends WeekViewEvent> onWeekViewLoad() {
-        List<WeekViewEvent> elements = new ArrayList<>();
-
-        // TODO: Get les éléments et les ajouter à la liste
-
-        return elements;
     }
 }

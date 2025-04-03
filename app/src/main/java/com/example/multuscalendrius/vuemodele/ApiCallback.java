@@ -1,4 +1,4 @@
-package com.example.multuscalendrius.modeles.entitees;
+package com.example.multuscalendrius.vuemodele;
 
 public interface ApiCallback<T> {
     void onSuccess(T result);

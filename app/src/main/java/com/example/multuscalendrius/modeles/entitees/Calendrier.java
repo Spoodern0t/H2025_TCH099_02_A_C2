@@ -1,8 +1,10 @@
 package com.example.multuscalendrius.modeles.entitees;
 
 
-import android.accounts.AuthenticatorException;
 import android.util.Log;
+
+import com.example.multuscalendrius.modeles.ApiService;
+import com.example.multuscalendrius.vuemodele.ApiCallback;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

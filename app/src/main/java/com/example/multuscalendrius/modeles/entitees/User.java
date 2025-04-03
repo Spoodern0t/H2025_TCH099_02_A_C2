@@ -2,6 +2,9 @@ package com.example.multuscalendrius.modeles.entitees;
 
 import android.util.Log;
 
+import com.example.multuscalendrius.modeles.ApiService;
+import com.example.multuscalendrius.vuemodele.ApiCallback;
+
 import java.util.ArrayList;
 import java.util.List;
 
