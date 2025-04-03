@@ -39,10 +39,6 @@ public class CalendrierJour extends View {
         init();
     }
 
-        super(context, attrs);
-        init();
-    }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int height = MeasureSpec.getSize(heightMeasureSpec) * 2;
