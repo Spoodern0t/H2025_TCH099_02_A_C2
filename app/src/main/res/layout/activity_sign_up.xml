@@ -65,4 +65,5 @@
         android:text="@string/deja_inscrit_se_connecter"
         android:textColor="@color/purple_500"
         android:layout_marginTop="16dp" />
+
 </LinearLayout>

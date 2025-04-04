@@ -5,10 +5,15 @@ import android.util.Log;
 import com.example.multuscalendrius.modeles.ApiService;
 import com.example.multuscalendrius.vuemodele.ApiCallback;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+
+public class User implements Serializable {
+    // Instance statique unique
+    private static User instance;
+
     private Long id;
     private String email;
     private String password;
@@ -17,13 +22,21 @@ public class User {
     private List<UserCalendar> userCalendars;
     private ApiService api;
 
-    public User() {
+    // Constructeur privé pour le Singleton
+    private User() {
         this.userCalendars = new ArrayList<>();
         this.api = new ApiService();
     }
 
+    // Méthode d'accès à l'instance unique
+    public static User getInstance() {
+        if (instance == null) {
+            instance = new User();
+        }
+        return instance;
+    }
 
-
+    // Getters & Setters
     public Long getId() {
         return id;
     }
@@ -60,8 +73,8 @@ public class User {
     public void setUserCalendars(List<UserCalendar> userCalendars) {
         this.userCalendars = userCalendars;
     }
-    // ----------- API WRAPPERS -----------
 
+    // ----------- API WRAPPERS -----------
     public void syncUserCalendars(String token) {
         api.getUserCalendar(token, new ApiCallback<List<UserCalendar>>() {
             @Override
@@ -80,9 +93,7 @@ public class User {
         });
     }
 
-
     public void syncLogin(String email, String password) {
-
         api.connexion(email, password, new ApiCallback<User>() {
             @Override
             public void onSuccess(User result) {
@@ -104,8 +115,7 @@ public class User {
             }
         });
     }
-
-
 }
+
 
 

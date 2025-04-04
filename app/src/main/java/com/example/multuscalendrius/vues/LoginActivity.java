@@ -1,11 +1,16 @@
 package com.example.multuscalendrius.vues;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.ApiService;
+import com.example.multuscalendrius.modeles.entitees.User;
+import com.example.multuscalendrius.vuemodele.ApiCallback;
+
+import java.io.Serializable;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -47,14 +52,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 return;
             }
 
-            // Appel de l'API via ApiService.login en passant tous les champs requis
-            /*apiService.login(email, password, new ApiCallback<LoginResponse>() {
+            // Appel de la méthode connexion de l'ApiService
+            apiService.connexion(email, password, new ApiCallback<User>() {
                 @Override
-                public void onSuccess(LoginResponse result) {
-                    // Vérifier que le token est valide
-                    if (result.getToken()) {
+                public void onSuccess(User user) {
+                    // Vérification de la validité du token (supposant que User possède une méthode getToken())
+                    if (user != null && user.getToken() != null && !user.getToken().isEmpty()) {
                         runOnUiThread(() -> {
                             Intent intent = new Intent(LoginActivity.this, MenuCalendriersActivity.class);
+                            intent.putExtra("user", (Serializable) user);
                             startActivity(intent);
                             finish();
                         });
@@ -64,6 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         );
                     }
                 }
+
                 @Override
                 public void onFailure(String errorMessage) {
                     runOnUiThread(() ->
@@ -75,8 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // Redirection vers l'activité d'inscription
             Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(intent);
-
-             */
         }
     }
 }
+
