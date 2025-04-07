@@ -5,7 +5,7 @@ import com.example.multuscalendrius.modeles.entitees.User;
 
 public class Modele {
 
-    private User user = new User();
+    private User user = User.getInstance();
     private Calendrier calendrier = new Calendrier();
     public void setUser(User user) {
         this.user = user;

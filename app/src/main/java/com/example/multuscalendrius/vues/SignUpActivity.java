@@ -9,6 +9,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.multuscalendrius.R;
+import com.example.multuscalendrius.modeles.ApiService;
+import com.example.multuscalendrius.modeles.entitees.LoginResponse;
+import com.example.multuscalendrius.vuemodele.ApiCallback;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,14 +29,11 @@ import okhttp3.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    private EditText editTextEmail, editTextPassword, editTextConfirmPassword;
+    private EditText editTextEmail, editTextUsername, editTextPassword, editTextConfirmPassword;
     private Button buttonSignUp;
     private TextView textViewLogin;
-    private OkHttpClient client;
-    private ObjectMapper objectMapper;
 
-    // URL de l'API d'inscription (à adapter à votre serveur)
-    private static final String SIGNUP_URL = "https://api.example.com/register";
+    private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +42,14 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Références aux éléments du layout
         editTextEmail = findViewById(R.id.editTextEmailSignUp);
+        editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPasswordSignUp);
         editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
         buttonSignUp = findViewById(R.id.buttonSignUp);
         textViewLogin = findViewById(R.id.textViewLogin);
 
-        // Initialisation d'OkHttp et de Jackson ObjectMapper
-        client = new OkHttpClient();
-        objectMapper = new ObjectMapper();
+        // Initialisation de l'ApiService
+        apiService = new ApiService();
 
         // Action lors du clic sur le bouton d'inscription
         buttonSignUp.setOnClickListener(v -> registerUser());
@@ -65,11 +65,12 @@ public class SignUpActivity extends AppCompatActivity {
     private void registerUser() {
         // Récupération des données saisies
         String email = editTextEmail.getText().toString().trim();
+        String username = editTextUsername.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
         // Vérification des champs obligatoires
-        if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+        if (email.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -78,76 +79,33 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        // Création d'un objet JSON pour les données d'inscription
-        JSONObject jsonSignUp = new JSONObject();
-        try {
-            jsonSignUp.put("email", email);
-            jsonSignUp.put("password", password);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Erreur lors de la création du JSON", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Préparation du corps de la requête avec le type MIME JSON
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(jsonSignUp.toString(), JSON);
-
-        // Construction de la requête HTTP POST
-        Request request = new Request.Builder()
-                .url(SIGNUP_URL)
-                .post(body)
-                .build();
-
-        /*
-
-        // Exécution asynchrone de la requête
-        client.newCall(request).enqueue(new Callback() {
+        // Appel de la méthode inscription de l'ApiService
+        apiService.inscription(email, username, password, confirmPassword, new ApiCallback<LoginResponse>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                runOnUiThread(() ->
-                        Toast.makeText(SignUpActivity.this, "Erreur réseau", Toast.LENGTH_SHORT).show()
-                );
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    String responseBody = response.body().string();
-                    try {
-                        // Mapping de la réponse JSON vers un objet LoginResponse à l'aide de Jackson
-                        LoginResponse loginResponse = objectMapper.readValue(responseBody, LoginResponse.class);
-
-                        // Vérification de la validité du token retourné
-                        if (loginResponse.getToken()) {
-                            runOnUiThread(() -> {
-                                Toast.makeText(SignUpActivity.this, "Inscription réussie", Toast.LENGTH_SHORT).show();
-                                // Redirection vers la page de connexion
-                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
-                            });
-                        } else {
-                            runOnUiThread(() ->
-                                    Toast.makeText(SignUpActivity.this, "Inscription échouée: token invalide", Toast.LENGTH_SHORT).show()
-                            );
-                        }
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                        runOnUiThread(() ->
-                                Toast.makeText(SignUpActivity.this, "Erreur de parsing", Toast.LENGTH_SHORT).show()
-                        );
-                    }
+            public void onSuccess(LoginResponse loginResponse) {
+                // Vérification de la validité du token retourné
+                if (loginResponse.getToken()) {  // Ici, getToken() doit retourner un booléen indiquant le succès
+                    runOnUiThread(() -> {
+                        Toast.makeText(SignUpActivity.this, "Inscription réussie", Toast.LENGTH_SHORT).show();
+                        // Redirection vers la page de connexion
+                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    });
                 } else {
                     runOnUiThread(() ->
-                            Toast.makeText(SignUpActivity.this, "Échec de l'inscription", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(SignUpActivity.this, "Inscription échouée: token invalide", Toast.LENGTH_SHORT).show()
                     );
-
-
                 }
             }
-        });
 
-         */
+            @Override
+            public void onFailure(String errorMessage) {
+                runOnUiThread(() ->
+                        Toast.makeText(SignUpActivity.this, errorMessage, Toast.LENGTH_SHORT).show()
+                );
+            }
+        });
     }
 }
+
