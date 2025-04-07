@@ -1,6 +1,7 @@
 package com.example.multuscalendrius.modeles.entitees;
 
-import android.util.Log;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.multuscalendrius.modeles.ApiService;
 import com.example.multuscalendrius.vuemodele.ApiCallback;
@@ -10,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class User implements Serializable {
-    // Instance statique unique
+public class User implements Serializable{
+    // Singleton instance
     private static User instance;
 
     private Long id;
@@ -21,11 +22,26 @@ public class User implements Serializable {
     private String token;
     private List<UserCalendar> userCalendars;
     private ApiService api;
+    private MutableLiveData<User> liveData;
 
-    // Constructeur privé pour le Singleton
+    // Enumération pour identifier l'opération effectuée sur l'utilisateur
+    public enum Operation {
+        LOGIN,
+        FETCH_USER_CALENDARS,
+        ERREUR,
+        AUTRE
+    }
+
+    private Operation operation;
+    private String errorMessage;
+
+    // Constructeur privé pour le pattern Singleton
     private User() {
         this.userCalendars = new ArrayList<>();
         this.api = new ApiService();
+        this.liveData = new MutableLiveData<>();
+        this.operation = Operation.AUTRE;
+        liveData.setValue(this);
     }
 
     // Méthode d'accès à l'instance unique
@@ -37,62 +53,35 @@ public class User implements Serializable {
     }
 
     // Getters & Setters
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    public String getToken() {
-        return token;
-    }
-    public void setToken(String token) {
-        this.token = token;
-    }
-    public List<UserCalendar> getUserCalendars() {
-        return userCalendars;
-    }
-    public void setUserCalendars(List<UserCalendar> userCalendars) {
-        this.userCalendars = userCalendars;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+
+    public String getToken() { return token; }
+    public void setToken(String token) { this.token = token; }
+
+    public List<UserCalendar> getUserCalendars() { return userCalendars; }
+    public void setUserCalendars(List<UserCalendar> userCalendars) { this.userCalendars = userCalendars; }
+
+    public Operation getOperation() { return operation; }
+    public String getErrorMessage() { return errorMessage; }
+
+    // Exposition du LiveData pour l'observation depuis l'UI (Activity/Fragment)
+    public LiveData<User> getLiveData() {
+        return liveData;
     }
 
-    // ----------- API WRAPPERS -----------
-    public void syncUserCalendars(String token) {
-        api.getUserCalendar(token, new ApiCallback<List<UserCalendar>>() {
-            @Override
-            public void onSuccess(List<UserCalendar> result) {
-                if (result != null) {
-                    setUserCalendars(result);
-                    Log.d("User", "Récupération des userCalendars réussie: " + result.size() + " éléments");
-                } else {
-                    Log.e("User", "Réponse vide lors de la récupération des userCalendars");
-                }
-            }
-            @Override
-            public void onFailure(String errorMessage) {
-                Log.e("User", "Erreur lors de la récupération des userCalendars: " + errorMessage);
-            }
-        });
-    }
+    // ----------- API WRAPPERS AVEC LIVE DATA -----------
 
+    // Wrapper pour la connexion (login)
     public void syncLogin(String email, String password) {
         api.connexion(email, password, new ApiCallback<User>() {
             @Override
@@ -104,14 +93,43 @@ public class User implements Serializable {
                     setUsername(result.getUsername());
                     setToken(result.getToken());
                     setUserCalendars(result.getUserCalendars());
-                    Log.d("User", "Login réussi: ID=" + id);
+                    operation = Operation.LOGIN;
+                    liveData.postValue(User.this);
                 } else {
-                    Log.e("User", "Réponse vide lors du login");
+                    operation = Operation.ERREUR;
+                    errorMessage = "Réponse vide lors du login";
+                    liveData.postValue(User.this);
                 }
             }
             @Override
-            public void onFailure(String errorMessage) {
-                Log.e("User", "Erreur lors du login: " + errorMessage);
+            public void onFailure(String errorMsg) {
+                operation = Operation.ERREUR;
+                errorMessage = errorMsg;
+                liveData.postValue(User.this);
+            }
+        });
+    }
+
+    // Wrapper pour récupérer les UserCalendar de l'utilisateur
+    public void syncUserCalendars(String tokenParam) {
+        api.getUserCalendar(tokenParam, new ApiCallback<List<UserCalendar>>() {
+            @Override
+            public void onSuccess(List<UserCalendar> result) {
+                if (result != null) {
+                    setUserCalendars(result);
+                    operation = Operation.FETCH_USER_CALENDARS;
+                    liveData.postValue(User.this);
+                } else {
+                    operation = Operation.ERREUR;
+                    errorMessage = "Réponse vide lors de la récupération des userCalendars";
+                    liveData.postValue(User.this);
+                }
+            }
+            @Override
+            public void onFailure(String errorMsg) {
+                operation = Operation.ERREUR;
+                errorMessage = errorMsg;
+                liveData.postValue(User.this);
             }
         });
     }
