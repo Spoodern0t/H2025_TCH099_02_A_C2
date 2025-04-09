@@ -268,7 +268,8 @@ public class Calendrier {
 
     public void addElement(String nom, String description, Evenement evenement, LocalDateTime dateDebut,
                            LocalDateTime dateFin, String token) {
-        apiService.createElement(this, nom, description, evenement, dateDebut, dateFin, token, new ApiCallback<Element>() {
+
+        apiService.createElement(this, nom, description, evenement.getId(), dateDebut, dateFin, token, new ApiCallback<Element>() {
             @Override
             public void onSuccess(Element element) {
                 if (element != null) {
