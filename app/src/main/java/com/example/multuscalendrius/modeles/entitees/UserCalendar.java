@@ -1,11 +1,21 @@
 package com.example.multuscalendrius.modeles.entitees;
 
 
-public class UserCalendar {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
+
+@JsonIgnoreProperties({"inviteAccepted"})
+public class UserCalendar implements Serializable {
+    @JsonProperty("id_utilisateur")
     private Long userId;
+    @JsonProperty("id_calendrier")
     private Long calendarId;
+    @JsonProperty("est_membre")
     private Boolean estMembre;
     private Boolean inviteAccepted;
+    @JsonProperty("nom_utilisateur")
     private String auteur;
 
     // Constructeur par défaut

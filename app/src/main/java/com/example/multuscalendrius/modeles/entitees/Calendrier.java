@@ -1,12 +1,11 @@
 package com.example.multuscalendrius.modeles.entitees;
 
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.multuscalendrius.modeles.ApiService;
+import com.example.multuscalendrius.modeles.dao.UserDao;
 import com.example.multuscalendrius.vuemodele.ApiCallback;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,10 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Calendrier {
+
+    private static Calendrier instance;
+
     private int id;
     private String nom;
     private String description;
     private String auteur;
+    private String token = null;
     private List<Element> elements;
     private List<Evenement> evenements;
     private ApiService apiService;
@@ -47,7 +50,15 @@ public class Calendrier {
         AUTRE
     }
 
-    public Calendrier() {
+    // Méthode d'accès à l'instance unique
+    public static Calendrier getInstance() {
+        if (instance == null) {
+            instance = new Calendrier();
+        }
+        return instance;
+    }
+
+    private Calendrier() {
         this.elements = new ArrayList<>();
         this.evenements = new ArrayList<>();
         this.apiService = new ApiService();
@@ -102,23 +113,23 @@ public class Calendrier {
     }
 
     // ----------- API WRAPPERS SANS notification du LiveData -----------
-    public static void fetchById(int id, String token, ApiCallback<Calendrier> callback) {
+    public void fetchById(int id) {
         ApiService api = new ApiService();
         api.getCalendrier(id, token, new ApiCallback<Calendrier>() {
             @Override
             public void onSuccess(Calendrier calendrier) {
-                callback.onSuccess(calendrier);
+                instance = calendrier;
             }
             @Override
             public void onFailure(String errorMessage) {
-                callback.onFailure(errorMessage);
+                instance = null;
             }
         });
     }
 
     // ----------- API WRAPPERS avec notification via LiveData -----------
-    public void syncCreate(String leNom, String laDescription, String leAuteur) {
-        apiService.createCalendrier(leNom, laDescription, leAuteur, new ApiCallback<Calendrier>() {
+    public void syncCreate(String leNom, String laDescription) {
+        apiService.createCalendrier(leNom, laDescription, token, new ApiCallback<Calendrier>() {
             @Override
             public void onSuccess(Calendrier result) {
                 if (result != null) {
@@ -143,7 +154,7 @@ public class Calendrier {
         });
     }
 
-    public void syncUpdate(String leNom, String laDescription, String leAuteurString, String token) {
+    public void syncUpdate(String leNom, String laDescription, String leAuteurString) {
         apiService.updateCalendrier(this, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
@@ -168,7 +179,7 @@ public class Calendrier {
         });
     }
 
-    public void syncDelete(String token) {
+    public void syncDelete() {
         apiService.deleteCalendrier(this, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
@@ -196,7 +207,7 @@ public class Calendrier {
         });
     }
 
-    public void addEvenement(String titre, String description, String token) {
+    public void addEvenement(String titre, String description) {
         apiService.createEvenement(this, titre, description, token, new ApiCallback<Evenement>() {
             @Override
             public void onSuccess(Evenement evenement) {
@@ -219,7 +230,7 @@ public class Calendrier {
         });
     }
 
-    public void updateEvenement(Evenement evenement, String titre, String description, String token) {
+    public void updateEvenement(Evenement evenement, String titre, String description) {
         apiService.updateEvenement(evenement, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
@@ -243,7 +254,7 @@ public class Calendrier {
         });
     }
 
-    public void deleteEvenement(Evenement evenement, String token) {
+    public void deleteEvenement(Evenement evenement) {
         apiService.deleteEvenement(evenement, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
@@ -267,8 +278,8 @@ public class Calendrier {
     }
 
     public void addElement(String nom, String description, Evenement evenement, LocalDateTime dateDebut,
-                           LocalDateTime dateFin, String token) {
-        apiService.createElement(this, nom, description, evenement, dateDebut, dateFin, token, new ApiCallback<Element>() {
+                           LocalDateTime dateFin) {
+        apiService.createElement(this, nom, description, evenement.getId(), dateDebut, dateFin, token, new ApiCallback<Element>() {
             @Override
             public void onSuccess(Element element) {
                 if (element != null) {
@@ -290,7 +301,7 @@ public class Calendrier {
         });
     }
 
-    public void updateElement(Element element, String nom, String description, Evenement evenement, String token) {
+    public void updateElement(Element element, String nom, String description, Evenement evenement) {
         apiService.updateElement(element, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
@@ -315,7 +326,7 @@ public class Calendrier {
         });
     }
 
-    public void deleteElement(Element element, String token) {
+    public void deleteElement(Element element) {
         apiService.deleteElement(element, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {

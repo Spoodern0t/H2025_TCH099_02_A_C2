@@ -96,11 +96,11 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         // Appel de la méthode inscription de l'ApiService
-        apiService.inscription(email, username, password, confirmPassword, new ApiCallback<LoginResponse>() {
+        apiService.inscription(email, username, password, new ApiCallback<Boolean>() {
             @Override
-            public void onSuccess(LoginResponse loginResponse) {
+            public void onSuccess(Boolean resultat) {
                 // Vérification de la validité du token retourné
-                if (loginResponse.getToken()) {  // Ici, getToken() doit retourner un booléen indiquant le succès
+                if (resultat) {  // Ici, getToken() doit retourner un booléen indiquant le succès
                     runOnUiThread(() -> {
                         Toast.makeText(SignUpActivity.this, "Inscription réussie", Toast.LENGTH_SHORT).show();
                         // Redirection vers la page de connexion
