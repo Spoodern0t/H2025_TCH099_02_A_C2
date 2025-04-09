@@ -70,7 +70,23 @@ public class SignUpActivity extends AppCompatActivity {
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
         // Vérification des champs obligatoires
-        if (email.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+        if (email.isEmpty()) {
+            editTextEmail.setError("Veuillez remplir votre email");
+            Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (username.isEmpty()) {
+            editTextUsername.setError("Veuillez remplir votre nom d'utilisateur");
+            Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (password.isEmpty()) {
+            editTextPassword.setError("Veuillez remplir votre mot de passe");
+            Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (confirmPassword.isEmpty()) {
+            editTextConfirmPassword.setError("Veuillez confirmer votre mot de passe");
             Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
             return;
         }

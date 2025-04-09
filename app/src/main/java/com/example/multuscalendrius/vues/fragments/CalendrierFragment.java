@@ -10,9 +10,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.multuscalendrius.R;
-import com.example.multuscalendrius.costumlayout.CalendrierJour;
+import com.example.multuscalendrius.vues.costumlayout.CalendrierView;
 import com.example.multuscalendrius.modeles.dao.DaoJour;
-import com.example.multuscalendrius.vues.AccueilActivity;
 import com.example.multuscalendrius.vues.adaptateurs.JourAdaptateur;
 
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.List;
 public class CalendrierFragment extends Fragment {
 
     private RecyclerView rvJours;
-    private CalendrierJour calendrierJour;
+    private CalendrierView calendrierView;
 
     @Nullable
     @Override
@@ -30,7 +29,7 @@ public class CalendrierFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_calendrier, container, false);
 
         rvJours = view.findViewById(R.id.rvJours);
-        calendrierJour = view.findViewById(R.id.calendrierJour);
+        calendrierView = view.findViewById(R.id.calendrierJour);
 
         List<String> jours = DaoJour.getInstance().getJours();
 

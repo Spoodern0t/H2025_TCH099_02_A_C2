@@ -75,7 +75,7 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         // Les actions des boutons de la barre de navigation
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+        bottomNavigationView.setOnItemSelectedListener(item -> {
             int ItemId = item.getItemId();
             if (ItemId == R.id.calendrier) {
                 setCurrentFragment(calendrierFragment);

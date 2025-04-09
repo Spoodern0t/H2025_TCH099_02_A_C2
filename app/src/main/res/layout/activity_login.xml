@@ -3,43 +3,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="24dp"
-    tools:context=".vues.LoginActivity">
+    tools:context=".vues.LoginActivity"
+    android:background="@color/couleur_background">
 
-    <EditText
-        android:id="@+id/editTextEmail"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/hint_logo"
+        android:src="@drawable/logo_icon"
+        android:layout_marginVertical="60dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"
+        android:textColor="@color/couleur_texte"
+        android:text="@string/connectez_vous"
+        android:layout_marginVertical="10dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="emailAddress"
+        android:layout_marginBottom="12dp"
         android:hint="@string/adresse_courriel"
-        android:inputType="textEmailAddress"
-        android:minHeight="48dp"
-        android:textColorHint="@color/black" />
+        app:boxBackgroundColor="@color/couleur_primaire"
+        app:hintTextColor="@color/couleur_texte"
+        android:textColorHint="@color/couleur_texte"
+        app:boxStrokeColor="@color/couleur_texte">
 
-    <EditText
-        android:id="@+id/editTextPassword"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/couleur_texte"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:autofillHints="password"
+        android:layout_marginBottom="12dp"
         android:hint="@string/mot_de_passe"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
-        android:textColorHint="@color/black" />
+        app:boxBackgroundColor="@color/couleur_primaire"
+        app:hintTextColor="@color/couleur_texte"
+        android:textColorHint="@color/couleur_texte"
+        app:boxStrokeColor="@color/couleur_texte"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="@color/couleur_texte"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/buttonLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/se_connecter"
-        android:layout_marginTop="24dp" />
+        android:minHeight="48dp"
+        android:textSize="20sp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/couleur_bouton" />
 
     <TextView
         android:id="@+id/textViewSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/inscrire"
-        android:textColor="@color/purple_500"
+        android:textSize="18sp"
+        android:textColor="@color/couleur_bouton"
         android:layout_marginTop="16dp" />
 </LinearLayout>

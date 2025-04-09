@@ -3,12 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    android:background="@color/couleur_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/hint_logo"
+            android:src="@drawable/logo_icon"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/tvCalendriersPersonnels"
@@ -20,7 +30,7 @@
             android:textSize="22sp"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.example.multuscalendrius.costumlayout.NonScrollListView
+        <com.example.multuscalendrius.vues.costumlayout.NonScrollListView
             android:id="@+id/lvCalendriersPersonnels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -44,7 +54,7 @@
             android:text="@string/liste_des_calendriers_partages"
             android:textSize="22sp"/>
 
-        <com.example.multuscalendrius.costumlayout.NonScrollListView
+        <com.example.multuscalendrius.vues.costumlayout.NonScrollListView
             android:id="@+id/lvCalendriersPartages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

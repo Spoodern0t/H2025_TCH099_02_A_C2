@@ -17,7 +17,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText editTextEmail, editTextPassword;
     private Button buttonLogin;
     private TextView textViewSignUp;
-
     private ApiService apiService;
 
     @Override
@@ -47,7 +46,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             String password = editTextPassword.getText().toString().trim();
 
             // Vérification que tous les champs sont remplis
-            if (email.isEmpty() || password.isEmpty()) {
+            if (email.isEmpty()) {
+                editTextEmail.setError("Veuillez remplir l'email");
+                Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (password.isEmpty()) {
+                editTextPassword.setError("Veuillez remplir le mot de passe");
                 Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
                 return;
             }

@@ -1,4 +1,4 @@
-package com.example.multuscalendrius.costumlayout;
+package com.example.multuscalendrius.vues.costumlayout;
 
 
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -14,10 +13,9 @@ import androidx.annotation.NonNull;
 import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.entitees.Element;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-public class CalendrierJour extends View {
+public class CalendrierView extends View {
 
     private final int NB_HEURE = 24;
     private Paint paint;
@@ -27,16 +25,16 @@ public class CalendrierJour extends View {
     private Element[] elements;
 
 
-    private void init() {
+    private void init(Context context) {
         paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
-        setWillNotDraw(false);
+
     }
 
-    public CalendrierJour(Context context) {
+    public CalendrierView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     @Override
@@ -102,7 +100,6 @@ public class CalendrierJour extends View {
             Paint paint = new Paint();
             paint.setColor(Color.BLUE);
 
-            /*
             LocalDateTime debut = element.getDateDebut() != null
                     ? element.getDateDebut()
                     : element.getDateFin();
@@ -117,14 +114,11 @@ public class CalendrierJour extends View {
 
             blocElement = new RectF(largeurColTemps, y1, largeur, y2);
             canvas.drawRect(blocElement, paint);
-             */
         }
     }
 
-    private float tempsDeDate(Date date) {
+    private float tempsDeDate(LocalDateTime date) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar.get(Calendar.HOUR_OF_DAY) + (calendar.get(Calendar.MINUTE)/60f);
+        return date.getHour() + (float) date.getMinute() / 60;
     }
 }
