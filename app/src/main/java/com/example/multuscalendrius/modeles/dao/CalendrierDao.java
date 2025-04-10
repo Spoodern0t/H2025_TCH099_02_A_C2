@@ -43,4 +43,8 @@ public class CalendrierDao {
     public void updateCalendrier(Calendrier calendrier, String token, ApiCallback<Boolean> apiCallback) {
         api.updateCalendrier(calendrier, token, apiCallback);
     }
+
+    public void getCalendrierById() {
+
+    }
 }

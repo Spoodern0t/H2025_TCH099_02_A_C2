@@ -80,7 +80,21 @@ public class Calendrier {
         return errorMessage;
     }
 
+    public Evenement getEvenementById(int id) {
+        for (Evenement evenement: evenements) {
+            if (evenement.getId() == id)
+                return evenement;
+        }
+        return null;
+    }
 
+    public Element getElementById(int elementId) {
+        for (Element element: elements) {
+            if (element.getId() == id)
+                return element;
+        }
+        return null;
+    }
 }
 
     /*

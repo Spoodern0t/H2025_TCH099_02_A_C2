@@ -32,6 +32,10 @@ public class CalendrierVueModele extends ViewModel {
         return erreurLiveData;
     }
 
+    public Calendrier getCurrentCalendrier() {
+        return calendrierDao.getCalendrier();
+    }
+
     // ----------- API WRAPPERS SANS notification du LiveData -----------
     public void fetchById(int id) {
         calendrierDao.chargerCalendrier(id, token, new ApiCallback<Calendrier>() {
