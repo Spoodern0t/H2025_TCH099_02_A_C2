@@ -1,4 +1,4 @@
-package com.example.multuscalendrius.costumlayout;
+package com.example.multuscalendrius.vues.costumlayout;
 
 import android.content.Context;
 import android.util.AttributeSet;

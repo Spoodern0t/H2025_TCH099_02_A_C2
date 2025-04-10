@@ -1,20 +1,24 @@
 package com.example.multuscalendrius.modeles;
 
-import com.example.multuscalendrius.modeles.entitees.LoginResponse;
 import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.modeles.entitees.Evenement;
+import com.example.multuscalendrius.modeles.dao.UserDao;
 import com.example.multuscalendrius.modeles.entitees.User;
 import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 import com.example.multuscalendrius.vuemodele.ApiCallback;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Call;
@@ -34,20 +38,20 @@ public class ApiService {
     public ApiService() {
         client = new OkHttpClient();
         mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // Recommended
     }
 
     // --------------------------
     // Utilisateur (inscription, connexion)
     // --------------------------
 
-    public void inscription(String email, String username, String password, String confirmPassword, ApiCallback<LoginResponse> callback) {
+    public void inscription(String email, String username, String password, ApiCallback<Boolean> callback) {
         try {
             // Création d'un objet JSON avec les informations d'inscription
             JSONObject json = new JSONObject();
-            json.put("adresse-courriel", email);
-            json.put("nom-utilisateur", username);
-            json.put("mot-de-passe", password);
-            json.put("conf-mdp", confirmPassword);
+            json.put("email", email);
+            json.put("user-name", username);
+            json.put("password", password);
 
             // Préparation du corps de la requête avec le type MIME JSON
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
@@ -68,13 +72,8 @@ public class ApiService {
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful() && response.body() != null) {
                         String responseBody = response.body().string();
-                        try {
-                            // Mapping de la réponse JSON vers un objet LoginResponse via Jackson
-                            LoginResponse loginResponse = mapper.readValue(responseBody, LoginResponse.class);
-                            callback.onSuccess(loginResponse);
-                        } catch (JsonProcessingException e) {
-                            callback.onFailure("Erreur de parsing JSON: " + e.getMessage());
-                        }
+                        // Mapping de la réponse JSON vers un objet LoginResponse via Jackson
+                        callback.onSuccess(true);
                     } else {
                         callback.onFailure("Échec de l'inscription: " + response.code());
                     }
@@ -91,7 +90,7 @@ public class ApiService {
             // Création d'un objet JSON avec toutes les informations de connexion
             JSONObject json = new JSONObject();
             json.put("email", email);
-            json.put("mot-de-passe", password);
+            json.put("password", password);
 
 
             // Préparation du corps de la requête en JSON
@@ -181,7 +180,7 @@ public class ApiService {
                     if(response.isSuccessful() && response.body() != null) {
                         String responseBody = response.body().string();
                         try {
-                            List<UserCalendar> calendars = mapper.readValue(responseBody, new TypeReference<List<UserCalendar>>() {});
+                            List<UserCalendar> calendars = Arrays.asList(mapper.readValue(responseBody, UserCalendar[].class));
                             callback.onSuccess(calendars);
                         } catch (JsonProcessingException e) {
                             callback.onFailure("Erreur de parsing JSON: " + e.getMessage());
@@ -464,7 +463,7 @@ public class ApiService {
     // ---------- ELEMENTS ----------
 
     // Fonction pour créer une nouvelle element dans un calendrier
-    public void createElement(Calendrier calendrier, String nom, String description, Evenement evenement, LocalDateTime dateDebut,
+    public void createElement(Calendrier calendrier, String nom, String description, int evenementId, LocalDateTime dateDebut,
             LocalDateTime dateFin, String token, ApiCallback<Element> callback) {
         try {
             // Création d'un objet JSON avec les informations de la deadline
@@ -473,7 +472,7 @@ public class ApiService {
             json.put("nom",nom );
             json.put("description",description );
             // Convertir l'objet Evenement en JSON via le mapper
-            json.put("evenement",new JSONObject(mapper.writeValueAsString(evenement)));
+            json.put("evenement_id", evenementId);
             // Convertir la deadlineDateTime en chaîne ISO 8601
             json.put("dateDebut", dateDebut.toString() );
             json.put("dateFin", dateDebut.toString() );

@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:padding="24dp"
-    tools:context=".vues.LoginActivity"
-    android:background="@color/couleur_background">
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/hint_logo"
-        android:src="@drawable/logo_icon"
-        android:layout_marginVertical="60dp"/>
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,14 +12,14 @@
         android:layout_gravity="center_horizontal"
         android:textSize="20sp"
         android:textColor="@color/couleur_texte"
-        android:text="@string/connectez_vous"
+        android:text="@string/creez_un_nouveau_calendrier"
         android:layout_marginVertical="10dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:hint="@string/adresse_courriel"
+        android:hint="@string/nom"
         app:boxBackgroundColor="@color/couleur_primaire"
         app:hintTextColor="@color/couleur_texte"
         android:textColorHint="@color/couleur_texte"
@@ -48,40 +36,42 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginBottom="12dp"
-        android:hint="@string/mot_de_passe"
+        android:hint="@string/description"
         app:boxBackgroundColor="@color/couleur_primaire"
         app:hintTextColor="@color/couleur_texte"
         android:textColorHint="@color/couleur_texte"
-        app:boxStrokeColor="@color/couleur_texte"
-        app:passwordToggleEnabled="true">
+        app:boxStrokeColor="@color/couleur_texte">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:inputType="textMultiLine"
             android:textColor="@color/couleur_texte"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/buttonLogin"
+        android:id="@+id/buttonCreer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/se_connecter"
+        android:text="@string/creer"
         android:minHeight="48dp"
+        android:layout_marginVertical="20dp"
         android:textSize="20sp"
-        android:layout_marginTop="24dp"
         android:backgroundTint="@color/couleur_bouton" />
 
-    <TextView
-        android:id="@+id/textViewSignUp"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/buttonAnnuler"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/inscrire"
-        android:textSize="18sp"
-        android:textColor="@color/couleur_bouton"
-        android:layout_marginTop="16dp" />
+        android:text="@string/annuler"
+        android:minHeight="48dp"
+        android:textSize="20sp"
+        android:backgroundTint="@color/couleur_bouton" />
+
 </LinearLayout>

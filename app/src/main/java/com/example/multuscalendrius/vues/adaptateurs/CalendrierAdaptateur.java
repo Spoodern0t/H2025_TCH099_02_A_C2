@@ -12,32 +12,33 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.entitees.Calendrier;
+import com.example.multuscalendrius.modeles.entitees.User;
+import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 import com.example.multuscalendrius.vues.AccueilActivity;
-import com.example.multuscalendrius.vues.fragments.CalendrierFragment;
-import com.example.multuscalendrius.vues.fragments.PlanificateurFragment;
 
-public class CalendrierPersonnelAdaptateur extends ArrayAdapter<Calendrier> {
+import java.util.List;
 
-    private Calendrier[] calendrier;
+public class CalendrierAdaptateur extends ArrayAdapter<UserCalendar> {
+
+    private List<UserCalendar> calendrier;
     private Context contexte;
     private int viewResourceId;
     private Resources resources;
 
-    public CalendrierPersonnelAdaptateur(@NonNull Context context, int viewResourceId, @NonNull Calendrier[] calendrier) {
-        super(context, viewResourceId, calendrier);
+    public CalendrierAdaptateur(@NonNull Context context, int viewResourceId, @NonNull List<UserCalendar> calendriers) {
+        super(context, viewResourceId, calendriers);
         this.contexte = context;
         this.viewResourceId = viewResourceId;
         this.resources = contexte.getResources();
-        this.calendrier = calendrier;
+        this.calendrier = calendriers;
     }
 
     @Override
     public int getCount() {
-        return this.calendrier.length;
+        return this.calendrier.size();
     }
 
     @NonNull
@@ -51,20 +52,20 @@ public class CalendrierPersonnelAdaptateur extends ArrayAdapter<Calendrier> {
             view = layoutInflater.inflate(this.viewResourceId, parent, false);
         }
 
-        final Calendrier calendrier = this.calendrier[position];
+        final UserCalendar calendrier = this.calendrier.get(position);
 
         if (calendrier != null) {
             final TextView nom = view.findViewById(R.id.nom);
             final ImageButton imgBtnCalendrier = view.findViewById(R.id.imgBtnCalendrier);
             final ImageButton imgBtnPlanificateur = view.findViewById(R.id.imgBtnPlanificateur);
 
-            nom.setText(calendrier.getAuteur());
+            nom.setText(calendrier.getNomCalendrier());
 
             imgBtnCalendrier.setOnClickListener(v -> {
 
                 Intent intent = new Intent(contexte, AccueilActivity.class);
                 intent.putExtra("FRAGMENT", 0);
-                intent.putExtra("ID", calendrier.getId());
+                intent.putExtra("ID", calendrier.getCalendarId());
                 contexte.startActivity(intent);
             });
 
@@ -72,7 +73,7 @@ public class CalendrierPersonnelAdaptateur extends ArrayAdapter<Calendrier> {
 
                 Intent intent = new Intent(contexte, AccueilActivity.class);
                 intent.putExtra("FRAGMENT", 1);
-                intent.putExtra("ID", calendrier.getId());
+                intent.putExtra("ID", calendrier.getCalendarId());
                 contexte.startActivity(intent);
             });
         }

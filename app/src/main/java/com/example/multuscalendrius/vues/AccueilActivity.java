@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
 import com.example.multuscalendrius.R;
+import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.vues.fragments.CalendrierFragment;
 import com.example.multuscalendrius.vues.fragments.PlanificateurFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -16,7 +19,7 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
 
     private ImageButton imgBtnCreate, imgBtnPhotoProfil;
     private BottomNavigationView bottomNavigationView;
-    private long calendrierId;
+    private int calendrierId;
     private Fragment calendrierFragment, planificateurFragment;
 
     @Override
@@ -30,8 +33,18 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         imgBtnCreate.setOnClickListener(this);
         imgBtnPhotoProfil.setOnClickListener(this);
 
+        Intent intent = getIntent();
+        intent.getIntExtra("ID", -1);
+
         // Initier la barre de navigation
         initNavView();
+
+        // Charger le calendrier
+        chargerCalendrier();
+    }
+
+    private void chargerCalendrier() {
+
     }
 
     // Changer la vue du frame
@@ -62,20 +75,13 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         planificateurFragment = new PlanificateurFragment();
 
         Intent intent = getIntent();
-        int fragmentNo = intent.getIntExtra("FRAGMENT", 0);
-        calendrierId = intent.getLongExtra("ID", 0);
+        calendrierId = intent.getIntExtra("ID", 0);
 
-        // Envoyer vers la vue choisie
-        if (fragmentNo == 0) {
-            setCurrentFragment(calendrierFragment);
-            bottomNavigationView.setSelectedItemId(R.id.calendrier);
-        } else {
-            setCurrentFragment(planificateurFragment);
-            bottomNavigationView.setSelectedItemId(R.id.planificateur);
-        }
+        setCurrentFragment(calendrierFragment);
+        bottomNavigationView.setSelectedItemId(R.id.calendrier);
 
         // Les actions des boutons de la barre de navigation
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+        bottomNavigationView.setOnItemSelectedListener(item -> {
             int ItemId = item.getItemId();
             if (ItemId == R.id.calendrier) {
                 setCurrentFragment(calendrierFragment);
