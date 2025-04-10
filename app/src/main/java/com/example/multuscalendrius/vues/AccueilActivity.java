@@ -33,6 +33,9 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         imgBtnCreate.setOnClickListener(this);
         imgBtnPhotoProfil.setOnClickListener(this);
 
+        Intent intent = getIntent();
+        intent.getIntExtra("ID", -1);
+
         // Initier la barre de navigation
         initNavView();
 
@@ -41,51 +44,7 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void chargerCalendrier() {
-        Calendrier calendrier = Calendrier.getInstance();
 
-        // Observation du LiveData pour être notifié des mises à jour
-        calendrier.getLiveData().observe(this, updatedCalendrier -> {
-            if (updatedCalendrier != null) {
-                switch (updatedCalendrier.getOperation()) {
-                    case CREATION:
-                        Toast.makeText(this, "Calendrier créé: " + updatedCalendrier.getNom(), Toast.LENGTH_SHORT).show();
-                        break;
-                    case MISE_A_JOUR:
-                        Toast.makeText(this, "Calendrier mis à jour: " + updatedCalendrier.getNom(), Toast.LENGTH_SHORT).show();
-                        break;
-                    case SUPPRESSION:
-                        Toast.makeText(this, "Calendrier supprimé", Toast.LENGTH_SHORT).show();
-                        break;
-                    case AJOUT_EVENEMENT:
-                        Toast.makeText(this, "Événement ajouté", Toast.LENGTH_SHORT).show();
-                        break;
-                    case MISE_A_JOUR_EVENEMENT:
-                        Toast.makeText(this, "Événement mis à jour", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SUPPRESSION_EVENEMENT:
-                        Toast.makeText(this, "Événement supprimé", Toast.LENGTH_SHORT).show();
-                        break;
-                    case AJOUT_ELEMENT:
-                        Toast.makeText(this, "Élément ajouté", Toast.LENGTH_SHORT).show();
-                        break;
-                    case MISE_A_JOUR_ELEMENT:
-                        Toast.makeText(this, "Élément mis à jour", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SUPPRESSION_ELEMENT:
-                        Toast.makeText(this, "Élément supprimé", Toast.LENGTH_SHORT).show();
-                        break;
-                    case ERREUR:
-                        Toast.makeText(this, "Erreur: " + updatedCalendrier.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                        break;
-                    case AUTRE:
-                        Toast.makeText(this, "Opération non spécifiée", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            } else {
-                Toast.makeText(this, "Aucun calendrier disponible", Toast.LENGTH_SHORT).show();
-            }
-        });
-        calendrier.fetchById(calendrierId);
     }
 
     // Changer la vue du frame

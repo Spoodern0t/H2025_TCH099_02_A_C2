@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -179,7 +180,7 @@ public class ApiService {
                     if(response.isSuccessful() && response.body() != null) {
                         String responseBody = response.body().string();
                         try {
-                            List<UserCalendar> calendars = mapper.readValue(responseBody, new TypeReference<List<UserCalendar>>() {});
+                            List<UserCalendar> calendars = Arrays.asList(mapper.readValue(responseBody, UserCalendar[].class));
                             callback.onSuccess(calendars);
                         } catch (JsonProcessingException e) {
                             callback.onFailure("Erreur de parsing JSON: " + e.getMessage());

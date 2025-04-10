@@ -1,7 +1,10 @@
 package com.example.multuscalendrius.vues;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,9 +21,10 @@ import com.example.multuscalendrius.vues.adaptateurs.CalendrierAdaptateur;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuCalendriersActivity extends AppCompatActivity {
+public class MenuCalendriersActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     private UserVueModele userVueModele;
+    private ImageButton imgBtnAddCalendrier;
     private TextView tvCalendriersPersonnels, tvCalendriersPartages;
     private ListView lvCalendriersPersonnels, lvCalendriersPartages;
     private View breakLine;
@@ -30,44 +34,16 @@ public class MenuCalendriersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_calendriers);
 
+        imgBtnAddCalendrier = findViewById(R.id.imgBtnAddCalendrier);
+
+        imgBtnAddCalendrier.setOnClickListener(this);
+
         userVueModele = new ViewModelProvider(this).get(UserVueModele.class);
         userVueModele.getUserCalendars().observe(this, this::initCalendriersPersonnels);
         userVueModele.getErreur().observe(this, message -> {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
-
         userVueModele.syncUserCalendars();
-
-        UserDao instance = UserDao.getInstance();
-        // Observation du LiveData pour être notifié des mises à jour
-        /*instance.getLiveData().observe(this, user -> {
-            if (user != null) {
-
-                switch (user.getOperation()) {
-                    case LOGIN:
-                        Toast.makeText(this, "Calendrier créé: " + user.getUsername(), Toast.LENGTH_SHORT).show();
-                        break;
-                    case FETCH_USER_CALENDARS:
-                        Toast.makeText(this, "Calendrier mis à jour: " + user.getUsername(), Toast.LENGTH_SHORT).show();
-                        initCalendriersPersonnels();
-
-                        estPartage = true; // TODO: Pour tester ce qu'un utilisateur voit
-                        if (estPartage) initCalendriersPartages();
-                        break;
-                    case ERREUR:
-                        Toast.makeText(this, "Erreur: " + user.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                        break;
-                    case AUTRE:
-                        Toast.makeText(this, "Opération non spécifiée", Toast.LENGTH_SHORT).show();
-                        break;
-
-
-
-            } else {
-                Toast.makeText(this, "Aucun calendrier disponible", Toast.LENGTH_SHORT).show();
-            }
-        });
-        instance.syncUserCalendars();}*/
     }
 
     public void initCalendriersPersonnels(List<UserCalendar> calendriers) {
@@ -101,6 +77,24 @@ public class MenuCalendriersActivity extends AppCompatActivity {
 
             CalendrierAdaptateur calendrierPartageAdaptateur = new CalendrierAdaptateur(this, R.layout.layout_calendrier_partage, calendriers);
             lvCalendriersPartages.setAdapter(calendrierPartageAdaptateur);
+
+            lvCalendriersPartages.setOnItemClickListener(this);
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(this, AccueilActivity.class);
+        UserCalendar userCalendar = (UserCalendar) parent.getAdapter().getItem(position);
+        intent.putExtra("ID", userCalendar.getCalendarId());
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == imgBtnAddCalendrier) {
+            
         }
     }
 }

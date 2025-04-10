@@ -12,6 +12,8 @@ public class UserCalendar implements Serializable {
     private Long userId;
     @JsonProperty("id_calendrier")
     private Long calendarId;
+    @JsonProperty("nom_calendrier")
+    private String nomCalendrier;
     @JsonProperty("est_membre")
     private Boolean estMembre;
     private Boolean inviteAccepted;
@@ -42,7 +44,12 @@ public class UserCalendar implements Serializable {
     public void setCalendarId(Long calendarId) {
         this.calendarId = calendarId;
     }
-
+    public String getNomCalendrier() {
+        return nomCalendrier;
+    }
+    public void setNomCalendrier(String nomCalendrier) {
+        this.nomCalendrier = nomCalendrier;
+    }
     public Boolean getEstMembre() {
         return estMembre;
     }

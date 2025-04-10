@@ -18,29 +18,14 @@ import java.util.List;
 @JsonIgnoreProperties({"instance", "id", "password", "api", "liveData", "operation", "errorMessage"})
 public class UserDao implements Serializable{
     // Singleton instance
-    private static UserDao instance;
+    private static UserDao instance = null;
     private User user;
-    @JsonProperty("userCalendars")
-    private List<UserCalendar> userCalendars;
     private ApiService api;
 
 
-    // Enumération pour identifier l'opération effectuée sur l'utilisateur
-    public enum Operation {
-        LOGIN,
-        FETCH_USER_CALENDARS,
-        ERREUR,
-        AUTRE
-    }
-
-    private Operation operation;
-    private String errorMessage;
-
     // Constructeur privé pour le pattern Singleton
     private UserDao() {
-        this.userCalendars = new ArrayList<>();
         this.api = new ApiService();
-        this.operation = Operation.AUTRE;
     }
 
     // Méthode d'accès à l'instance unique
@@ -59,16 +44,17 @@ public class UserDao implements Serializable{
         return user;
     }
 
-    public void setOperation(Operation operation) {
-        this.operation = operation;
+    public void connexion(String email, String password, ApiCallback<User> apiCallback) {
+        api.connexion(email, password, apiCallback);
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void getUserCalendar(String token, ApiCallback<List<UserCalendar>> apiCallback) {
+        api.getUserCalendar(token, apiCallback);
     }
 
-    public Operation getOperation() { return operation; }
-    public String getErrorMessage() { return errorMessage; }
+    public void decoUser(String token, ApiCallback<Boolean> apiCallback) {
+        api.decoUser(token, apiCallback);
+    }
 }
 
 

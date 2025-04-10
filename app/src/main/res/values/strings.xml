@@ -33,4 +33,9 @@
     <string name="connectez_vous">Connectez-vous !</string>
     <string name="nom_utilisateur">Nom d\'utilisateur</string>
     <string name="inscrivez_vous">Inscrivez-vous !</string>
+    <string name="profil">Profil</string>
+    <string name="description">Description</string>
+    <string name="nom">Nom</string>
+    <string name="creez_un_nouveau_calendrier">Créez un nouveau calendrier !</string>
+    <string name="annuler">Annuler</string>
 </resources>
