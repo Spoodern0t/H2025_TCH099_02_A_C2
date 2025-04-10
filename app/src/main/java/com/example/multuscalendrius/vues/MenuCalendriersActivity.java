@@ -94,7 +94,7 @@ public class MenuCalendriersActivity extends AppCompatActivity implements Adapte
     @Override
     public void onClick(View v) {
         if (v == imgBtnAddCalendrier) {
-            
+
         }
     }
 }
