@@ -19,16 +19,7 @@ public class User {
     @JsonProperty("userCalendars")
     private List<UserCalendar> userCalendars;
 
-    // Enumération pour identifier l'opération effectuée sur l'utilisateur
-    public enum Operation {
-        LOGIN,
-        FETCH_USER_CALENDARS,
-        ERREUR,
-        AUTRE
-    }
 
-    @JsonIgnore
-    private Operation operation;
     @JsonIgnore
     private String errorMessage;
 
@@ -63,14 +54,9 @@ public class User {
     public List<UserCalendar> getUserCalendars() { return userCalendars; }
     public void setUserCalendars(List<UserCalendar> userCalendars) { this.userCalendars = userCalendars; }
 
-    public void setOperation(Operation operation) {
-        this.operation = operation;
-    }
-
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
-    public Operation getOperation() { return operation; }
     public String getErrorMessage() { return errorMessage; }
 }

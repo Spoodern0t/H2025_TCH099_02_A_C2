@@ -14,16 +14,8 @@ public class Element {
 
 
 
-    public Element(int id, int calendrierId, String nom, String description,
-                   int evenementId, LocalDateTime dateDebut, LocalDateTime dateFin) {
-        this.id = id;
-        this.calendrierId = calendrierId;
-        this.nom = nom;
-        this.description = description;
-        this.evenementId = evenementId;
-        this.dateDebut= dateDebut;
-        this.dateFin=dateFin;
-    }
+    public Element() {}
+
 
     public int getId() {
         return id;

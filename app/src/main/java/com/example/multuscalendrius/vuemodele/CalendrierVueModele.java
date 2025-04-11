@@ -4,268 +4,182 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.multuscalendrius.modeles.dao.CalendrierDao;
-import com.example.multuscalendrius.modeles.dao.UserDao;
 import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.modeles.entitees.Evenement;
 
 import java.time.LocalDateTime;
 
-public class CalendrierVueModele extends ViewModel {
+class CalendrierViewModel extends ViewModel {
 
-    private MutableLiveData<Calendrier> calendrierLiveData = new MutableLiveData<>();
-    private MutableLiveData<Calendrier> succesLiveData = new MutableLiveData<>();
-    private final MutableLiveData<String> erreurLiveData = new MutableLiveData<>();
-    private final String token;
-    public CalendrierDao calendrierDao;
-
-    public CalendrierVueModele() {
-        calendrierDao = CalendrierDao.getInstance();
-        token = UserDao.getInstance().getUser().getToken();
-    }
+    private final MutableLiveData<Calendrier> calendrierLiveData = new MutableLiveData<>(new Calendrier());
 
     public LiveData<Calendrier> getCalendrier() {
         return calendrierLiveData;
     }
-    public LiveData<String> getErreur() {
-        return erreurLiveData;
+
+    public void setCalendrier(Calendrier calendrier) {
+        calendrierLiveData.setValue(calendrier);
     }
 
-    public Calendrier getCurrentCalendrier() {
-        return calendrierDao.getCalendrier();
+    private void notifyCalendrierObservers() {
+        calendrierLiveData.setValue(calendrierLiveData.getValue());
     }
 
-    // ----------- API WRAPPERS SANS notification du LiveData -----------
     public void fetchById(int id) {
-        calendrierDao.chargerCalendrier(id, token, new ApiCallback<Calendrier>() {
-            @Override
-            public void onSuccess(Calendrier calendrier) {
-                calendrierDao.setCalendrier(calendrier);
-                calendrierLiveData.postValue(calendrier);
-            }
-            @Override
-            public void onFailure(String errorMessage) {
-                erreurLiveData.postValue(errorMessage);
-            }
-        });
+        Calendrier cal = calendrierLiveData.getValue();
+        if (cal != null) {
+            cal.fetchById(id, this::notifyCalendrierObservers);
+        }
     }
 
-    // ----------- API WRAPPERS avec notification via LiveData -----------
-    public void syncCreate(String leNom, String laDescription) {
-        calendrierDao.createCalendrier(leNom, laDescription, token, new ApiCallback<Calendrier>() {
-            @Override
-            public void onSuccess(Calendrier calendrier) {
-                if (calendrier != null) {
-                    calendrier.setOperation(Calendrier.Operation.CREATION);
-                    calendrierLiveData.postValue(calendrier);
-                } /*else {
-                    calendrier.setOperation(Calendrier.Operation.ERREUR);
-                    errorMessage = "Réponse vide lors de la création";
-                    liveData.postValue(Calendrier.this);
-                }*/
-            }
-            @Override
-            public void onFailure(String errorMsg) {
-                erreurLiveData.postValue(errorMsg);
-            }
-        });
+    public void createCalendrier(String nom, String description) {
+        Calendrier cal = calendrierLiveData.getValue();
+        if (cal != null) {
+            cal.syncCreate(nom, description, this::notifyCalendrierObservers);
+        }
     }
 
-    /*
-    public void syncUpdate(String leNom, String laDescription, String leAuteurString) {
-        calendrierDao.updateCalendrier(calendrier, token, new ApiCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean success) {
-                if (success != null && success) {
-                    nom = leNom;
-                    description = laDescription;
-                    auteur = leAuteurString;
-                    operation = Calendrier.Operation.MISE_A_JOUR;
-                    liveData.postValue(Calendrier.this);
-                } else {
-                    operation = Calendrier.Operation.ERREUR;
-                    errorMessage = "Échec de la mise à jour";
-                    liveData.postValue(Calendrier.this);
-                }
-            }
-            @Override
-            public void onFailure(String errorMsg) {
-                operation = Calendrier.Operation.ERREUR;
-                errorMessage = errorMsg;
-                erreurLiveData.postValue(errorMsg);
-            }
-        });
+    public void updateCalendrier(String nom, String description, String auteur) {
+        Calendrier cal = calendrierLiveData.getValue();
+        if (cal != null) {
+            cal.syncUpdate(nom, description, auteur, this::notifyCalendrierObservers);
+        }
     }
 
-    public void syncDelete() {
-        apiService.deleteCalendrier(this, token, new ApiCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean success) {
-                if (success != null && success) {
-                    id = 0;
-                    nom = null;
-                    description = null;
-                    auteur = null;
-                    elements.clear();
-                    evenements.clear();
-                    operation = Calendrier.Operation.SUPPRESSION;
-                    liveData.postValue(Calendrier.this);
-                } else {
-                    operation = Calendrier.Operation.ERREUR;
-                    errorMessage = "Échec de la suppression";
-                    liveData.postValue(Calendrier.this);
-                }
-            }
-            @Override
-            public void onFailure(String errorMsg) {
-                operation = Calendrier.Operation.ERREUR;
-                errorMessage = errorMsg;
-                erreurLiveData.postValue(errorMsg);
-            }
-        });
+    public void deleteCalendrier() {
+        Calendrier cal = calendrierLiveData.getValue();
+        if (cal != null) {
+            cal.syncDelete(this::notifyCalendrierObservers);
+        }
     }
 
-    public void addEvenement(String titre, String description) {
-        apiService.createEvenement(this, titre, description, token, new ApiCallback<Evenement>() {
-            @Override
-            public void onSuccess(Evenement evenement) {
-                if (evenement != null) {
-                    evenements.add(evenement);
-                    operation = Calendrier.Operation.AJOUT_EVENEMENT;
-                    liveData.postValue(Calendrier.this);
-                } else {
-                    operation = Calendrier.Operation.ERREUR;
-                    errorMessage = "Événement non créé";
-                    liveData.postValue(Calendrier.this);
-                }
-            }
-            @Override
-            public void onFailure(String errorMsg) {
-                operation = Calendrier.Operation.ERREUR;
-                errorMessage = errorMsg;
-                erreurLiveData.postValue(errorMsg);
-            }
-        });
+    public void ajouterEvenement(String titre, String description) {
+        Calendrier cal = calendrierLiveData.getValue();
+        if (cal != null) {
+            cal.addEvenement(titre, description, this::notifyCalendrierObservers);
+        }
     }
 
-    public void updateEvenement(Evenement evenement, String titre, String description) {
-        apiService.updateEvenement(evenement, token, new ApiCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean success) {
-                if (success != null && success) {
-                    evenement.setTitre(titre);
-                    evenement.setDescription(description);
-                    operation = Calendrier.Operation.MISE_A_JOUR_EVENEMENT;
-                    liveData.postValue(Calendrier.this);
-                } else {
-                    operation = Calendrier.Operation.ERREUR;
-                    errorMessage = "Échec de la mise à jour de l'événement";
-                    liveData.postValue(Calendrier.this);
-                }
-            }
-            @Override
-            public void onFailure(String errorMsg) {
-                operation = Calendrier.Operation.ERREUR;
-                errorMessage = errorMsg;
-                erreurLiveData.postValue(errorMsg);
-            }
-        });
+    public void modifierEvenement(Evenement evenement, String titre, String description) {
+        Calendrier cal = calendrierLiveData.getValue();
+        if (cal != null) {
+            cal.updateEvenement(evenement, titre, description, this::notifyCalendrierObservers);
+        }
     }
 
-    public void deleteEvenement(Evenement evenement) {
-        apiService.deleteEvenement(evenement, token, new ApiCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean success) {
-                if (success != null && success) {
-                    evenements.remove(evenement);
-                    operation = Calendrier.Operation.SUPPRESSION_EVENEMENT;
-                    liveData.postValue(Calendrier.this);
-                } else {
-                    operation = Calendrier.Operation.ERREUR;
-                    errorMessage = "Échec de la suppression de l'événement";
-                    liveData.postValue(Calendrier.this);
-                }
-            }
-            @Override
-            public void onFailure(String errorMsg) {
-                operation = Calendrier.Operation.ERREUR;
-                errorMessage = errorMsg;
-                erreurLiveData.postValue(errorMsg);
-            }
-        });
+    public void supprimerEvenement(Evenement evenement) {
+        Calendrier cal = calendrierLiveData.getValue();
+        if (cal != null) {
+            cal.deleteEvenement(evenement, this::notifyCalendrierObservers);
+        }
     }
 
-    public void addElement(String nom, String description, Evenement evenement, LocalDateTime dateDebut,
-                           LocalDateTime dateFin) {
-        apiService.createElement(this, nom, description, evenement.getId(), dateDebut, dateFin, token, new ApiCallback<Element>() {
-            @Override
-            public void onSuccess(Element element) {
-                if (element != null) {
-                    elements.add(element);
-                    operation = Calendrier.Operation.AJOUT_ELEMENT;
-                    liveData.postValue(Calendrier.this);
-                } else {
-                    operation = Calendrier.Operation.ERREUR;
-                    errorMessage = "Élément non créé";
-                    liveData.postValue(Calendrier.this);
-                }
-            }
-            @Override
-            public void onFailure(String errorMsg) {
-                operation = Calendrier.Operation.ERREUR;
-                errorMessage = errorMsg;
-                erreurLiveData.postValue(errorMsg);
-            }
-        });
+    public void ajouterElement(String nom, String description, Evenement evenement, LocalDateTime dateDebut, LocalDateTime dateFin) {
+        Calendrier cal = calendrierLiveData.getValue();
+        if (cal != null) {
+            cal.addElement(nom, description, evenement, dateDebut, dateFin, this::notifyCalendrierObservers);
+        }
     }
 
-    public void updateElement(Element element, String nom, String description, Evenement evenement) {
-        apiService.updateElement(element, token, new ApiCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean success) {
-                if (success != null && success) {
-                    element.setNom(nom);
-                    element.setDescription(description);
-                    element.setEvenement(evenement);
-                    operation = Calendrier.Operation.MISE_A_JOUR_ELEMENT;
-                    liveData.postValue(Calendrier.this);
-                } else {
-                    operation = Calendrier.Operation.ERREUR;
-                    errorMessage = "Échec de la mise à jour de l'élément";
-                    liveData.postValue(Calendrier.this);
-                }
-            }
-            @Override
-            public void onFailure(String errorMsg) {
-                operation = Calendrier.Operation.ERREUR;
-                errorMessage = errorMsg;
-                erreurLiveData.postValue(errorMsg);
-            }
-        });
+    public void modifierElement(Element element, String nom, String description, int evenementId) {
+        Calendrier cal = calendrierLiveData.getValue();
+        if (cal != null) {
+            cal.updateElement(element, nom, description, evenementId, this::notifyCalendrierObservers);
+        }
     }
 
-    public void deleteElement(Element element) {
-        apiService.deleteElement(element, token, new ApiCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean success) {
-                if (success != null && success) {
-                    elements.remove(element);
-                    operation = Calendrier.Operation.SUPPRESSION_ELEMENT;
-                    liveData.postValue(Calendrier.this);
-                } else {
-                    operation = Calendrier.Operation.ERREUR;
-                    errorMessage = "Échec de la suppression de l'élément";
-                    liveData.postValue(Calendrier.this);
-                }
-            }
-            @Override
-            public void onFailure(String errorMsg) {
-                operation = Calendrier.Operation.ERREUR;
-                errorMessage = errorMsg;
-                erreurLiveData.postValue(errorMsg);
-            }
-        });
+    public void supprimerElement(Element element) {
+        Calendrier cal = calendrierLiveData.getValue();
+        if (cal != null) {
+            cal.deleteElement(element, this::notifyCalendrierObservers);
+        }
     }
-     */
 }
+
+/*
+private CalendrierViewModel viewModel;
+private TextView statusTextView; // Assure-toi de lier ça à ta vue dans le layout
+
+@Override
+public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    viewModel = new ViewModelProvider(requireActivity()).get(CalendrierViewModel.class);
+
+    statusTextView = view.findViewById(R.id.statusTextView); // ou ton ID réel
+
+    // Observer les changements du calendrier
+    viewModel.getCalendrier().observe(getViewLifecycleOwner(), calendrier -> {
+        if (calendrier == null) {
+            statusTextView.setText("Aucun calendrier disponible");
+            return;
+        }
+
+        switch (calendrier.getOperation()) {
+            case CREATION:
+                statusTextView.setText("✅ Calendrier créé : " + calendrier.getNom());
+                ajouterElementExemple(); // Ajoute un élément après création
+                break;
+            case MISE_A_JOUR:
+                statusTextView.setText("✅ Calendrier mis à jour : " + calendrier.getNom());
+                break;
+            case SUPPRESSION:
+                statusTextView.setText("❌ Calendrier supprimé");
+                break;
+            case AJOUT_EVENEMENT:
+                statusTextView.setText("🗓️ Événement ajouté");
+                break;
+            case MISE_A_JOUR_EVENEMENT:
+                statusTextView.setText("✏️ Événement mis à jour");
+                break;
+            case SUPPRESSION_EVENEMENT:
+                statusTextView.setText("🗑️ Événement supprimé");
+                break;
+            case AJOUT_ELEMENT:
+                statusTextView.setText("📌 Élément ajouté");
+                break;
+            case MISE_A_JOUR_ELEMENT:
+                statusTextView.setText("✏️ Élément mis à jour");
+                break;
+            case SUPPRESSION_ELEMENT:
+                statusTextView.setText("🗑️ Élément supprimé");
+                break;
+            case ERREUR:
+                statusTextView.setText("❌ Erreur : " + calendrier.getErrorMessage());
+                break;
+            case AUTRE:
+            default:
+                statusTextView.setText("ℹ️ Opération non spécifiée");
+                break;
+        }
+    });
+
+    // Démarrer la création du calendrier
+    Calendrier calendrierActuel = viewModel.getCalendrier().getValue();
+    if (calendrierActuel != null && calendrierActuel.getId() == 0) {
+        viewModel.createCalendrier("Mon projet", "Calendrier de travail");
+    }
+}
+
+private void ajouterElementExemple() {
+    Calendrier calendrier = viewModel.getCalendrier().getValue();
+    if (calendrier != null) {
+        List<Evenement> evenements = calendrier.getEvenements();
+        if (!evenements.isEmpty()) {
+            Evenement evenement = evenements.get(0);
+            viewModel.ajouterElement(
+                "Créer le backend",
+                "Tâche initiale",
+                evenement,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusDays(2)
+            );
+        } else {
+            statusTextView.setText("⚠️ Aucun événement pour associer un élément.");
+        }
+    }
+}
+
+ */
+

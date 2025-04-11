@@ -7,16 +7,7 @@ public class Evenement {
     private String description;
     private String titre;
 
-    public Evenement() {
-    }
-
-    // Constructeur complet
-    public Evenement(int id, int calendrierId, String titre, String description) {
-        this.id = id;
-        this.calendrierId=calendrierId;
-        this.titre = titre;
-        this.description = description;
-    }
+    public Evenement() {}
 
     // Getters et Setters
 
