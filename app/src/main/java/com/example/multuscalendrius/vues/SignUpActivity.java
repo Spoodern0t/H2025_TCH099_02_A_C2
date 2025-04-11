@@ -12,20 +12,6 @@ import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.ApiService;
 import com.example.multuscalendrius.modeles.entitees.LoginResponse;
 import com.example.multuscalendrius.vuemodele.ApiCallback;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -96,14 +82,12 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         // Appel de la méthode inscription de l'ApiService
-        apiService.inscription(email, username, password, new ApiCallback<Boolean>() {
+        apiService.inscription(email, username, password, confirmPassword, new ApiCallback<LoginResponse>() {
             @Override
-            public void onSuccess(Boolean resultat) {
-                // Vérification de la validité du token retourné
-                if (resultat) {  // Ici, getToken() doit retourner un booléen indiquant le succès
+            public void onSuccess(LoginResponse response) {
+                if (response != null && Boolean.TRUE.equals(response.getToken())) {
                     runOnUiThread(() -> {
                         Toast.makeText(SignUpActivity.this, "Inscription réussie", Toast.LENGTH_SHORT).show();
-                        // Redirection vers la page de connexion
                         Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();

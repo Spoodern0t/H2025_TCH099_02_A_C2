@@ -2,7 +2,6 @@ package com.example.multuscalendrius.vuemodele;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.Element;
@@ -10,7 +9,7 @@ import com.example.multuscalendrius.modeles.entitees.Evenement;
 
 import java.time.LocalDateTime;
 
-class CalendrierViewModel extends ViewModel {
+public class CalendarVueModele {
 
     private final MutableLiveData<Calendrier> calendrierLiveData = new MutableLiveData<>(new Calendrier());
 
@@ -179,7 +178,7 @@ private void ajouterElementExemple() {
             statusTextView.setText("⚠️ Aucun événement pour associer un élément.");
         }
     }
+
 }
 
  */
-
