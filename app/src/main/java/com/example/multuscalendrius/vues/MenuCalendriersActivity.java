@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.multuscalendrius.R;
-import com.example.multuscalendrius.modeles.dao.UserDao;
 import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 import com.example.multuscalendrius.vuemodele.UserVueModele;
 import com.example.multuscalendrius.vues.adaptateurs.CalendrierAdaptateur;
@@ -21,7 +20,7 @@ import com.example.multuscalendrius.vues.adaptateurs.CalendrierAdaptateur;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuCalendriersActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class MenuCalendriersActivity extends AppCompatActivity implements ListView.OnItemClickListener, View.OnClickListener {
 
     private UserVueModele userVueModele;
     private ImageButton imgBtnAddCalendrier;
@@ -34,9 +33,11 @@ public class MenuCalendriersActivity extends AppCompatActivity implements Adapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_calendriers);
 
+        lvCalendriersPersonnels = findViewById(R.id.lvCalendriersPersonnels);
         imgBtnAddCalendrier = findViewById(R.id.imgBtnAddCalendrier);
 
         imgBtnAddCalendrier.setOnClickListener(this);
+        lvCalendriersPersonnels.setOnItemClickListener(this);
 
         userVueModele = new ViewModelProvider(this).get(UserVueModele.class);
         userVueModele.getUserCalendars().observe(this, this::initCalendriersPersonnels);
@@ -47,8 +48,6 @@ public class MenuCalendriersActivity extends AppCompatActivity implements Adapte
     }
 
     public void initCalendriersPersonnels(List<UserCalendar> calendriers) {
-
-        lvCalendriersPersonnels = findViewById(R.id.lvCalendriersPersonnels);
 
         String username = userVueModele.getUsername();
         List<UserCalendar> calendriersPersonnels = new ArrayList<>();
@@ -61,7 +60,7 @@ public class MenuCalendriersActivity extends AppCompatActivity implements Adapte
             }
         }
 
-        CalendrierAdaptateur calendrierPersonnelAdaptateur = new CalendrierAdaptateur(this, R.layout.layout_calendrier_personnel, calendriersPersonnels);
+        CalendrierAdaptateur calendrierPersonnelAdaptateur = new CalendrierAdaptateur(this, R.layout.layout_calendrier, calendriersPersonnels);
         lvCalendriersPersonnels.setAdapter(calendrierPersonnelAdaptateur);
 
         if (!calendriersPartages.isEmpty()) {
@@ -75,7 +74,7 @@ public class MenuCalendriersActivity extends AppCompatActivity implements Adapte
             tvCalendriersPartages.setVisibility(View.VISIBLE);
             tvCalendriersPersonnels.setText(R.string.liste_des_calendriers_personnels);
 
-            CalendrierAdaptateur calendrierPartageAdaptateur = new CalendrierAdaptateur(this, R.layout.layout_calendrier_partage, calendriers);
+            CalendrierAdaptateur calendrierPartageAdaptateur = new CalendrierAdaptateur(this, R.layout.layout_calendrier, calendriers);
             lvCalendriersPartages.setAdapter(calendrierPartageAdaptateur);
 
             lvCalendriersPartages.setOnItemClickListener(this);
@@ -94,7 +93,8 @@ public class MenuCalendriersActivity extends AppCompatActivity implements Adapte
     @Override
     public void onClick(View v) {
         if (v == imgBtnAddCalendrier) {
-
+            Intent intent = new Intent(this, CreerCalendrierActivity.class);
+            startActivity(intent);
         }
     }
 }

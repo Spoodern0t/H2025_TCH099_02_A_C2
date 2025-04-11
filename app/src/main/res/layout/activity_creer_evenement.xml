@@ -12,13 +12,12 @@
         android:layout_gravity="center_horizontal"
         android:textSize="20sp"
         android:textColor="@color/couleur_texte"
-        android:text="@string/creez_un_nouveau_calendrier"
-        android:layout_marginVertical="10dp"/>
+        android:text="@string/creez_un_nouvel_evenement"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="10dp"
         android:hint="@string/nom"
         app:boxBackgroundColor="@color/couleur_primaire"
         app:hintTextColor="@color/couleur_texte"
@@ -26,10 +25,10 @@
         app:boxStrokeColor="@color/couleur_texte">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextEmail"
+            android:id="@+id/textNom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             android:textColor="@color/couleur_texte"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -38,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="10dp"
         android:hint="@string/description"
         app:boxBackgroundColor="@color/couleur_primaire"
         app:hintTextColor="@color/couleur_texte"
@@ -46,7 +45,7 @@
         app:boxStrokeColor="@color/couleur_texte">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/textDescription"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="start"
@@ -55,23 +54,53 @@
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/choisissez_la_couleur_de_evenement"
+            android:textColor="@color/couleur_texte"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/viewCouleur"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:background="@color/couleur_primaire"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <Button
-        android:id="@+id/buttonCreer"
+        android:id="@+id/btnCreer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/creer"
         android:minHeight="48dp"
-        android:layout_marginVertical="20dp"
         android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/couleur_primaire"
         android:backgroundTint="@color/couleur_bouton" />
 
     <Button
-        android:id="@+id/buttonAnnuler"
+        android:id="@+id/btnAnnuler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/annuler"
         android:minHeight="48dp"
         android:textSize="20sp"
+        android:textColor="@color/couleur_primaire"
         android:backgroundTint="@color/couleur_bouton" />
 
 </LinearLayout>

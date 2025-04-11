@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu"
-        android:title="@string/menu"
+        android:title=""
         android:icon="@drawable/menu_burger_icon"/>
     <item
         android:id="@+id/calendrier"
-        android:title="@string/calendrier"
+        android:title=""
         android:icon="@drawable/calendar_icon"/>
     <item
         android:enabled="false"
@@ -14,10 +14,10 @@
         android:title="" />
     <item
         android:id="@+id/planificateur"
-        android:title="@string/planificateur"
+        android:title=""
         android:icon="@drawable/planner_icon"/>
     <item
         android:id="@+id/profil"
-        android:title="@string/profil"
+        android:title=""
         android:icon="@drawable/user_icon"/>
 </menu>

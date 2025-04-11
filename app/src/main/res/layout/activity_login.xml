@@ -10,8 +10,8 @@
     android:background="@color/couleur_background">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="126dp"
+        android:layout_height="126dp"
         android:layout_gravity="center_horizontal"
         android:background="@android:color/transparent"
         android:contentDescription="@string/hint_logo"
@@ -74,6 +74,7 @@
         android:minHeight="48dp"
         android:textSize="20sp"
         android:layout_marginTop="24dp"
+        android:textColor="@color/couleur_primaire"
         android:backgroundTint="@color/couleur_bouton" />
 
     <TextView
@@ -82,6 +83,6 @@
         android:layout_height="wrap_content"
         android:text="@string/inscrire"
         android:textSize="18sp"
-        android:textColor="@color/couleur_bouton"
+        android:textColor="@color/couleur_primaire"
         android:layout_marginTop="16dp" />
 </LinearLayout>

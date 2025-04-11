@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:backgroundTint="@color/couleur_bouton"
-        android:text="Année/Mois"/>
+        android:text="Année/Mois"
+        android:textColor="@color/couleur_primaire"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvJours"

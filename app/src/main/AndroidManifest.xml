@@ -24,6 +24,15 @@
             android:name=".vues.MenuCalendriersActivity"
             android:exported="false" />
         <activity
+            android:name=".vues.CreerCalendrierActivity"
+            android:exported="false" />
+        <activity
+            android:name=".vues.CreerEvenementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".vues.CreerElementActivity"
+            android:exported="false" />
+        <activity
             android:name=".vues.LoginActivity"
             android:exported="true">
             <intent-filter>

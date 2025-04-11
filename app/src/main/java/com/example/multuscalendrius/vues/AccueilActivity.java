@@ -4,20 +4,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.entitees.Calendrier;
+import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
+import com.example.multuscalendrius.vuemodele.UserVueModele;
 import com.example.multuscalendrius.vues.fragments.CalendrierFragment;
 import com.example.multuscalendrius.vues.fragments.PlanificateurFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AccueilActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageButton imgBtnCreate, imgBtnPhotoProfil;
+    private CalendrierVueModele calendrierVueModele;
+    private TextView titreCalendrier;
+    private ImageButton imgBtnCreate;
     private BottomNavigationView bottomNavigationView;
     private int calendrierId;
     private Fragment calendrierFragment, planificateurFragment;
@@ -27,14 +33,15 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accueil);
 
-        imgBtnCreate = findViewById(R.id.imgBtnMenu);
-        imgBtnPhotoProfil = findViewById(R.id.imgBtnPhotoProfil);
+        titreCalendrier = findViewById(R.id.titreCalendrier);
+        imgBtnCreate = findViewById(R.id.btnCreer);
 
         imgBtnCreate.setOnClickListener(this);
-        imgBtnPhotoProfil.setOnClickListener(this);
 
-        Intent intent = getIntent();
-        intent.getIntExtra("ID", -1);
+        Intent resultIntent = getIntent();
+        calendrierId = resultIntent.getIntExtra("ID", 0);
+
+        calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
 
         // Initier la barre de navigation
         initNavView();
@@ -59,9 +66,8 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v == imgBtnCreate) {
-            // TODO: Vers interface de création
-        } else if (v == imgBtnPhotoProfil) {
-            // TODO: Menu de l'utilisateur
+            Intent intent = new Intent(this, CreerElementActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -70,25 +76,29 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
+        //titreCalendrier.setText(calendrierVueModele.getCurrentCalendrier().getNom());
+
         // Les vues qui vont apparaitre dans le frame
         calendrierFragment = new CalendrierFragment();
         planificateurFragment = new PlanificateurFragment();
-
-        Intent intent = getIntent();
-        calendrierId = intent.getIntExtra("ID", 0);
 
         setCurrentFragment(calendrierFragment);
         bottomNavigationView.setSelectedItemId(R.id.calendrier);
 
         // Les actions des boutons de la barre de navigation
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            int ItemId = item.getItemId();
-            if (ItemId == R.id.calendrier) {
+            int itemId = item.getItemId();
+            if (itemId == R.id.menu){
+                Intent intent = new Intent(this, MenuCalendriersActivity.class);
+                startActivity(intent);
+            } else if (itemId == R.id.calendrier) {
                 setCurrentFragment(calendrierFragment);
                 return true;
-            } else if (ItemId == R.id.planificateur) {
+            } else if (itemId == R.id.planificateur) {
                 setCurrentFragment(planificateurFragment);
                 return true;
+            } else if (itemId == R.id.profil){
+                //TODO: Vers profil
             }
             return false;
         });

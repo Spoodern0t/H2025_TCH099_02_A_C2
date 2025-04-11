@@ -44,9 +44,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.jackson.databind)
     implementation(libs.okhttp)
-    implementation("me.jlurena:revolvingweekview:1.0.0") {
-        exclude(group = "com.android.support")
-    }
+    implementation(libs.ambilwarna)
     implementation(libs.firebase.appdistribution.gradle)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
