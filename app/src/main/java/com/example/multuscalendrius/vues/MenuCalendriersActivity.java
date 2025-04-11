@@ -50,7 +50,7 @@ public class MenuCalendriersActivity extends AppCompatActivity implements Adapte
 
         lvCalendriersPersonnels = findViewById(R.id.lvCalendriersPersonnels);
 
-        String username = userVueModele.getUsername();
+        String username = userVueModele.getUserInstance().getUsername();
         List<UserCalendar> calendriersPersonnels = new ArrayList<>();
         List<UserCalendar> calendriersPartages = new ArrayList<>();
         for (UserCalendar calendrier: calendriers) {
