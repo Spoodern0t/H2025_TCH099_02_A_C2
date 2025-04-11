@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.multuscalendrius.modeles.dao.UserDao;
+import com.example.multuscalendrius.modeles.ApiService;
+import com.example.multuscalendrius.modeles.dao.UserInstance;
 import com.example.multuscalendrius.modeles.entitees.User;
 import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 
@@ -12,15 +13,19 @@ import java.util.List;
 
 public class UserVueModele extends ViewModel {
 
+    //ATTRIBUTES//
+    private final ApiService api = new ApiService();
     private final MutableLiveData<User> userLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<UserCalendar>> userCalendarsLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> erreurLiveData = new MutableLiveData<>();
-    private final UserDao userDao;
+    private final UserInstance userInstance;
 
+    //CONSTRUCTOR//
     public UserVueModele() {
-        userDao = UserDao.getInstance();
+        userInstance = UserInstance.getInstance();
     }
 
+    //LIVE DATA'S//
     public LiveData<User> getUser() {
         return userLiveData;
     }
@@ -29,24 +34,23 @@ public class UserVueModele extends ViewModel {
         return userCalendarsLiveData;
     }
 
-    public LiveData<String> getErreur() {
-        return erreurLiveData;
-    }
+    public LiveData<String> getErreur() {return erreurLiveData;}
 
+
+    //RETOURNE INSTANCE DU USER
+    public User getUserInstance() {return userInstance.getUser();}
 
     // Wrapper pour la connexion (login)
     public void syncLogin(String email, String password) {
-        userDao.connexion(email, password, new ApiCallback<User>() {
+        api.connexion(email, password, new ApiCallback<User>() {
             @Override
             public void onSuccess(User user) {
                 if (user != null) {
-                    userDao.setUser(user);
-                    user.setOperation(User.Operation.LOGIN);
+                    userInstance.setUser(user);
                     userLiveData.postValue(user);
-                } /* else {
-                    userDao.setOperation(UserDao.Operation.ERREUR);
-                    userDao.setErrorMessage("Réponse vide lors du login");
-                }*/
+                } else {
+                    erreurLiveData.postValue("Réponse vide lors du login");
+                }
             }
             @Override
             public void onFailure(String errorMsg) {
@@ -55,20 +59,18 @@ public class UserVueModele extends ViewModel {
         });
     }
 
-    // Wrapper pour la connexion (login)
+    // Wrapper pour la de-connexion (decoUser)
     public void decoUser() {
-        userDao.decoUser(userDao.getUser().getToken(), new ApiCallback<Boolean>() {
+        api.decoUser(userInstance.getUser().getToken(), new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (result) {
-                    User user = userDao.getUser();
-                    userDao.setUser(user);
-                    user.setOperation(User.Operation.LOGIN);
+                    User user = userInstance.getUser();
+                    userInstance.setUser(user);
                     userLiveData.postValue(user);
-                } /* else {
-                    userDao.setOperation(UserDao.Operation.ERREUR);
-                    userDao.setErrorMessage("Réponse vide lors du login");
-                }*/
+                } else {
+                    erreurLiveData.postValue("Réponse vide lors du login");
+                }
             }
             @Override
             public void onFailure(String errorMsg) {
@@ -79,18 +81,16 @@ public class UserVueModele extends ViewModel {
 
     // Wrapper pour récupérer les UserCalendar de l'utilisateur
     public void syncUserCalendars() {
-        userDao.getUserCalendar(userDao.getUser().getToken(), new ApiCallback<List<UserCalendar>>() {
+        api.getUserCalendar(userInstance.getUser().getToken(), new ApiCallback<List<UserCalendar>>() {
             @Override
             public void onSuccess(List<UserCalendar> calendriers) {
                 if (!calendriers.isEmpty()) {
-                    User user = userDao.getUser();
+                    User user = userInstance.getUser();
                     user.setUserCalendars(calendriers);
-                    user.setOperation(User.Operation.FETCH_USER_CALENDARS);
                     userCalendarsLiveData.postValue(calendriers);
-                } /* else {
-                    userDao.setOperation(UserDao.Operation.ERREUR);
-                    userDao.setErrorMessage("Réponse vide lors de la récupération des userCalendars");
-                } */
+                } else {
+                    erreurLiveData.postValue("Réponse vide lors de la récupération des userCalendars");
+                }
             }
             @Override
             public void onFailure(String errorMsg) {
@@ -99,7 +99,4 @@ public class UserVueModele extends ViewModel {
         });
     }
 
-    public String getUsername() {
-        return userDao.getUser().getUsername();
-    }
 }
