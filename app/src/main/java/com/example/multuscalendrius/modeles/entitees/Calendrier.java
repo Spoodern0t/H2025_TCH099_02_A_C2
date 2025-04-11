@@ -1,8 +1,5 @@
 package com.example.multuscalendrius.modeles.entitees;
 
-
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -15,24 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Calendrier {
+
     private int id;
     private String nom;
     private String description;
     private String auteur;
+    private String token = null;
     private List<Element> elements;
     private List<Evenement> evenements;
+
+    @JsonIgnore
     private ApiService apiService;
 
-    // Champs intégrant la logique du wrapper (ignorés lors du mapping JSON)
     @JsonIgnore
     private Operation operation;
     @JsonIgnore
     private String errorMessage;
 
-    // LiveData pour notifier l'UI de l'état et des opérations sur ce Calendrier
-    private MutableLiveData<Calendrier> liveData;
-
-    // Enumération pour identifier l'opération effectuée
     public enum Operation {
         CREATION,
         MISE_A_JOUR,
@@ -51,293 +47,273 @@ public class Calendrier {
         this.elements = new ArrayList<>();
         this.evenements = new ArrayList<>();
         this.apiService = new ApiService();
-        this.liveData = new MutableLiveData<>();
-        // Par défaut, aucune opération particulière n'est en cours
         this.operation = Operation.AUTRE;
-        liveData.setValue(this);
     }
 
-    // Getters & Setters classiques pour le mapping JSON
+    // Getters / Setters
     public int getId() { return id; }
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    public void setId(int id) { this.id = id; }
     public String getNom() { return nom; }
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
+    public void setNom(String nom) { this.nom = nom; }
     public String getDescription() { return description; }
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
+    public void setDescription(String description) { this.description = description; }
     public String getAuteur() { return auteur; }
-    public void setAuteur(String auteur) {
-        this.auteur = auteur;
-    }
-
+    public void setAuteur(String auteur) { this.auteur = auteur; }
     public List<Element> getElements() { return elements; }
-    public void setElements(List<Element> elements) {
-        this.elements = elements;
-    }
-
+    public void setElements(List<Element> elements) { this.elements = elements; }
     public List<Evenement> getEvenements() { return evenements; }
-    public void setEvenements(List<Evenement> evenements) {
-        this.evenements = evenements;
-    }
+    public void setEvenements(List<Evenement> evenements) { this.evenements = evenements; }
+    public Operation getOperation() { return operation; }
+    public void setOperation(Operation operation) { this.operation = operation; }
+    public String getErrorMessage() { return errorMessage; }
+    public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
 
-    // Getters pour la logique du wrapper (non mappés en JSON)
-    public Operation getOperation() {
-        return operation;
-    }
-    public String getErrorMessage() {
-        return errorMessage;
-    }
+    // API wrappers avec callback de complétion
 
-    // Exposition du LiveData pour l'observation depuis l'UI (Activity/Fragment)
-    public LiveData<Calendrier> getLiveData() {
-        return liveData;
-    }
-
-    // ----------- API WRAPPERS SANS notification du LiveData -----------
-    public static void fetchById(int id, String token, ApiCallback<Calendrier> callback) {
-        ApiService api = new ApiService();
-        api.getCalendrier(id, token, new ApiCallback<Calendrier>() {
+    public void fetchById(int id, Runnable onComplete) {
+        apiService.getCalendrier(id, token, new ApiCallback<Calendrier>() {
             @Override
             public void onSuccess(Calendrier calendrier) {
-                callback.onSuccess(calendrier);
+                if (calendrier != null) {
+                    setId(calendrier.getId());
+                    setNom(calendrier.getNom());
+                    setDescription(calendrier.getDescription());
+                    setAuteur(calendrier.getAuteur());
+                    setElements(calendrier.getElements());
+                    setEvenements(calendrier.getEvenements());
+                    setOperation(Operation.AUTRE);
+                }
+                onComplete.run();
             }
             @Override
-            public void onFailure(String errorMessage) {
-                callback.onFailure(errorMessage);
+            public void onFailure(String errorMsg) {
+                setOperation(Operation.ERREUR);
+                setErrorMessage(errorMsg);
+                onComplete.run();
             }
         });
     }
 
-    // ----------- API WRAPPERS avec notification via LiveData -----------
-    public void syncCreate(String leNom, String laDescription, String leAuteur) {
-        apiService.createCalendrier(leNom, laDescription, leAuteur, new ApiCallback<Calendrier>() {
+    public void syncCreate(String leNom, String laDescription, Runnable onComplete) {
+        apiService.createCalendrier(leNom, laDescription, token, new ApiCallback<Calendrier>() {
             @Override
             public void onSuccess(Calendrier result) {
                 if (result != null) {
-                    id = result.getId();
-                    nom = result.getNom();
-                    description = result.getDescription();
-                    auteur = result.getAuteur();
-                    operation = Operation.CREATION;
-                    liveData.postValue(Calendrier.this);
+                    setId(result.getId());
+                    setNom(result.getNom());
+                    setDescription(result.getDescription());
+                    setAuteur(result.getAuteur());
+                    setOperation(Operation.CREATION);
                 } else {
-                    operation = Operation.ERREUR;
-                    errorMessage = "Réponse vide lors de la création";
-                    liveData.postValue(Calendrier.this);
+                    setOperation(Operation.ERREUR);
+                    setErrorMessage("Réponse vide lors de la création");
                 }
+                onComplete.run();
             }
             @Override
             public void onFailure(String errorMsg) {
-                operation = Operation.ERREUR;
-                errorMessage = errorMsg;
-                liveData.postValue(Calendrier.this);
+                setOperation(Operation.ERREUR);
+                setErrorMessage(errorMsg);
+                onComplete.run();
             }
         });
     }
 
-    public void syncUpdate(String leNom, String laDescription, String leAuteurString, String token) {
+    public void syncUpdate(String nom, String description, String auteur, Runnable onComplete) {
         apiService.updateCalendrier(this, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
-                if (success != null && success) {
-                    nom = leNom;
-                    description = laDescription;
-                    auteur = leAuteurString;
-                    operation = Operation.MISE_A_JOUR;
-                    liveData.postValue(Calendrier.this);
+                if (Boolean.TRUE.equals(success)) {
+                    setNom(nom);
+                    setDescription(description);
+                    setAuteur(auteur);
+                    setOperation(Operation.MISE_A_JOUR);
                 } else {
-                    operation = Operation.ERREUR;
-                    errorMessage = "Échec de la mise à jour";
-                    liveData.postValue(Calendrier.this);
+                    setOperation(Operation.ERREUR);
+                    setErrorMessage("Échec de la mise à jour");
                 }
+                onComplete.run();
             }
             @Override
             public void onFailure(String errorMsg) {
-                operation = Operation.ERREUR;
-                errorMessage = errorMsg;
-                liveData.postValue(Calendrier.this);
+                setOperation(Operation.ERREUR);
+                setErrorMessage(errorMsg);
+                onComplete.run();
             }
         });
     }
 
-    public void syncDelete(String token) {
+    public void syncDelete(Runnable onComplete) {
         apiService.deleteCalendrier(this, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
-                if (success != null && success) {
-                    id = 0;
-                    nom = null;
-                    description = null;
-                    auteur = null;
-                    elements.clear();
-                    evenements.clear();
-                    operation = Operation.SUPPRESSION;
-                    liveData.postValue(Calendrier.this);
+                if (Boolean.TRUE.equals(success)) {
+                    setId(0);
+                    setNom(null);
+                    setDescription(null);
+                    setAuteur(null);
+                    setElements(new ArrayList<>());
+                    setEvenements(new ArrayList<>());
+                    setOperation(Operation.SUPPRESSION);
                 } else {
-                    operation = Operation.ERREUR;
-                    errorMessage = "Échec de la suppression";
-                    liveData.postValue(Calendrier.this);
+                    setOperation(Operation.ERREUR);
+                    setErrorMessage("Échec de la suppression");
                 }
+                onComplete.run();
             }
             @Override
             public void onFailure(String errorMsg) {
-                operation = Operation.ERREUR;
-                errorMessage = errorMsg;
-                liveData.postValue(Calendrier.this);
+                setOperation(Operation.ERREUR);
+                setErrorMessage(errorMsg);
+                onComplete.run();
             }
         });
     }
 
-    public void addEvenement(String titre, String description, String token) {
+    public void addEvenement(String titre, String description, Runnable onComplete) {
         apiService.createEvenement(this, titre, description, token, new ApiCallback<Evenement>() {
             @Override
             public void onSuccess(Evenement evenement) {
                 if (evenement != null) {
-                    evenements.add(evenement);
-                    operation = Operation.AJOUT_EVENEMENT;
-                    liveData.postValue(Calendrier.this);
+                    List<Evenement> liste = getEvenements();
+                    liste.add(evenement);
+                    setEvenements(liste);
+                    setOperation(Operation.AJOUT_EVENEMENT);
                 } else {
-                    operation = Operation.ERREUR;
-                    errorMessage = "Événement non créé";
-                    liveData.postValue(Calendrier.this);
+                    setOperation(Operation.ERREUR);
+                    setErrorMessage("Événement non créé");
                 }
+                onComplete.run();
             }
             @Override
             public void onFailure(String errorMsg) {
-                operation = Operation.ERREUR;
-                errorMessage = errorMsg;
-                liveData.postValue(Calendrier.this);
+                setOperation(Operation.ERREUR);
+                setErrorMessage(errorMsg);
+                onComplete.run();
             }
         });
     }
 
-    public void updateEvenement(Evenement evenement, String titre, String description, String token) {
+    public void updateEvenement(Evenement evenement, String titre, String description, Runnable onComplete) {
         apiService.updateEvenement(evenement, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
-                if (success != null && success) {
+                if (Boolean.TRUE.equals(success)) {
                     evenement.setTitre(titre);
                     evenement.setDescription(description);
-                    operation = Operation.MISE_A_JOUR_EVENEMENT;
-                    liveData.postValue(Calendrier.this);
+                    setOperation(Operation.MISE_A_JOUR_EVENEMENT);
                 } else {
-                    operation = Operation.ERREUR;
-                    errorMessage = "Échec de la mise à jour de l'événement";
-                    liveData.postValue(Calendrier.this);
+                    setOperation(Operation.ERREUR);
+                    setErrorMessage("Échec de la mise à jour de l'événement");
                 }
+                onComplete.run();
             }
             @Override
             public void onFailure(String errorMsg) {
-                operation = Operation.ERREUR;
-                errorMessage = errorMsg;
-                liveData.postValue(Calendrier.this);
+                setOperation(Operation.ERREUR);
+                setErrorMessage(errorMsg);
+                onComplete.run();
             }
         });
     }
 
-    public void deleteEvenement(Evenement evenement, String token) {
+    public void deleteEvenement(Evenement evenement, Runnable onComplete) {
         apiService.deleteEvenement(evenement, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
-                if (success != null && success) {
-                    evenements.remove(evenement);
-                    operation = Operation.SUPPRESSION_EVENEMENT;
-                    liveData.postValue(Calendrier.this);
+                if (Boolean.TRUE.equals(success)) {
+                    List<Evenement> liste = getEvenements();
+                    liste.remove(evenement);
+                    setEvenements(liste);
+                    setOperation(Operation.SUPPRESSION_EVENEMENT);
                 } else {
-                    operation = Operation.ERREUR;
-                    errorMessage = "Échec de la suppression de l'événement";
-                    liveData.postValue(Calendrier.this);
+                    setOperation(Operation.ERREUR);
+                    setErrorMessage("Échec de la suppression de l'événement");
                 }
+                onComplete.run();
             }
             @Override
             public void onFailure(String errorMsg) {
-                operation = Operation.ERREUR;
-                errorMessage = errorMsg;
-                liveData.postValue(Calendrier.this);
+                setOperation(Operation.ERREUR);
+                setErrorMessage(errorMsg);
+                onComplete.run();
             }
         });
     }
 
     public void addElement(String nom, String description, Evenement evenement, LocalDateTime dateDebut,
-                           LocalDateTime dateFin, String token) {
-
+                           LocalDateTime dateFin, Runnable onComplete) {
         apiService.createElement(this, nom, description, evenement.getId(), dateDebut, dateFin, token, new ApiCallback<Element>() {
             @Override
             public void onSuccess(Element element) {
                 if (element != null) {
-                    elements.add(element);
-                    operation = Operation.AJOUT_ELEMENT;
-                    liveData.postValue(Calendrier.this);
+                    List<Element> liste = getElements();
+                    liste.add(element);
+                    setElements(liste);
+                    setOperation(Operation.AJOUT_ELEMENT);
                 } else {
-                    operation = Operation.ERREUR;
-                    errorMessage = "Élément non créé";
-                    liveData.postValue(Calendrier.this);
+                    setOperation(Operation.ERREUR);
+                    setErrorMessage("Élément non créé");
                 }
+                onComplete.run();
             }
             @Override
             public void onFailure(String errorMsg) {
-                operation = Operation.ERREUR;
-                errorMessage = errorMsg;
-                liveData.postValue(Calendrier.this);
+                setOperation(Operation.ERREUR);
+                setErrorMessage(errorMsg);
+                onComplete.run();
             }
         });
     }
 
-    public void updateElement(Element element, String nom, String description, Evenement evenement, String token) {
+    public void updateElement(Element element, String nom, String description, int evenementId, Runnable onComplete) {
         apiService.updateElement(element, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
-                if (success != null && success) {
+                if (Boolean.TRUE.equals(success)) {
                     element.setNom(nom);
                     element.setDescription(description);
-                    element.setEvenement(evenement);
-                    operation = Operation.MISE_A_JOUR_ELEMENT;
-                    liveData.postValue(Calendrier.this);
+                    element.setEvenement(evenementId);
+                    setOperation(Operation.MISE_A_JOUR_ELEMENT);
                 } else {
-                    operation = Operation.ERREUR;
-                    errorMessage = "Échec de la mise à jour de l'élément";
-                    liveData.postValue(Calendrier.this);
+                    setOperation(Operation.ERREUR);
+                    setErrorMessage("Échec de la mise à jour de l'élément");
                 }
+                onComplete.run();
             }
             @Override
             public void onFailure(String errorMsg) {
-                operation = Operation.ERREUR;
-                errorMessage = errorMsg;
-                liveData.postValue(Calendrier.this);
+                setOperation(Operation.ERREUR);
+                setErrorMessage(errorMsg);
+                onComplete.run();
             }
         });
     }
 
-    public void deleteElement(Element element, String token) {
+    public void deleteElement(Element element, Runnable onComplete) {
         apiService.deleteElement(element, token, new ApiCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
-                if (success != null && success) {
-                    elements.remove(element);
-                    operation = Operation.SUPPRESSION_ELEMENT;
-                    liveData.postValue(Calendrier.this);
+                if (Boolean.TRUE.equals(success)) {
+                    List<Element> liste = getElements();
+                    liste.remove(element);
+                    setElements(liste);
+                    setOperation(Operation.SUPPRESSION_ELEMENT);
                 } else {
-                    operation = Operation.ERREUR;
-                    errorMessage = "Échec de la suppression de l'élément";
-                    liveData.postValue(Calendrier.this);
+                    setOperation(Operation.ERREUR);
+                    setErrorMessage("Échec de la suppression de l'élément");
                 }
+                onComplete.run();
             }
             @Override
             public void onFailure(String errorMsg) {
-                operation = Operation.ERREUR;
-                errorMessage = errorMsg;
-                liveData.postValue(Calendrier.this);
+                setOperation(Operation.ERREUR);
+                setErrorMessage(errorMsg);
+                onComplete.run();
             }
         });
     }
+
 }
 
     /*

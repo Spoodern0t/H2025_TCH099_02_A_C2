@@ -7,23 +7,15 @@ public class Element {
     private int calendrierId;
     private String nom;
     private String description;
-    private Evenement evenement;
+    private int evenementId;
 
     private LocalDateTime dateDebut;
     private LocalDateTime dateFin;
 
 
 
-    public Element(int id, int calendrierId, String nom, String description,
-                   Evenement evenement, LocalDateTime dateDebut, LocalDateTime dateFin) {
-        this.id = id;
-        this.calendrierId = calendrierId;
-        this.nom = nom;
-        this.description = description;
-        this.evenement = evenement;
-        this.dateDebut= dateDebut;
-        this.dateFin=dateFin;
-    }
+    public Element() {}
+
 
     public int getId() {
         return id;
@@ -46,11 +38,11 @@ public class Element {
         this.description = description;
     }
 
-    public Evenement getEvenement() {
-        return evenement;
+    public int getEvenement() {
+        return evenementId;
     }
-    public void setEvenement(Evenement evenement) {
-        this.evenement = evenement;
+    public void setEvenement(int evenementId) {
+        this.evenementId = evenementId;
     }
 
     public int getCalendrierId() {
