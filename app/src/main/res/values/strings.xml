@@ -38,4 +38,12 @@
     <string name="nom">Nom</string>
     <string name="creez_un_nouveau_calendrier">Créez un nouveau calendrier !</string>
     <string name="annuler">Annuler</string>
+    <string name="creez_un_nouvel_evenement">Créez un nouvel événement !</string>
+    <string name="creez_un_nouvel_element">Créez un nouvel élément !</string>
+    <string name="choisir_une_date">Choisir une date :</string>
+    <string name="choisir_une_date_heure_de_fin">Choisir une date/heure de fin :</string>
+    <string name="creer_une_date_limite">Créer une date limite :</string>
+    <string name="choisir_une_date_heure_de_debut">Choisir une date heure de début</string>
+    <string name="choisissez_la_couleur_de_evenement">Choisissez la couleur de l\'événement : </string>
+    <string name="associer_un_evenement">Associer un événement (optionnel) :</string>
 </resources>

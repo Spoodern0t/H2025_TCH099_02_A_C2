@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp"
-    android:background="@color/couleur_background">
+    android:background="@color/couleur_background"
+    android:paddingTop="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,16 +17,16 @@
             android:layout_height="48dp"
             android:layout_gravity="right"
             android:background="@drawable/round_background"
-            android:contentDescription="@string/hint_logo"
+            android:importantForAccessibility="no"
             android:src="@drawable/add_icon"
-            android:padding="15dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/tvCalendriersPersonnels"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="start"
             android:paddingBottom="10dp"
             android:text="@string/liste_des_calendriers"
             android:textSize="22sp"
@@ -36,7 +36,9 @@
         <com.example.multuscalendrius.vues.costumlayout.NonScrollListView
             android:id="@+id/lvCalendriersPersonnels"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            android:focusable="false"/>
 
         <View
             android:id="@+id/breakLine"
@@ -52,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_gravity="center"
+            android:layout_gravity="start"
             android:paddingBottom="10dp"
             android:text="@string/liste_des_calendriers_partages"
             android:textSize="22sp"/>
@@ -61,6 +63,8 @@
             android:id="@+id/lvCalendriersPartages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            android:focusable="false"
             android:visibility="gone"/>
 
     </LinearLayout>

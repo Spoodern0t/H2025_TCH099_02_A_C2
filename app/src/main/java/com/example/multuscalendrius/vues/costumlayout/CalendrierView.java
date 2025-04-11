@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,11 @@ public class CalendrierView extends View {
 
     public CalendrierView(Context context) {
         super(context);
+        init(context);
+    }
+
+    public CalendrierView(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
         init(context);
     }
 

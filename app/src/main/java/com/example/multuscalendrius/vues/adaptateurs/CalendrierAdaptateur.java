@@ -1,5 +1,7 @@
 package com.example.multuscalendrius.vues.adaptateurs;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -8,16 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.multuscalendrius.R;
-import com.example.multuscalendrius.modeles.entitees.Calendrier;
-import com.example.multuscalendrius.modeles.entitees.User;
 import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 import com.example.multuscalendrius.vues.AccueilActivity;
+import com.example.multuscalendrius.vues.MenuCalendriersActivity;
 
 import java.util.List;
 
@@ -56,25 +58,21 @@ public class CalendrierAdaptateur extends ArrayAdapter<UserCalendar> {
 
         if (calendrier != null) {
             final TextView nom = view.findViewById(R.id.nom);
-            final ImageButton imgBtnCalendrier = view.findViewById(R.id.imgBtnCalendrier);
-            final ImageButton imgBtnPlanificateur = view.findViewById(R.id.imgBtnPlanificateur);
+            final TextView auteur = view.findViewById(R.id.auteur);
+            final LinearLayout llCalendrier = view.findViewById(R.id.llCalendrier);
+            final ImageButton imgBtnMenuCalendrier = view.findViewById(R.id.imgBtnMenuCalendrier);
 
             nom.setText(calendrier.getNomCalendrier());
+            auteur.setText(calendrier.getAuteur());
 
-            imgBtnCalendrier.setOnClickListener(v -> {
-
+            llCalendrier.setOnClickListener(v -> {
                 Intent intent = new Intent(contexte, AccueilActivity.class);
-                intent.putExtra("FRAGMENT", 0);
                 intent.putExtra("ID", calendrier.getCalendarId());
                 contexte.startActivity(intent);
             });
 
-            imgBtnPlanificateur.setOnClickListener(v -> {
-
-                Intent intent = new Intent(contexte, AccueilActivity.class);
-                intent.putExtra("FRAGMENT", 1);
-                intent.putExtra("ID", calendrier.getCalendarId());
-                contexte.startActivity(intent);
+            imgBtnMenuCalendrier.setOnClickListener(v -> {
+                //TODO: Dropdown menu
             });
         }
 
