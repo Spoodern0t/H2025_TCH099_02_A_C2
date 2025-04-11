@@ -464,7 +464,7 @@ public class ApiService {
     // ---------- ELEMENTS ----------
 
     // Fonction pour créer une nouvelle element dans un calendrier
-    public void createElement(Calendrier calendrier, String nom, String description, Evenement evenement, LocalDateTime dateDebut,
+    public void createElement(Calendrier calendrier, String nom, String description,  int evenementId, LocalDateTime dateDebut,
             LocalDateTime dateFin, String token, ApiCallback<Element> callback) {
         try {
             // Création d'un objet JSON avec les informations de la deadline
@@ -473,7 +473,7 @@ public class ApiService {
             json.put("nom",nom );
             json.put("description",description );
             // Convertir l'objet Evenement en JSON via le mapper
-            json.put("evenement",new JSONObject(mapper.writeValueAsString(evenement)));
+            json.put("evenement-id",evenementId);
             // Convertir la deadlineDateTime en chaîne ISO 8601
             json.put("dateDebut", dateDebut.toString() );
             json.put("dateFin", dateDebut.toString() );
