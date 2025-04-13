@@ -26,7 +26,6 @@ public class MenuCalendriersActivity extends AppCompatActivity implements ListVi
     private ImageButton imgBtnAddCalendrier;
     private TextView tvCalendriersPersonnels, tvCalendriersPartages;
     private ListView lvCalendriersPersonnels, lvCalendriersPartages;
-    private View breakLine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +40,8 @@ public class MenuCalendriersActivity extends AppCompatActivity implements ListVi
 
         userVueModele = new ViewModelProvider(this).get(UserVueModele.class);
         userVueModele.getUserCalendars().observe(this, this::initCalendriersPersonnels);
-        userVueModele.getErreur().observe(this, message -> {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        });
+        userVueModele.getErreur().observe(this, message ->
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
         userVueModele.syncUserCalendars();
     }
 
@@ -69,7 +67,7 @@ public class MenuCalendriersActivity extends AppCompatActivity implements ListVi
             tvCalendriersPersonnels = findViewById(R.id.tvCalendriersPersonnels);
             tvCalendriersPartages = findViewById(R.id.tvCalendriersPartages);
             lvCalendriersPartages = findViewById(R.id.lvCalendriersPartages);
-            breakLine = findViewById(R.id.breakLine);
+            View breakLine = findViewById(R.id.breakLine);
 
             breakLine.setVisibility(View.VISIBLE);
             lvCalendriersPartages.setVisibility(View.VISIBLE);

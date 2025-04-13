@@ -9,9 +9,7 @@
         android:layout_height="48dp"
         android:textSize="24sp"
         android:gravity="center"
-        android:textColor="@color/couleur_primaire"
-        android:paddingVertical="10dp"
-        android:layout_marginHorizontal="5dp"
-        android:background="@drawable/round_background"/>
+        android:textColor="@color/couleur_bouton"
+        android:layout_marginHorizontal="5dp"/>
 
 </LinearLayout>

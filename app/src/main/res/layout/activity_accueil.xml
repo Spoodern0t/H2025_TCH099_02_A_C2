@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/couleur_background"
+    android:background="@color/couleur_primaire"
     android:paddingTop="20dp">
 
     <LinearLayout
@@ -45,9 +45,8 @@
             android:id="@+id/flFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
-
-        </FrameLayout>
+            android:layout_weight="1"
+            android:background="@color/couleur_background"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
@@ -66,6 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/couleur_bouton"
+        app:tint="@color/couleur_primaire"
         android:contentDescription="@string/bouton_de_creation"
         android:src="@drawable/add_icon"
         android:translationY="10dp"

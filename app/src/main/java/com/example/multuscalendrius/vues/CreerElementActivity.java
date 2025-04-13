@@ -11,22 +11,26 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.multuscalendrius.R;
+import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.modeles.entitees.Evenement;
+import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class CreerElementActivity extends AppCompatActivity implements View.OnClickListener {
 
-    //private CalendrierVueModele calendrierVueModele;
     private EditText textNom, textDescription;
     private TextView debutTV;
+    private ActivityResultLauncher<Intent> launcher;
     private ConstraintLayout debutCL;
     private DatePicker debutDP, finDP;
     private TimePicker debutTP, finTP;
@@ -34,7 +38,6 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
     private Spinner evenementSpinner;
     private Button btnCreer, btnAnnuler;
     private ImageButton btnAddEvenement;
-    private Element element;
     private String nom, description;
     private boolean deadline;
     private LocalDateTime debutElement, finElement;
@@ -59,6 +62,21 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
         btnCreer = findViewById(R.id.btnCreer);
         btnAnnuler = findViewById(R.id.btnAnnuler);
 
+        launcher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            evenementId = data.getIntExtra("EVENT", -1);
+                            if (evenementId >= 0) {
+                                // TODO: ADD evenement dans adaptor
+                                evenementSpinner.setSelection(evenementId);
+                            }
+                        }
+                    }
+                });
+
         // Change le picker pour être sur 24 heures
         debutTP.setIs24HourView(true);
         finTP.setIs24HourView(true);
@@ -67,9 +85,11 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
         btnAnnuler.setOnClickListener(this);
         btnAddEvenement.setOnClickListener(this);
 
-        //calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
-        //Calendrier calendrier = calendrierVueModele.getCurrentCalendrier();
+        CalendrierVueModele calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
+        Calendrier calendrier = calendrierVueModele.getCurrentCalendrier();
         //calendrierId = calendrier.getId();
+
+
 
         // Masquer le date picker du début pour une date limite
         elementSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -86,7 +106,18 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
         int elementId = intent.getIntExtra("ID", -1);
         if (elementId >= 0) {
 
-            //element = calendrier.getElementById(elementId);
+            TextView textCreerElement = findViewById(R.id.textCreerElement);
+            ImageButton imgBtnSuppElement = findViewById(R.id.imgBtnSuppElement);
+
+            textCreerElement.setText("Modifiez votre élément !");
+            imgBtnSuppElement.setVisibility(View.VISIBLE);
+            btnCreer.setText("Modifier");
+
+            imgBtnSuppElement.setOnClickListener(v -> {
+                // TODO: Delete Element
+            });
+
+            Element element = calendrier.getElementById(elementId);
             nom = element.getNom();
             description = element.getDescription();
 
@@ -116,14 +147,18 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
             nom = textNom.getText().toString().trim();
             description = textDescription.getText().toString().trim();
             deadline = elementSwitch.isChecked();
-            if (!deadline)
+            if (!deadline) {
                 debutElement = LocalDateTime.of(debutDP.getYear(), debutDP.getMonth(), debutDP.getDayOfMonth(), debutTP.getHour(), debutTP.getMinute());
+            } else {
+                debutElement = null;
+            }
             finElement = LocalDateTime.of(finDP.getYear(), finDP.getMonth(), finDP.getDayOfMonth(), finTP.getHour(), finTP.getMinute());
 
             Evenement selectedEvenement = (Evenement) evenementSpinner.getSelectedItem();
             evenementId = selectedEvenement.getId();
-            //Element newElement = new Element(0, calendrierId, nom, description, evenementId, debutElement, finElement);
-            // TODO: Méthode CreerElement
+            Element newElement = new Element(0, calendrierId, nom, description, evenementId, debutElement, finElement);
+            // TODO: Creer Element
+            // TODO: Modifier Element
             setResult(RESULT_OK);
             finish();
         } else if (v == btnAnnuler) {
@@ -132,7 +167,6 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
         } else if (v == btnAddEvenement) {
             Intent intent = new Intent(this, CreerEvenementActivity.class);
             startActivity(intent);
-            finish();
         }
     }
 }

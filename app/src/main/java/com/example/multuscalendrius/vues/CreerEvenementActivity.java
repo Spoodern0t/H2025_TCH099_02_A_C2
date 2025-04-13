@@ -5,18 +5,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.multuscalendrius.R;
+import com.example.multuscalendrius.modeles.entitees.Calendrier;
+import com.example.multuscalendrius.modeles.entitees.Evenement;
 import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
-import com.example.multuscalendrius.vuemodele.UserVueModele;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class CreerEvenementActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private CalendrierVueModele calendrierVueModele;
     private EditText textNom, textDescription;
     private Button btnCreer, btnAnnuler;
     private String nom, description;
@@ -38,10 +41,29 @@ public class CreerEvenementActivity extends AppCompatActivity implements View.On
         btnAnnuler.setOnClickListener(this);
         viewCouleur.setOnClickListener(this);
 
+        CalendrierVueModele calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
+        Calendrier calendrier = calendrierVueModele.getCurrentCalendrier();
+        //calendrierId = calendrier.getId();
+
         Intent intent = getIntent();
-        if (intent != null) {
-            nom = intent.getStringExtra("NOM");
-            description = intent.getStringExtra("DESCRIPTION");
+        int evenementId = intent.getIntExtra("ID", -1);
+        if (evenementId >= 0) {
+
+            TextView textCreerEvenement = findViewById(R.id.textCreerEvenement);
+            ImageButton imgBtnSuppEvenement = findViewById(R.id.imgBtnSuppEvenement);
+
+            textCreerEvenement.setText(R.string.modifiez_votre_evenement);
+            imgBtnSuppEvenement.setVisibility(View.VISIBLE);
+            btnCreer.setText(R.string.modifier);
+
+            imgBtnSuppEvenement.setOnClickListener(v -> {
+                // TODO: Delete Evenement
+            });
+
+            Evenement evenement = calendrier.getEvenementById(evenementId);
+
+            nom = evenement.getTitre();
+            description = evenement.getDescription();
 
             textNom.setText(nom);
             textDescription.setText(description);
@@ -53,7 +75,8 @@ public class CreerEvenementActivity extends AppCompatActivity implements View.On
         if (v == btnCreer) {
             nom = textNom.getText().toString().trim();
             description = textDescription.getText().toString().trim();
-            // TODO: Méthode CreerEvenement
+            // TODO: Creer Evenement
+            // TODO: Modifier Element
             setResult(RESULT_OK);
             finish();
         } else if (v == btnAnnuler) {

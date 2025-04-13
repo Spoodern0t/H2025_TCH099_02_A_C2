@@ -5,27 +5,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.multuscalendrius.R;
-import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
-import com.example.multuscalendrius.vuemodele.UserVueModele;
 import com.example.multuscalendrius.vues.fragments.CalendrierFragment;
 import com.example.multuscalendrius.vues.fragments.PlanificateurFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AccueilActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private CalendrierVueModele calendrierVueModele;
     private TextView titreCalendrier;
     private ImageButton imgBtnCreate;
     private BottomNavigationView bottomNavigationView;
-    private int calendrierId;
     private Fragment calendrierFragment, planificateurFragment;
 
     @Override
@@ -39,9 +34,9 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         imgBtnCreate.setOnClickListener(this);
 
         Intent resultIntent = getIntent();
-        calendrierId = resultIntent.getIntExtra("ID", 0);
+        int calendrierId = resultIntent.getIntExtra("ID", 0);
 
-        calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
+        CalendrierVueModele calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
 
         // Initier la barre de navigation
         initNavView();
@@ -51,7 +46,7 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void chargerCalendrier() {
-
+        // TODO: GET Calendrier
     }
 
     // Changer la vue du frame
@@ -98,7 +93,8 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
                 setCurrentFragment(planificateurFragment);
                 return true;
             } else if (itemId == R.id.profil){
-                //TODO: Vers profil
+                Intent intent = new Intent(this, ProfilActivity.class);
+                startActivity(intent);
             }
             return false;
         });

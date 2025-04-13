@@ -1,6 +1,5 @@
 package com.example.multuscalendrius.vues;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.ApiService;
-import com.example.multuscalendrius.modeles.entitees.LoginResponse;
 import com.example.multuscalendrius.vuemodele.ApiCallback;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -42,8 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Redirection vers la page de connexion si l'utilisateur est déjà inscrit
         textViewLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-            startActivity(intent);
+            setResult(RESULT_CANCELED);
             finish();
         });
     }
@@ -82,14 +79,15 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         // Appel de la méthode inscription de l'ApiService
-        apiService.inscription(email, username, password, confirmPassword, new ApiCallback<LoginResponse>() {
+        apiService.inscription(email, username, password, new ApiCallback<>() {
             @Override
-            public void onSuccess(LoginResponse response) {
-                if (response != null && Boolean.TRUE.equals(response.getToken())) {
+            public void onSuccess(Boolean resultat) {
+                // Vérification de la validité du token retourné
+                if (resultat) {  // Ici, getToken() doit retourner un booléen indiquant le succès
                     runOnUiThread(() -> {
                         Toast.makeText(SignUpActivity.this, "Inscription réussie", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        // Redirection vers la page de connexion
+                        setResult(RESULT_OK);
                         finish();
                     });
                 } else {

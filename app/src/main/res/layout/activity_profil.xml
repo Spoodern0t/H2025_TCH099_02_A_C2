@@ -3,9 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="24dp"
     android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
     android:background="@color/couleur_background">
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="invisible"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,28 +21,27 @@
         android:layout_gravity="center">
 
         <TextView
-            android:id="@+id/textCreerEvenement"
+            android:id="@+id/textCreerCalendrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/creez_un_nouvel_evenement"
+            android:text="@string/votre_profil"
             android:textColor="@color/couleur_texte"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imgBtnSuppEvenement"
+            app:layout_constraintEnd_toStartOf="@+id/imgBtnSuppCalendrier"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/imgBtnSuppEvenement"
+            android:id="@+id/imgBtnSuppCalendrier"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:scaleType="fitCenter"
             android:background="@android:color/transparent"
             android:importantForAccessibility="no"
-            android:src="@drawable/trash_icon"
+            android:src="@drawable/deco_icon"
             android:layout_margin="5dp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,15 +51,15 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:hint="@string/nom"
+        android:layout_marginBottom="12dp"
+        android:hint="@string/nom_utilisateur"
         app:boxBackgroundColor="@color/couleur_primaire"
         app:hintTextColor="@color/couleur_texte"
         android:textColorHint="@color/couleur_texte"
         app:boxStrokeColor="@color/couleur_texte">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textNom"
+            android:id="@+id/editTextNom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -63,61 +69,56 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="10dp"
-        android:hint="@string/description"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:hint="@string/adresse_courriel"
         app:boxBackgroundColor="@color/couleur_primaire"
         app:hintTextColor="@color/couleur_texte"
         android:textColorHint="@color/couleur_texte"
         app:boxStrokeColor="@color/couleur_texte">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textDescription"
+            android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="start"
-            android:inputType="textMultiLine"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
             android:textColor="@color/couleur_texte"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp">
+        android:layout_marginBottom="12dp"
+        android:hint="@string/mot_de_passe"
+        app:boxBackgroundColor="@color/couleur_primaire"
+        app:hintTextColor="@color/couleur_texte"
+        android:textColorHint="@color/couleur_texte"
+        app:boxStrokeColor="@color/couleur_texte"
+        app:passwordToggleEnabled="true">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/choisissez_la_couleur_de_evenement"
+            android:inputType="textPassword"
             android:textColor="@color/couleur_texte"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <View
-            android:id="@+id/viewCouleur"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:background="@color/couleur_primaire"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="invisible"/>
 
     <Button
-        android:id="@+id/btnCreer"
+        android:id="@+id/btnLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/creer"
+        android:text="@string/modifier"
         android:minHeight="48dp"
         android:textSize="20sp"
-        android:layout_marginTop="10dp"
         android:textColor="@color/couleur_primaire"
         android:backgroundTint="@color/couleur_bouton" />
 

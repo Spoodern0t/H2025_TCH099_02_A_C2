@@ -46,4 +46,12 @@
     <string name="choisir_une_date_heure_de_debut">Choisir une date heure de début</string>
     <string name="choisissez_la_couleur_de_evenement">Choisissez la couleur de l\'événement : </string>
     <string name="associer_un_evenement">Associer un événement (optionnel) :</string>
+    <string name="charger">Charger</string>
+    <string name="partager">Partager</string>
+    <string name="modifier">Modifier</string>
+    <string name="supprimer">Supprimer</string>
+    <string name="votre_profil">Votre profil !</string>
+    <string name="se_deconnecter">Se déconnecter</string>
+    <string name="modifiez_votre_calendrier">Modifiez votre calendrier !</string>
+    <string name="modifiez_votre_evenement">Modifiez votre événement !</string>
 </resources>
