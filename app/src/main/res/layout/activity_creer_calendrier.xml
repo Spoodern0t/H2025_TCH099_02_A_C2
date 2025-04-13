@@ -4,15 +4,43 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="24dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/couleur_background">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textSize="20sp"
-        android:textColor="@color/couleur_texte"
-        android:text="@string/creez_un_nouveau_calendrier"/>
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/textCreerCalendrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/creez_un_nouveau_calendrier"
+            android:textColor="@color/couleur_texte"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imgBtnSuppCalendrier"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/imgBtnSuppCalendrier"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:scaleType="fitCenter"
+            android:background="@android:color/transparent"
+            android:importantForAccessibility="no"
+            android:src="@drawable/trash_icon"
+            android:layout_margin="5dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"

@@ -33,6 +33,9 @@
             android:name=".vues.CreerElementActivity"
             android:exported="false" />
         <activity
+            android:name=".vues.ProfilActivity"
+            android:exported="false" />
+        <activity
             android:name=".vues.LoginActivity"
             android:exported="true">
             <intent-filter>

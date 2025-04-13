@@ -1,71 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/couleur_background"
-    android:paddingTop="20dp">
+    android:background="@color/couleur_primaire"
+    android:paddingTop="24dp">
 
-    <LinearLayout
+    <ImageButton
+        android:id="@+id/imgBtnAddCalendrier"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:elevation="4dp"
+        android:background="@drawable/round_background"
+        android:importantForAccessibility="no"
+        android:src="@drawable/add_icon"
+        android:layout_margin="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:paddingHorizontal="24dp"
+        android:background="@color/couleur_background">
 
-        <ImageButton
-            android:id="@+id/imgBtnAddCalendrier"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="right"
-            android:background="@drawable/round_background"
-            android:importantForAccessibility="no"
-            android:src="@drawable/add_icon"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"/>
-
-        <TextView
-            android:id="@+id/tvCalendriersPersonnels"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:paddingBottom="10dp"
-            android:text="@string/liste_des_calendriers"
-            android:textSize="22sp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/couleur_texte"/>
-
-        <com.example.multuscalendrius.vues.costumlayout.NonScrollListView
-            android:id="@+id/lvCalendriersPersonnels"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:descendantFocusability="blocksDescendants"
-            android:focusable="false"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="24dp">
 
-        <View
-            android:id="@+id/breakLine"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:visibility="gone"
-            android:background="@color/black"
-            android:layout_marginVertical="10dp"/>
+            <TextView
+                android:id="@+id/tvCalendriersPersonnels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="24dp"
+                android:paddingBottom="10dp"
+                android:text="@string/liste_des_calendriers"
+                android:textSize="22sp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/couleur_texte"/>
+
+            <com.example.multuscalendrius.vues.costumlayout.NonScrollListView
+                android:id="@+id/lvCalendriersPersonnels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants"
+                android:focusable="false"
+                android:background="@color/couleur_background"/>
+
+            <View
+                android:id="@+id/breakLine"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:visibility="gone"
+                android:background="@color/black"
+                android:layout_marginVertical="10dp"/>
 
 
-        <TextView
-            android:id="@+id/tvCalendriersPartages"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_gravity="start"
-            android:paddingBottom="10dp"
-            android:text="@string/liste_des_calendriers_partages"
-            android:textSize="22sp"/>
+            <TextView
+                android:id="@+id/tvCalendriersPartages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="start"
+                android:paddingBottom="10dp"
+                android:text="@string/liste_des_calendriers_partages"
+                android:textSize="22sp"
+                android:background="@color/couleur_background"/>
 
-        <com.example.multuscalendrius.vues.costumlayout.NonScrollListView
-            android:id="@+id/lvCalendriersPartages"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:descendantFocusability="blocksDescendants"
-            android:focusable="false"
-            android:visibility="gone"/>
+            <com.example.multuscalendrius.vues.costumlayout.NonScrollListView
+                android:id="@+id/lvCalendriersPartages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants"
+                android:focusable="false"
+                android:visibility="gone"
+                android:background="@color/couleur_background"/>
 
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

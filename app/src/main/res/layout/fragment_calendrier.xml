@@ -5,31 +5,35 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".vues.AccueilActivity">
->
+    tools:context=".vues.AccueilActivity"
+    android:background="@color/couleur_primaire">
+
     <Button
+        android:id="@+id/btnAnneeMois"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="10dp"
         android:backgroundTint="@color/couleur_bouton"
-        android:text="Année/Mois"
         android:textColor="@color/couleur_primaire"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvJours"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/couleur_background">
 
-    <com.example.multuscalendrius.vues.costumlayout.CalendrierView
-        android:id="@+id/calendrierJour"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <com.example.multuscalendrius.vues.costumlayout.CalendrierView
+            android:id="@+id/calendrierJour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </ScrollView>
 
