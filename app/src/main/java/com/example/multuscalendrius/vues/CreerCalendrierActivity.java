@@ -7,15 +7,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.multuscalendrius.R;
+import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 import com.example.multuscalendrius.vuemodele.UserVueModele;
 
 public class CreerCalendrierActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private UserVueModele userVueModele;
+    private UserCalendar calendrier;
     private EditText textNom, textDescription;
     private Button btnCreer, btnAnnuler;
     private String nom, description;
@@ -30,12 +34,23 @@ public class CreerCalendrierActivity extends AppCompatActivity implements View.O
         btnCreer = findViewById(R.id.btnCreer);
         btnAnnuler = findViewById(R.id.btnAnnuler);
 
+        userVueModele = new ViewModelProvider(this).get(UserVueModele.class);
+        userVueModele.getSucces().observe(this, succes -> {
+            if (succes) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+        userVueModele.getErreur().observe(this, message -> {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        });
+
         btnCreer.setOnClickListener(this);
         btnAnnuler.setOnClickListener(this);
 
         Intent intent = getIntent();
-        long elementId = intent.getLongExtra("ID", -1);
-        if (elementId >= 0) {
+        int calendrierId = intent.getIntExtra("ID", -1);
+        if (calendrierId >= 0) {
 
             TextView textCreerCalendrier = findViewById(R.id.textCreerCalendrier);
             ImageButton imgBtnSuppCalendrier = findViewById(R.id.imgBtnSuppCalendrier);
@@ -44,13 +59,13 @@ public class CreerCalendrierActivity extends AppCompatActivity implements View.O
             imgBtnSuppCalendrier.setVisibility(View.VISIBLE);
             btnCreer.setText(R.string.modifier);
 
+            calendrier = userVueModele.getCurrentUser().getUserCalendarById(calendrierId);
             imgBtnSuppCalendrier.setOnClickListener(v -> {
-                // TODO: Delete Calendrier
+                userVueModele.deleteCalendrier(calendrier);
             });
-            UserVueModele userVueModele = new ViewModelProvider(this).get(UserVueModele.class);
-            //UserCalendar calendrier = userVueModele.getUserCalendarById();
-            //nom = calendrier.getNomCalendrier();
-            //description = calendrier.getDescription();
+
+            nom = calendrier.getNomCalendrier();
+            description = calendrier.getDescription();
 
             textNom.setText(nom);
             textDescription.setText(description);
@@ -60,12 +75,17 @@ public class CreerCalendrierActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         if (v == btnCreer) {
-            nom = textNom.getText().toString().trim();
-            description = textDescription.getText().toString().trim();
-            // TODO: Créer Calendrier
-            // TODO: Modifier Calendrier
-            setResult(RESULT_OK);
-            finish();
+            if (calendrier == null) {
+                nom = textNom.getText().toString().trim();
+                description = textDescription.getText().toString().trim();
+                calendrier = new UserCalendar();
+                calendrier.setNomCalendrier(nom);
+                calendrier.setDescription(description);
+
+                userVueModele.creerCalendrier(calendrier);
+            } else {
+                userVueModele.updateCalendrier(calendrier);
+            }
         } else if (v == btnAnnuler) {
             setResult(RESULT_CANCELED);
             finish();

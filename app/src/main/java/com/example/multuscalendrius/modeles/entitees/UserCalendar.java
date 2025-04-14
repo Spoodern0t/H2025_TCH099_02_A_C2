@@ -1,19 +1,18 @@
 package com.example.multuscalendrius.modeles.entitees;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-
 @JsonIgnoreProperties({"inviteAccepted"})
-public class UserCalendar implements Serializable {
+public class UserCalendar {
     @JsonProperty("id_utilisateur")
-    private Long userId;
+    private int userId;
     @JsonProperty("id_calendrier")
-    private Long calendarId;
+    private int calendarId;
     @JsonProperty("nom_calendrier")
     private String nomCalendrier;
+    @JsonProperty("description")
+    private String description;
     @JsonProperty("est_membre")
     private Boolean estMembre;
     private Boolean inviteAccepted;
@@ -25,23 +24,23 @@ public class UserCalendar implements Serializable {
     public UserCalendar() {}
 
     // Constructeur complet
-    public UserCalendar(Long id, Long userId, Long calendarId) {
+    public UserCalendar(int id, int userId, int calendarId) {
         this.userId = userId;
         this.calendarId = calendarId;
     }
 
     // Getters et Setters
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
-    public Long getCalendarId() {
+    public int getCalendarId() {
         return calendarId;
     }
-    public void setCalendarId(Long calendarId) {
+    public void setCalendarId(int calendarId) {
         this.calendarId = calendarId;
     }
     public String getNomCalendrier() {
@@ -50,26 +49,27 @@ public class UserCalendar implements Serializable {
     public void setNomCalendrier(String nomCalendrier) {
         this.nomCalendrier = nomCalendrier;
     }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
     public Boolean getEstMembre() {
         return estMembre;
     }
-
     public void setEstMembre(Boolean estMembre) {
         this.estMembre = estMembre;
     }
-
     public Boolean getInviteAccepted() {
         return inviteAccepted;
     }
-
     public void setInviteAccepted(Boolean inviteAccepted) {
         this.inviteAccepted = inviteAccepted;
     }
-
     public String getAuteur() {
         return auteur;
     }
-
     public void setAuteur(String auteur) {
         this.auteur = auteur;
     }

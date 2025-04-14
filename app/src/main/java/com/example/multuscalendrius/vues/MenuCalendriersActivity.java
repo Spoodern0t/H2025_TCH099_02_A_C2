@@ -9,6 +9,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -20,7 +22,7 @@ import com.example.multuscalendrius.vues.adaptateurs.CalendrierAdaptateur;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuCalendriersActivity extends AppCompatActivity implements ListView.OnItemClickListener, View.OnClickListener {
+public class MenuCalendriersActivity extends AppCompatActivity implements View.OnClickListener {
 
     private UserVueModele userVueModele;
     private ImageButton imgBtnAddCalendrier;
@@ -36,18 +38,23 @@ public class MenuCalendriersActivity extends AppCompatActivity implements ListVi
         imgBtnAddCalendrier = findViewById(R.id.imgBtnAddCalendrier);
 
         imgBtnAddCalendrier.setOnClickListener(this);
-        lvCalendriersPersonnels.setOnItemClickListener(this);
 
         userVueModele = new ViewModelProvider(this).get(UserVueModele.class);
         userVueModele.getUserCalendars().observe(this, this::initCalendriersPersonnels);
         userVueModele.getErreur().observe(this, message ->
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
-        userVueModele.syncUserCalendars();
+        userVueModele.chargerUserCalendars();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        userVueModele.chargerUserCalendars();
     }
 
     public void initCalendriersPersonnels(List<UserCalendar> calendriers) {
 
-        String username = userVueModele.getUsername();
+        String username = userVueModele.getCurrentUser().getUsername();
         List<UserCalendar> calendriersPersonnels = new ArrayList<>();
         List<UserCalendar> calendriersPartages = new ArrayList<>();
         for (UserCalendar calendrier: calendriers) {
@@ -74,18 +81,7 @@ public class MenuCalendriersActivity extends AppCompatActivity implements ListVi
 
             CalendrierAdaptateur calendrierPartageAdaptateur = new CalendrierAdaptateur(this, R.layout.layout_calendrier, calendriers);
             lvCalendriersPartages.setAdapter(calendrierPartageAdaptateur);
-
-            lvCalendriersPartages.setOnItemClickListener(this);
         }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this, AccueilActivity.class);
-        UserCalendar userCalendar = (UserCalendar) parent.getAdapter().getItem(position);
-        intent.putExtra("ID", userCalendar.getCalendarId());
-        startActivity(intent);
-        finish();
     }
 
     @Override

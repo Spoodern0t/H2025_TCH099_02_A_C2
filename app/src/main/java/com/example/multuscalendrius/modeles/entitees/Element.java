@@ -1,5 +1,7 @@
 package com.example.multuscalendrius.modeles.entitees;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
 
 public class Element {
@@ -7,15 +9,13 @@ public class Element {
     private int calendrierId;
     private String nom;
     private String description;
-    private int evenementId;
-
+    private Evenement evenement;
+    @JsonIgnore
+    private Integer evenementId;
     private LocalDateTime dateDebut;
     private LocalDateTime dateFin;
 
-
-
     public Element() {}
-
 
     public int getId() {
         return id;
@@ -38,11 +38,11 @@ public class Element {
         this.description = description;
     }
 
-    public int getEvenement() {
-        return evenementId;
+    public Evenement getEvenement() {
+        return evenement;
     }
-    public void setEvenement(int evenementId) {
-        this.evenementId = evenementId;
+    public void setEvenement(Evenement evenement) {
+        this.evenement = evenement;
     }
 
     public int getCalendrierId() {
@@ -67,6 +67,14 @@ public class Element {
 
     public void setDateFin(LocalDateTime dateFin) {
         this.dateFin = dateFin;
+    }
+
+    public void setEvenementId(Integer evenementId) {
+        this.evenementId = evenementId;
+    }
+
+    public Integer getEvenementId() {
+        return evenementId;
     }
 }
 

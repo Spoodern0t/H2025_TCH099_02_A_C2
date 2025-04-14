@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AccueilActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private CalendrierVueModele calendrierVueModele;
     private TextView titreCalendrier;
     private ImageButton imgBtnCreate;
     private BottomNavigationView bottomNavigationView;
@@ -33,10 +35,13 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
 
         imgBtnCreate.setOnClickListener(this);
 
-        Intent resultIntent = getIntent();
-        int calendrierId = resultIntent.getIntExtra("ID", 0);
-
-        CalendrierVueModele calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
+        calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
+        calendrierVueModele.getCalendrier().observe(this, calendrier -> {
+            titreCalendrier.setText(calendrier.getNom());
+        });
+        calendrierVueModele.getErreur().observe(this, message -> {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        });
 
         // Initier la barre de navigation
         initNavView();
@@ -46,7 +51,10 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void chargerCalendrier() {
-        // TODO: GET Calendrier
+        Intent resultIntent = getIntent();
+        int calendrierId = resultIntent.getIntExtra("ID", -1);
+        if (calendrierId >= 0)
+            calendrierVueModele.chargerCalendrier(calendrierId);
     }
 
     // Changer la vue du frame
@@ -70,8 +78,6 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
     public void initNavView() {
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
-        //titreCalendrier.setText(calendrierVueModele.getCurrentCalendrier().getNom());
 
         // Les vues qui vont apparaitre dans le frame
         calendrierFragment = new CalendrierFragment();

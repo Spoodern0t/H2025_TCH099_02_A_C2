@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,12 +23,16 @@ import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.modeles.entitees.Evenement;
+import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
+import com.example.multuscalendrius.vuemodele.UserVueModele;
 
 import java.time.LocalDateTime;
 
 public class CreerElementActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private CalendrierVueModele calendrierVueModele;
+    private Element element;
     private EditText textNom, textDescription;
     private TextView debutTV;
     private ActivityResultLauncher<Intent> launcher;
@@ -41,7 +46,7 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
     private String nom, description;
     private boolean deadline;
     private LocalDateTime debutElement, finElement;
-    private int calendrierId, evenementId;
+    private Integer calendrierId, evenementId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,17 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
                     }
                 });
 
+        calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
+        calendrierVueModele.getSucces().observe(this, succes -> {
+            if (succes) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+        calendrierVueModele.getErreur().observe(this, message -> {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        });
+
         // Change le picker pour être sur 24 heures
         debutTP.setIs24HourView(true);
         finTP.setIs24HourView(true);
@@ -87,9 +103,7 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
 
         CalendrierVueModele calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
         Calendrier calendrier = calendrierVueModele.getCurrentCalendrier();
-        //calendrierId = calendrier.getId();
-
-
+        calendrierId = calendrier.getId();
 
         // Masquer le date picker du début pour une date limite
         elementSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -109,22 +123,22 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
             TextView textCreerElement = findViewById(R.id.textCreerElement);
             ImageButton imgBtnSuppElement = findViewById(R.id.imgBtnSuppElement);
 
-            textCreerElement.setText("Modifiez votre élément !");
+            textCreerElement.setText(R.string.modifiez_votre_element);
             imgBtnSuppElement.setVisibility(View.VISIBLE);
-            btnCreer.setText("Modifier");
+            btnCreer.setText(R.string.modifier);
 
+            element = calendrier.getElementById(elementId);
             imgBtnSuppElement.setOnClickListener(v -> {
-                // TODO: Delete Element
+                calendrierVueModele.deleteElement(element);
             });
 
-            Element element = calendrier.getElementById(elementId);
             nom = element.getNom();
             description = element.getDescription();
 
             debutElement = element.getDateDebut();
             finElement = element.getDateFin();
             deadline = (debutElement == null);
-            evenementId = element.getEvenement();
+            evenementId = element.getEvenementId();
 
             textNom.setText(nom);
             textDescription.setText(description);
@@ -144,21 +158,31 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         if (v == btnCreer) {
-            nom = textNom.getText().toString().trim();
-            description = textDescription.getText().toString().trim();
-            deadline = elementSwitch.isChecked();
-            if (!deadline) {
-                debutElement = LocalDateTime.of(debutDP.getYear(), debutDP.getMonth(), debutDP.getDayOfMonth(), debutTP.getHour(), debutTP.getMinute());
-            } else {
-                debutElement = null;
-            }
-            finElement = LocalDateTime.of(finDP.getYear(), finDP.getMonth(), finDP.getDayOfMonth(), finTP.getHour(), finTP.getMinute());
+            if (element == null) {
+                nom = textNom.getText().toString().trim();
+                description = textDescription.getText().toString().trim();
+                deadline = elementSwitch.isChecked();
+                if (!deadline) {
+                    debutElement = LocalDateTime.of(debutDP.getYear(), debutDP.getMonth(), debutDP.getDayOfMonth(), debutTP.getHour(), debutTP.getMinute());
+                } else {
+                    debutElement = null;
+                }
+                finElement = LocalDateTime.of(finDP.getYear(), finDP.getMonth(), finDP.getDayOfMonth(), finTP.getHour(), finTP.getMinute());
 
-            Evenement selectedEvenement = (Evenement) evenementSpinner.getSelectedItem();
-            evenementId = selectedEvenement.getId();
-            Element newElement = new Element(0, calendrierId, nom, description, evenementId, debutElement, finElement);
-            // TODO: Creer Element
-            // TODO: Modifier Element
+                Evenement selectedEvenement = (Evenement) evenementSpinner.getSelectedItem();
+                evenementId = selectedEvenement != null ? selectedEvenement.getId() : null;
+                element = new Element();
+                element.setCalendrierId(calendrierId);
+                element.setNom(nom);
+                element.setDescription(description);
+                element.setEvenementId(evenementId);
+                element.setDateDebut(debutElement);
+                element.setDateFin(finElement);
+
+                calendrierVueModele.addElement(element);
+            } else {
+                calendrierVueModele.updateElement(element);
+            }
             setResult(RESULT_OK);
             finish();
         } else if (v == btnAnnuler) {

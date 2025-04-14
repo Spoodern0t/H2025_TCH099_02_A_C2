@@ -2,5 +2,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="@string/partager">Partager</item>
     <item android:title="@string/modifier">Modifier</item>
-    <item android:title="@string/supprimer">Supprimer</item>
 </menu>

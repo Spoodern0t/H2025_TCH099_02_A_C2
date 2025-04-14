@@ -1,22 +1,13 @@
 package com.example.multuscalendrius.modeles.dao;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.example.multuscalendrius.modeles.ApiService;
+import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.User;
 import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 import com.example.multuscalendrius.vuemodele.ApiCallback;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-
-@JsonIgnoreProperties({"instance", "id", "password", "api", "liveData", "operation", "errorMessage"})
-public class UserDao implements Serializable{
+public class UserDao {
     // Singleton instance
     private static UserDao instance = null;
     private User user;
@@ -48,14 +39,23 @@ public class UserDao implements Serializable{
         api.connexion(email, password, apiCallback);
     }
 
+    public void decoUser(String token, ApiCallback<Boolean> apiCallback) {
+        api.decoUser(token, apiCallback);
+    }
+
     public void getUserCalendar(String token, ApiCallback<List<UserCalendar>> apiCallback) {
         api.getUserCalendar(token, apiCallback);
     }
 
-    public void decoUser(String token, ApiCallback<Boolean> apiCallback) {
-        api.decoUser(token, apiCallback);
+    public void createCalendrier(UserCalendar calendrier, String token, ApiCallback<Boolean> apiCallback) {
+        api.createCalendrier(calendrier, token, apiCallback);
+    }
+
+    public void updateCalendrier(UserCalendar calendrier, String token, ApiCallback<Boolean> apiCallback) {
+        api.updateCalendrier(calendrier, token, apiCallback);
+    }
+
+    public void deleteCalendrier(UserCalendar userCalendar, String token, ApiCallback<Boolean> apiCallback) {
+        api.deleteCalendrier(userCalendar, token, apiCallback);
     }
 }
-
-
-

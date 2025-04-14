@@ -54,4 +54,5 @@
     <string name="se_deconnecter">Se déconnecter</string>
     <string name="modifiez_votre_calendrier">Modifiez votre calendrier !</string>
     <string name="modifiez_votre_evenement">Modifiez votre événement !</string>
+    <string name="modifiez_votre_element">Modifiez votre élément !</string>
 </resources>

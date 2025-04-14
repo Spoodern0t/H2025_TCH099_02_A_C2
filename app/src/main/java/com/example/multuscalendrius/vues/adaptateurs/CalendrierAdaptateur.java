@@ -24,6 +24,7 @@ import java.util.List;
 
 public class CalendrierAdaptateur extends ArrayAdapter<UserCalendar> {
 
+
     private List<UserCalendar> calendrier;
     private Context contexte;
     private PopupMenu popupMenu;
@@ -83,8 +84,6 @@ public class CalendrierAdaptateur extends ArrayAdapter<UserCalendar> {
                         Intent intent = new Intent(contexte, CreerCalendrierActivity.class);
                         intent.putExtra("ID", calendrier.getCalendarId());
                         contexte.startActivity(intent);
-                    } else if (itemTitre.equals("Supprimer")) {
-                        // TODO: Supprimer calendrier
                     }
                     return true;
                 });

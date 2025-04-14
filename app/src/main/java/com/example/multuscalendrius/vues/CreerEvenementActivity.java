@@ -20,6 +20,8 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class CreerEvenementActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private CalendrierVueModele calendrierVueModele;
+    private Evenement evenement;
     private EditText textNom, textDescription;
     private Button btnCreer, btnAnnuler;
     private String nom, description;
@@ -41,9 +43,11 @@ public class CreerEvenementActivity extends AppCompatActivity implements View.On
         btnAnnuler.setOnClickListener(this);
         viewCouleur.setOnClickListener(this);
 
-        CalendrierVueModele calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
-        Calendrier calendrier = calendrierVueModele.getCurrentCalendrier();
-        //calendrierId = calendrier.getId();
+        calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
+        calendrierVueModele.getSucces().observe(this, succes -> {
+            setResult(RESULT_OK);
+            finish();
+        });
 
         Intent intent = getIntent();
         int evenementId = intent.getIntExtra("ID", -1);
@@ -56,11 +60,11 @@ public class CreerEvenementActivity extends AppCompatActivity implements View.On
             imgBtnSuppEvenement.setVisibility(View.VISIBLE);
             btnCreer.setText(R.string.modifier);
 
+            Calendrier calendrier = calendrierVueModele.getCurrentCalendrier();
+            evenement = calendrier.getEvenementById(evenementId);
             imgBtnSuppEvenement.setOnClickListener(v -> {
-                // TODO: Delete Evenement
+                calendrierVueModele.deleteEvenement(evenement);
             });
-
-            Evenement evenement = calendrier.getEvenementById(evenementId);
 
             nom = evenement.getTitre();
             description = evenement.getDescription();
@@ -73,12 +77,18 @@ public class CreerEvenementActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         if (v == btnCreer) {
-            nom = textNom.getText().toString().trim();
-            description = textDescription.getText().toString().trim();
-            // TODO: Creer Evenement
-            // TODO: Modifier Element
-            setResult(RESULT_OK);
-            finish();
+            if (evenement == null) {
+                nom = textNom.getText().toString().trim();
+                description = textDescription.getText().toString().trim();
+
+                evenement = new Evenement();
+                evenement.setTitre(nom);
+                evenement.setDescription(description);
+
+                calendrierVueModele.addEvenement(evenement);
+            } else {
+                calendrierVueModele.updateEvenement(evenement);
+            }
         } else if (v == btnAnnuler) {
             setResult(RESULT_CANCELED);
             finish();
