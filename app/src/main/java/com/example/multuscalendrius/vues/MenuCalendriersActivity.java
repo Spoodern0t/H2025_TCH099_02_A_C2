@@ -47,8 +47,6 @@ public class MenuCalendriersActivity extends AppCompatActivity implements ListVi
 
     public void initCalendriersPersonnels(List<UserCalendar> calendriers) {
 
-        lvCalendriersPersonnels = findViewById(R.id.lvCalendriersPersonnels);
-
         String username = userVueModele.getUsername();
         List<UserCalendar> calendriersPersonnels = new ArrayList<>();
         List<UserCalendar> calendriersPartages = new ArrayList<>();
