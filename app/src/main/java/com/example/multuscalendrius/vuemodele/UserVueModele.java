@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.multuscalendrius.modeles.ApiService;
 import com.example.multuscalendrius.modeles.dao.UserDao;
-import com.example.multuscalendrius.modeles.dao.UserInstance;
-import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.User;
 import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 

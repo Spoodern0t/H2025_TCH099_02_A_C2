@@ -1,6 +1,5 @@
 package com.example.multuscalendrius.modeles;
 
-import com.example.multuscalendrius.modeles.entitees.LoginResponse;
 import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.modeles.entitees.Evenement;
@@ -8,13 +7,11 @@ import com.example.multuscalendrius.modeles.entitees.User;
 import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 import com.example.multuscalendrius.vuemodele.ApiCallback;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -338,6 +335,7 @@ public class ApiService {
             json.put("calendrierId", calendrier.getId());
             json.put("titre", evenement.getTitre());
             json.put("description", evenement.getDescription());
+            json.put("couleur", evenement.getCouleur());
             json.put("token", token);
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));

@@ -104,7 +104,7 @@ public class CalendrierVueModele extends ViewModel {
             @Override
             public void onSuccess(Boolean success) {
                 if (success) {
-                    chargerCalendrier(calendrierDao.getCalendrier().getId());
+                    succesLiveData.postValue(true);
                 }
             }
             @Override

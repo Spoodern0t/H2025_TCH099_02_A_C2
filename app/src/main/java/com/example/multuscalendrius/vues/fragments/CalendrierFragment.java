@@ -16,8 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.multuscalendrius.R;
+import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
 import com.example.multuscalendrius.vues.adaptateurs.JourAdaptateur;
-import com.example.multuscalendrius.vues.costumlayout.CalendrierView;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -25,6 +25,7 @@ import java.time.YearMonth;
 
 public class CalendrierFragment extends Fragment implements JourAdaptateur.OnItemClickListener {
 
+    private CalendrierVueModele calendrierVueModele;
     private Button btnAnneeMois;
     private RecyclerView rvJours;
 
@@ -42,7 +43,6 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
 
         btnAnneeMois = view.findViewById(R.id.btnAnneeMois);
         rvJours = view.findViewById(R.id.rvJours);
-        CalendrierView calendrierView = view.findViewById(R.id.calendrierJour);
 
         btnAnneeMois.setOnClickListener(v -> {
             int anchorWidth = btnAnneeMois.getWidth();
@@ -54,9 +54,7 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
             int offsetX = (anchorWidth - popupWidth) / 2;
             popupWindow.showAsDropDown(btnAnneeMois, offsetX, 0);
         });
-
         creerPopUp();
-
         dateListe();
 
         return view;
@@ -79,6 +77,7 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
         );
         pickerMonth = popupView.findViewById(R.id.pickerMonth);
         pickerYear = popupView.findViewById(R.id.pickerYear);
+        Button btnCharger = popupView.findViewById(R.id.btnCharger);
 
         pickerMonth.setMinValue(1);
         pickerMonth.setMaxValue(12);
@@ -88,6 +87,10 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
         pickerMonth.setValue(LocalDate.now().getMonthValue());
         pickerYear.setValue(LocalDate.now().getYear());
 
+        btnCharger.setOnClickListener(v -> {
+            dateListe();
+            popupWindow.dismiss();
+        });
         popupWindow.setOnDismissListener(this::dateListe);
     }
 

@@ -22,15 +22,6 @@ public class User {
     public User() {
     }
 
-    public User(int id, String email, String password, String username, String token, List<UserCalendar> userCalendars) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.username = username;
-        this.token = token;
-        this.userCalendars = userCalendars;
-    }
-
     // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

@@ -62,27 +62,6 @@
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="10dp"
-        android:hint="@string/description"
-        app:boxBackgroundColor="@color/couleur_primaire"
-        app:hintTextColor="@color/couleur_texte"
-        android:textColorHint="@color/couleur_texte"
-        app:boxStrokeColor="@color/couleur_texte">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textDescription"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="start"
-            android:inputType="textMultiLine"
-            android:textColor="@color/couleur_texte"
-            android:textSize="16sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/elementSwitch"
         android:layout_width="wrap_content"
@@ -244,6 +223,27 @@
             android:padding="10dp"/>
 
     </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="10dp"
+        android:hint="@string/description"
+        app:boxBackgroundColor="@color/couleur_primaire"
+        app:hintTextColor="@color/couleur_texte"
+        android:textColorHint="@color/couleur_texte"
+        app:boxStrokeColor="@color/couleur_texte">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textDescription"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:inputType="textMultiLine"
+            android:textColor="@color/couleur_texte"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnCreer"

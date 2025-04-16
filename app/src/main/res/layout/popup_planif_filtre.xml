@@ -2,49 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
+    android:padding="10dp"
     android:orientation="vertical"
+    android:background="@drawable/rounded_rectangle"
     android:divider="@android:color/transparent"
     android:dividerHeight="8dp">
 
-    <LinearLayout
+    <CheckBox
+        android:id="@+id/cbPeriodes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="@string/voir_periodes"
+        android:textSize="16sp"
+        android:textColor="@color/couleur_texte"
+        android:layoutDirection="rtl"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="Filtre 1 :" />
-
-        <Spinner
-            android:id="@+id/budgetSpinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:minHeight="48dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <CheckBox
+        android:id="@+id/cbDeadlines"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="@string/voir_dates_limites"
+        android:textSize="16sp"
+        android:textColor="@color/couleur_texte"
+        android:layoutDirection="rtl"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="Filtre 2 :" />
-
-        <Spinner
-            android:id="@+id/typeSpinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:minHeight="48dp" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/btnCharger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/charger"
+        android:textColor="@color/couleur_primaire"
+        android:backgroundTint="@color/couleur_bouton"/>
 
 </LinearLayout>

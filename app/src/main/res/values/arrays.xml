@@ -1,26 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="Elements">
-        <item>Période 1</item>
-        <item>Période 2</item>
-        <item>Période 3</item>
-        <item>Période 4</item>
-        <item>Période 5</item>
-        <item>Période 6</item>
-        <item>Période 7</item>
-        <item>Période 8</item>
-        <item>Période 9</item>
-        <item>Période 10</item>
-        <item>Date limite 1</item>
-        <item>Date limite 2</item>
-        <item>Date limite 3</item>
-        <item>Date limite 4</item>
-        <item>Date limite 5</item>
-        <item>Date limite 6</item>
-        <item>Date limite 7</item>
-        <item>Date limite 8</item>
-        <item>Date limite 9</item>
-        <item>Date limite 10</item>
-    </string-array>
-
 </resources>

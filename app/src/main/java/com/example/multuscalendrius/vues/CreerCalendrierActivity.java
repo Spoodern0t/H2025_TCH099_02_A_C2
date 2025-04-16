@@ -19,7 +19,7 @@ import com.example.multuscalendrius.vuemodele.UserVueModele;
 public class CreerCalendrierActivity extends AppCompatActivity implements View.OnClickListener {
 
     private UserVueModele userVueModele;
-    private UserCalendar calendrier;
+    private UserCalendar calendrier = new UserCalendar();
     private EditText textNom, textDescription;
     private Button btnCreer, btnAnnuler;
     private String nom, description;
@@ -50,7 +50,7 @@ public class CreerCalendrierActivity extends AppCompatActivity implements View.O
 
         Intent intent = getIntent();
         int calendrierId = intent.getIntExtra("ID", -1);
-        if (calendrierId >= 0) {
+        if (calendrierId > 0) {
 
             TextView textCreerCalendrier = findViewById(R.id.textCreerCalendrier);
             ImageButton imgBtnSuppCalendrier = findViewById(R.id.imgBtnSuppCalendrier);
@@ -75,16 +75,25 @@ public class CreerCalendrierActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         if (v == btnCreer) {
-            if (calendrier == null) {
-                nom = textNom.getText().toString().trim();
-                description = textDescription.getText().toString().trim();
-                calendrier = new UserCalendar();
-                calendrier.setNomCalendrier(nom);
-                calendrier.setDescription(description);
+            nom = textNom.getText().toString().trim();
+            description = textDescription.getText().toString().trim();
 
-                userVueModele.creerCalendrier(calendrier);
-            } else {
+            // Vérification que tous les champs sont remplis
+            if (nom.isEmpty()) {
+                textNom.setError("Veuillez nommer votre calendrier");
+                Toast.makeText(this, "Veuillez nommer votre calendrier", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (description.isEmpty()) {
+                description = "";
+            }
+
+            calendrier.setNomCalendrier(nom);
+            calendrier.setDescription(description);
+            if (calendrier.getCalendarId() > 0) {
                 userVueModele.updateCalendrier(calendrier);
+            } else {
+                userVueModele.creerCalendrier(calendrier);
             }
         } else if (v == btnAnnuler) {
             setResult(RESULT_CANCELED);

@@ -23,14 +23,7 @@ public class UserCalendar {
 
     public UserCalendar() {}
 
-    // Constructeur complet
-    public UserCalendar(int id, int userId, int calendarId) {
-        this.userId = userId;
-        this.calendarId = calendarId;
-    }
-
     // Getters et Setters
-
     public int getUserId() {
         return userId;
     }

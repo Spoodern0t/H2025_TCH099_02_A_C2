@@ -23,16 +23,16 @@ import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.modeles.entitees.Evenement;
-import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
-import com.example.multuscalendrius.vuemodele.UserVueModele;
+import com.example.multuscalendrius.vues.adaptateurs.EvenementAdaptateur;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CreerElementActivity extends AppCompatActivity implements View.OnClickListener {
 
     private CalendrierVueModele calendrierVueModele;
-    private Element element;
+    private Element element = new Element();
     private EditText textNom, textDescription;
     private TextView debutTV;
     private ActivityResultLauncher<Intent> launcher;
@@ -47,6 +47,8 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
     private boolean deadline;
     private LocalDateTime debutElement, finElement;
     private Integer calendrierId, evenementId;
+    private List<Evenement> evenements;
+    private EvenementAdaptateur adaptateur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +75,10 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
                     if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
                         if (data != null) {
-                            evenementId = data.getIntExtra("EVENT", -1);
+                            evenementId = data.getIntExtra("POSITION", -1);
                             if (evenementId >= 0) {
                                 // TODO: ADD evenement dans adaptor
-                                evenementSpinner.setSelection(evenementId);
+                                //evenementSpinner.setSelection(evenementId);
                             }
                         }
                     }
@@ -116,9 +118,13 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
             }
         });
 
+        evenements = calendrierVueModele.getCurrentCalendrier().getEvenements();
+        adaptateur = new EvenementAdaptateur(this, R.layout.layout_evenement, evenements);
+        evenementSpinner.setAdapter(adaptateur);
+
         Intent intent = getIntent();
         int elementId = intent.getIntExtra("ID", -1);
-        if (elementId >= 0) {
+        if (elementId > 0) {
 
             TextView textCreerElement = findViewById(R.id.textCreerElement);
             ImageButton imgBtnSuppElement = findViewById(R.id.imgBtnSuppElement);
@@ -156,41 +162,58 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        evenements = calendrierVueModele.getCurrentCalendrier().getEvenements();
+        adaptateur = new EvenementAdaptateur(this, R.layout.layout_evenement, evenements);
+        evenementSpinner.setAdapter(adaptateur);
+        //evenementSpinner.setSelection(adaptateur.getCount() - 1);
+    }
+
+    @Override
     public void onClick(View v) {
         if (v == btnCreer) {
-            if (element == null) {
-                nom = textNom.getText().toString().trim();
-                description = textDescription.getText().toString().trim();
-                deadline = elementSwitch.isChecked();
-                if (!deadline) {
-                    debutElement = LocalDateTime.of(debutDP.getYear(), debutDP.getMonth(), debutDP.getDayOfMonth(), debutTP.getHour(), debutTP.getMinute());
-                } else {
-                    debutElement = null;
-                }
-                finElement = LocalDateTime.of(finDP.getYear(), finDP.getMonth(), finDP.getDayOfMonth(), finTP.getHour(), finTP.getMinute());
+            nom = textNom.getText().toString().trim();
+            description = textDescription.getText().toString().trim();
 
-                Evenement selectedEvenement = (Evenement) evenementSpinner.getSelectedItem();
-                evenementId = selectedEvenement != null ? selectedEvenement.getId() : null;
-                element = new Element();
-                element.setCalendrierId(calendrierId);
-                element.setNom(nom);
-                element.setDescription(description);
-                element.setEvenementId(evenementId);
-                element.setDateDebut(debutElement);
-                element.setDateFin(finElement);
-
-                calendrierVueModele.addElement(element);
-            } else {
-                calendrierVueModele.updateElement(element);
+            // Vérification que tous les champs sont remplis
+            if (nom.isEmpty()) {
+                textNom.setError("Veuillez nommer votre element");
+                Toast.makeText(this, "Veuillez nommer votre element", Toast.LENGTH_SHORT).show();
+                return;
             }
-            setResult(RESULT_OK);
-            finish();
+            if (description.isEmpty()) {
+                description = "";
+            }
+
+            deadline = elementSwitch.isChecked();
+            if (!deadline) {
+                debutElement = LocalDateTime.of(debutDP.getYear(), debutDP.getMonth(), debutDP.getDayOfMonth(), debutTP.getHour(), debutTP.getMinute());
+            } else {
+                debutElement = null;
+            }
+            finElement = LocalDateTime.of(finDP.getYear(), finDP.getMonth(), finDP.getDayOfMonth(), finTP.getHour(), finTP.getMinute());
+
+            Evenement selectedEvenement = (Evenement) evenementSpinner.getSelectedItem();
+            evenementId = selectedEvenement != null ? selectedEvenement.getId() : null;
+
+            element.setCalendrierId(calendrierId);
+            element.setNom(nom);
+            element.setDescription(description);
+            element.setEvenementId(evenementId);
+            element.setDateDebut(debutElement);
+            element.setDateFin(finElement);
+            if (element.getId() > 0) {
+                calendrierVueModele.updateElement(element);
+            } else {
+                calendrierVueModele.addElement(element);
+            }
         } else if (v == btnAnnuler) {
             setResult(RESULT_CANCELED);
             finish();
         } else if (v == btnAddEvenement) {
             Intent intent = new Intent(this, CreerEvenementActivity.class);
-            startActivity(intent);
+            launcher.launch(intent);
         }
     }
 }
