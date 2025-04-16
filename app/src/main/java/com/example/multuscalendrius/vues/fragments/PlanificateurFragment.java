@@ -22,6 +22,7 @@ import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
 import com.example.multuscalendrius.vues.adaptateurs.CalendrierAdaptateur;
 import com.example.multuscalendrius.vues.adaptateurs.PlanificateurAdaptateur;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PlanificateurFragment extends Fragment implements View.OnClickListener {
@@ -47,7 +48,13 @@ public class PlanificateurFragment extends Fragment implements View.OnClickListe
 
         calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
         List<Element> elements = calendrierVueModele.getCurrentCalendrier().getElements();
-        PlanificateurAdaptateur adaptateur = new PlanificateurAdaptateur(inflater.getContext(), R.layout.layout_calendrier, elements);
+        Element element = new Element();
+        element.setNom("yess");
+        element.setDateDebut(LocalDateTime.now());
+        element.setDateFin(LocalDateTime.now());
+        elements.add(element);
+
+        PlanificateurAdaptateur adaptateur = new PlanificateurAdaptateur(inflater.getContext(), R.layout.layout_planif, elements);
         voyagesListView.setAdapter(adaptateur);
 
         creerPopUpFiltre();

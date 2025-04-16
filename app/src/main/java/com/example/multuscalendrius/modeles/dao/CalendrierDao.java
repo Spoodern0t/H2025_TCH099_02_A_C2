@@ -11,7 +11,7 @@ public class CalendrierDao {
 
     private static CalendrierDao instance = null;
     private final ApiService api;
-    private Calendrier calendrier;
+    private Calendrier calendrier = new Calendrier();
 
 
     public static CalendrierDao getInstance() {

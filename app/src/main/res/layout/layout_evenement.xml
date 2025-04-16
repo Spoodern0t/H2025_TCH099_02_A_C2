@@ -19,8 +19,6 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:textColor="@color/couleur_texte"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginStart="10dp"/>
 
 </LinearLayout>

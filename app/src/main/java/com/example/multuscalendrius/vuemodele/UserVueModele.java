@@ -16,11 +16,7 @@ public class UserVueModele extends ViewModel {
     private final MutableLiveData<List<UserCalendar>> userCalendarsLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> succesLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> erreurLiveData = new MutableLiveData<>();
-    private final UserDao userDao;
-
-    public UserVueModele() {
-        userDao = UserDao.getInstance();
-    }
+    private final UserDao userDao = UserDao.getInstance();
 
     public LiveData<User> getUser() {
         return userLiveData;
@@ -78,6 +74,7 @@ public class UserVueModele extends ViewModel {
 
     // Wrapper pour récupérer les UserCalendar de l'utilisateur
     public void chargerUserCalendars() {
+
         userDao.getUserCalendar(userDao.getUser().getToken(), new ApiCallback<>() {
             @Override
             public void onSuccess(List<UserCalendar> calendriers) {

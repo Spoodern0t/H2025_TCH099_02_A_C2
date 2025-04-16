@@ -1,18 +1,27 @@
 package com.example.multuscalendrius.modeles.entitees;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 
 public class Element {
+
+    @JsonProperty("id_element")
     private int id;
+    @JsonProperty("id_calendrier")
     private int calendrierId;
+    @JsonProperty("nom")
     private String nom;
+    @JsonProperty("description")
     private String description;
-    private Evenement evenement;
     @JsonIgnore
+    private Evenement evenement;
+    @JsonProperty("id_evenement")
     private Integer evenementId;
+    @JsonProperty("date_debut")
     private LocalDateTime dateDebut;
+    @JsonProperty("date_fin")
     private LocalDateTime dateFin;
 
     public Element() {}

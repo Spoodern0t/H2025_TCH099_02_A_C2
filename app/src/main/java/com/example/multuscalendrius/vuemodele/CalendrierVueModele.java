@@ -12,16 +12,11 @@ import com.example.multuscalendrius.modeles.entitees.Evenement;
 
 public class CalendrierVueModele extends ViewModel {
 
-    private MutableLiveData<Calendrier> calendrierLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> succesLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Calendrier> calendrierLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> succesLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> erreurLiveData = new MutableLiveData<>();
-    private final String token;
-    public CalendrierDao calendrierDao;
-
-    public CalendrierVueModele() {
-        calendrierDao = CalendrierDao.getInstance();
-        token = UserDao.getInstance().getUser().getToken();
-    }
+    private final String token = UserDao.getInstance().getUser().getToken();;
+    public final CalendrierDao calendrierDao = CalendrierDao.getInstance();
 
     public LiveData<Calendrier> getCalendrier() {
         return calendrierLiveData;

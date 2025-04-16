@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.entitees.Element;
+import com.example.multuscalendrius.modeles.entitees.Evenement;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -55,8 +56,13 @@ public class PlanificateurAdaptateur extends ArrayAdapter<Element> {
             TextView tvNom = view.findViewById(R.id.tvNom);
             TextView tvHeures = view.findViewById(R.id.tvHeures);
 
-            couleurEvenement.setBackgroundColor(123);
-            tvNom.setText(element.getEvenement().getTitre() + ":" + element.getNom());
+            Evenement evenement = element.getEvenement();
+            String titre = "";
+            if (evenement != null) {
+                couleurEvenement.setBackgroundColor(0);
+                titre = evenement.getTitre() + " : ";
+            }
+            tvNom.setText(titre + element.getNom());
             String debut = "";
             LocalDateTime elementDebut = element.getDateDebut();
             if (elementDebut != null) {

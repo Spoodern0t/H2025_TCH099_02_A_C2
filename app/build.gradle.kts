@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.jackson.databind)
+    implementation(libs.jackson.datatype.jsr310)
     implementation(libs.okhttp)
     implementation(libs.ambilwarna)
     implementation(libs.firebase.appdistribution.gradle)
