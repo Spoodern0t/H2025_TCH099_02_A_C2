@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.multuscalendrius.R;
 
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class JourAdaptateur extends RecyclerView.Adapter<JourAdaptateur.ViewHold
 
     private List<String> jours;
     private OnItemClickListener listener;
-    private int selectedPosition = RecyclerView.NO_POSITION;
+    private int selectedPosition = LocalDate.now().getDayOfMonth() - 1;
 
     public JourAdaptateur(int nbJour, OnItemClickListener listener) {
         List<String> jours = new ArrayList<>();

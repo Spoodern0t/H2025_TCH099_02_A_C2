@@ -6,6 +6,7 @@
     android:background="@drawable/rounded_rectangle"
     android:orientation="vertical"
     android:padding="10dp"
+    android:layout_margin="15dp"
     android:layout_marginBottom="8dp">
 
     <View

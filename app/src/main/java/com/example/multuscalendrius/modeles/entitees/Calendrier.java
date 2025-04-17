@@ -3,6 +3,9 @@ package com.example.multuscalendrius.modeles.entitees;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Calendrier {
@@ -65,5 +68,17 @@ public class Calendrier {
                 return element;
         }
         return null;
+    }
+
+    public List<Element> getElementsByDate(LocalDate today) {
+        List<Element> elementsFiltres = new ArrayList<>();
+        for (Element element: elements) {
+            LocalDate debut = element.getDateDebut().toLocalDate();
+            LocalDate fin = element.getDateFin().toLocalDate();
+            if (debut.equals(today) || fin.equals(today)) {
+                elementsFiltres.add(element);
+            }
+        }
+        return elementsFiltres;
     }
 }

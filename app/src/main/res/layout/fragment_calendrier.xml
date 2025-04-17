@@ -10,10 +10,11 @@
 
     <Button
         android:id="@+id/btnAnneeMois"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="30dp"
         android:backgroundTint="@color/couleur_bouton"
         android:textColor="@color/couleur_primaire"/>
 

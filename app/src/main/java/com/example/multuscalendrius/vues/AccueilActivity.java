@@ -38,13 +38,11 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
         calendrierVueModele.getCalendrier().observe(this, calendrier -> {
             titreCalendrier.setText(calendrier.getNom());
+            initNavView();
         });
         calendrierVueModele.getErreur().observe(this, message -> {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
-
-        // Initier la barre de navigation
-        initNavView();
 
         // Charger le calendrier
         chargerCalendrier();

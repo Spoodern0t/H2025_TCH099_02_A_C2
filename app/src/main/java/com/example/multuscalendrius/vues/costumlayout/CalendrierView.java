@@ -1,46 +1,42 @@
 package com.example.multuscalendrius.vues.costumlayout;
 
-
 import android.content.Context;
-import android.graphics.Canvas;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
 import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.entitees.Element;
+import com.example.multuscalendrius.vues.CreerElementActivity;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
-public class CalendrierView extends View {
+public class CalendrierView extends FrameLayout {
 
-    private final int NB_HEURE = 24;
     private Paint paint;
-    private RectF blocElement;
+    private final int NB_HEURE = 24;
     private int largeur, hauteur, blocHauteur;
-    private int largeurColTemps, largeurColElement;
-    private Element[] elements;
-
-
-    private void init(Context context) {
-        paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.FILL);
-
-    }
+    private int largeurColTemps;
 
     public CalendrierView(Context context) {
         super(context);
-        init(context);
+        init();
     }
 
-    public CalendrierView(Context context, AttributeSet attributeSet) {
-        super(context, attributeSet);
-        init(context);
+    public CalendrierView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    private void init() {
+        setWillNotDraw(false);
+        paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
     }
 
     @Override
@@ -56,75 +52,42 @@ public class CalendrierView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         largeur = w;
         hauteur = h;
-        blocHauteur = h/NB_HEURE;
-        largeurColTemps = w/5;
-        largeurColElement = w - largeurColTemps;
+        blocHauteur = h / NB_HEURE;
+        largeurColTemps = w / 5;
     }
 
     @Override
-    protected void onDraw(@NonNull Canvas canvas) {
+    protected void onDraw(@NonNull android.graphics.Canvas canvas) {
         super.onDraw(canvas);
 
-        dessinerBloc(canvas);
-
-        //dessinerElement(canvas);
-    }
-
-    private void dessinerBloc(Canvas canvas) {
-
-        float x1 = 0;
-        float x2 = largeurColTemps;
-
-        paint = new Paint();
+        paint.setColor(getResources().getColor(R.color.couleur_icon, null));
         paint.setTextSize(36);
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setColor(getResources().getColor(R.color.couleur_icon));
 
-        // Ligne verticale
-        canvas.drawLine(x2, 0, x2, hauteur, paint);
+        // Ligne verticale de séparation
+        canvas.drawLine(largeurColTemps, 0, largeurColTemps, hauteur, paint);
 
+        // Heures
         for (int i = 0; i < NB_HEURE; i++) {
-
-            float y1 = i * blocHauteur;
-
-            float pointX = (x1 + x2)/2;
-            float pointY = ((i + 0.1f) * blocHauteur) + paint.getTextSize();
-
-            // Format d'heure
+            float y = i * blocHauteur;
+            canvas.drawLine(0, y, largeur, y, paint);
             String heure = String.format("%02d:00", i);
-
-            canvas.drawText(heure, pointX, pointY, paint);
-            // Ligne horizontale
-            canvas.drawLine(0, y1, largeur, y1, paint);
+            float textY = y + paint.getTextSize() + 10;
+            canvas.drawText(heure, largeurColTemps / 2f, textY, paint);
         }
     }
 
-    public void dessinerElement(Canvas canvas) {
+    public void setElements(List<Element> elements) {
+        removeAllViews();
 
         for (Element element : elements) {
-
-            Paint paint = new Paint();
-            paint.setColor(Color.BLUE);
-
-            LocalDateTime debut = element.getDateDebut() != null
-                    ? element.getDateDebut()
-                    : element.getDateFin();
-
-            float elementDebut = tempsDeDate(debut);
-            float elementFin = tempsDeDate(element.getDateFin());
-
-            float y1 = elementDebut * blocHauteur;
-            float y2 = elementFin * blocHauteur;
-
-
-
-            blocElement = new RectF(largeurColTemps, y1, largeur, y2);
-            canvas.drawRect(blocElement, paint);
+            ElementView ev = new ElementView(getContext(), element, blocHauteur, largeur, largeurColTemps);
+            ev.setOnClickListener(v -> {
+                Intent intent = new Intent(getContext(), CreerElementActivity.class);
+                intent.putExtra("ID", element.getId());
+                getContext().startActivity(intent);
+            });
+            addView(ev);
         }
-    }
-
-    private float tempsDeDate(LocalDateTime date) {
-
-        return date.getHour() + (float) date.getMinute() / 60;
     }
 }

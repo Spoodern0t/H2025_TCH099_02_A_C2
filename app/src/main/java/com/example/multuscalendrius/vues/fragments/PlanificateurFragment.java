@@ -51,7 +51,7 @@ public class PlanificateurFragment extends Fragment implements View.OnClickListe
         Element element = new Element();
         element.setNom("yess");
         element.setDateDebut(LocalDateTime.now());
-        element.setDateFin(LocalDateTime.now());
+        element.setDateFin(LocalDateTime.now().plusHours(1));
         elements.add(element);
 
         PlanificateurAdaptateur adaptateur = new PlanificateurAdaptateur(inflater.getContext(), R.layout.layout_planif, elements);
