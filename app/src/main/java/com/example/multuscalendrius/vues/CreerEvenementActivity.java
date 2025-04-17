@@ -23,6 +23,7 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 public class CreerEvenementActivity extends AppCompatActivity implements View.OnClickListener {
 
     private CalendrierVueModele calendrierVueModele;
+    private Calendrier calendrier;
     private Evenement evenement = new Evenement();
     private EditText textNom, textDescription;
     private Button btnCreer, btnAnnuler;
@@ -46,6 +47,8 @@ public class CreerEvenementActivity extends AppCompatActivity implements View.On
         viewCouleur.setOnClickListener(this);
 
         calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
+        calendrier = calendrierVueModele.getCurrentCalendrier();
+
         calendrierVueModele.getSucces().observe(this, succes -> {
             Intent  intent = new Intent();
             intent.putExtra("POSITION", -1);
@@ -56,26 +59,30 @@ public class CreerEvenementActivity extends AppCompatActivity implements View.On
         Intent intent = getIntent();
         int evenementId = intent.getIntExtra("ID", -1);
         if (evenementId > 0) {
-
-            TextView textCreerEvenement = findViewById(R.id.textCreerEvenement);
-            ImageButton imgBtnSuppEvenement = findViewById(R.id.imgBtnSuppEvenement);
-
-            textCreerEvenement.setText(R.string.modifiez_votre_evenement);
-            imgBtnSuppEvenement.setVisibility(View.VISIBLE);
-            btnCreer.setText(R.string.modifier);
-
-            Calendrier calendrier = calendrierVueModele.getCurrentCalendrier();
             evenement = calendrier.getEvenementById(evenementId);
-            imgBtnSuppEvenement.setOnClickListener(v -> {
-                calendrierVueModele.deleteEvenement(evenement);
-            });
-
-            nom = evenement.getTitre();
-            description = evenement.getDescription();
-
-            textNom.setText(nom);
-            textDescription.setText(description);
+            modifierEvenement(evenement);
         }
+    }
+
+    private void modifierEvenement(Evenement evenement) {
+        TextView textCreerEvenement = findViewById(R.id.textCreerEvenement);
+        ImageButton imgBtnSuppEvenement = findViewById(R.id.imgBtnSuppEvenement);
+
+        textCreerEvenement.setText(R.string.modifiez_votre_evenement);
+        imgBtnSuppEvenement.setVisibility(View.VISIBLE);
+        btnCreer.setText(R.string.modifier);
+
+
+
+        imgBtnSuppEvenement.setOnClickListener(v -> {
+            calendrierVueModele.deleteEvenement(evenement);
+        });
+
+        nom = evenement.getTitre() != null ? evenement.getTitre() : "";
+        description = evenement.getDescription() != null ? evenement.getDescription() : "";
+
+        textNom.setText(nom);
+        textDescription.setText(description);
     }
 
     @Override
@@ -94,6 +101,7 @@ public class CreerEvenementActivity extends AppCompatActivity implements View.On
                 description = "";
             }
 
+            evenement.setCalendrierId(calendrier.getId());
             evenement.setTitre(nom);
             evenement.setDescription(description);
             String hexColor = String.format("%06X", (0xFFFFFF & courantCouleur));

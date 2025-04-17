@@ -23,7 +23,6 @@ public class UserCalendar {
 
     public UserCalendar() {}
 
-    // Getters et Setters
     public int getUserId() {
         return userId;
     }

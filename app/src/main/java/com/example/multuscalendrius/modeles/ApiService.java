@@ -8,10 +8,14 @@ import com.example.multuscalendrius.modeles.entitees.UserCalendar;
 import com.example.multuscalendrius.vuemodele.ApiCallback;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,13 +30,18 @@ import okhttp3.Response;
 public class ApiService {
 
     private static final String BASE_URL = "http://10.0.2.2:80/H2025_TCH099_02_A_API/index.php";
-    private OkHttpClient client;
-    private ObjectMapper mapper;
+    private final OkHttpClient client = new OkHttpClient();
+    private final ObjectMapper mapper;
+
 
     public ApiService() {
-        client = new OkHttpClient();
-        mapper = new ObjectMapper();
+        JavaTimeModule module = new JavaTimeModule();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(formatter));
+        mapper = new ObjectMapper().registerModule(module);
     }
+
+
 
     // --------------------------
     // Utilisateur (inscription, connexion)

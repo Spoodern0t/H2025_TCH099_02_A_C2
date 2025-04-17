@@ -51,25 +51,30 @@ public class CreerCalendrierActivity extends AppCompatActivity implements View.O
         Intent intent = getIntent();
         int calendrierId = intent.getIntExtra("ID", -1);
         if (calendrierId > 0) {
-
-            TextView textCreerCalendrier = findViewById(R.id.textCreerCalendrier);
-            ImageButton imgBtnSuppCalendrier = findViewById(R.id.imgBtnSuppCalendrier);
-
-            textCreerCalendrier.setText(R.string.modifiez_votre_calendrier);
-            imgBtnSuppCalendrier.setVisibility(View.VISIBLE);
-            btnCreer.setText(R.string.modifier);
-
             calendrier = userVueModele.getCurrentUser().getUserCalendarById(calendrierId);
-            imgBtnSuppCalendrier.setOnClickListener(v -> {
-                userVueModele.deleteCalendrier(calendrier);
-            });
-
-            nom = calendrier.getNomCalendrier();
-            description = calendrier.getDescription();
-
-            textNom.setText(nom);
-            textDescription.setText(description);
+            modifierCalendrier(calendrier);
         }
+    }
+
+    private void modifierCalendrier(UserCalendar calendrier) {
+
+        TextView textCreerCalendrier = findViewById(R.id.textCreerCalendrier);
+        ImageButton imgBtnSuppCalendrier = findViewById(R.id.imgBtnSuppCalendrier);
+
+        textCreerCalendrier.setText(R.string.modifiez_votre_calendrier);
+        imgBtnSuppCalendrier.setVisibility(View.VISIBLE);
+        btnCreer.setText(R.string.modifier);
+
+
+        imgBtnSuppCalendrier.setOnClickListener(v -> {
+            userVueModele.deleteCalendrier(calendrier);
+        });
+
+        nom = calendrier.getNomCalendrier() != null ? calendrier.getNomCalendrier() : "";
+        description = calendrier.getDescription() != null ? calendrier.getDescription() : "";
+
+        textNom.setText(nom);
+        textDescription.setText(description);
     }
 
     @Override

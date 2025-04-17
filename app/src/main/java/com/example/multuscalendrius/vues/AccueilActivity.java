@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,10 +13,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.multuscalendrius.R;
+import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
+import com.example.multuscalendrius.vues.adaptateurs.PlanificateurAdaptateur;
+import com.example.multuscalendrius.vues.costumlayout.CalendrierView;
 import com.example.multuscalendrius.vues.fragments.CalendrierFragment;
 import com.example.multuscalendrius.vues.fragments.PlanificateurFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
 
 public class AccueilActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -24,11 +30,17 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
     private ImageButton imgBtnCreate;
     private BottomNavigationView bottomNavigationView;
     private Fragment calendrierFragment, planificateurFragment;
+    private List<Element> elements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accueil);
+
+        // Les vues qui vont apparaitre dans le frame
+        calendrierFragment = new CalendrierFragment();
+        planificateurFragment = new PlanificateurFragment();
+        setCurrentFragment(calendrierFragment);
 
         titreCalendrier = findViewById(R.id.titreCalendrier);
         imgBtnCreate = findViewById(R.id.btnCreer);
@@ -38,7 +50,7 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
         calendrierVueModele.getCalendrier().observe(this, calendrier -> {
             titreCalendrier.setText(calendrier.getNom());
-            initNavView();
+            elements = calendrier.getElements();
         });
         calendrierVueModele.getErreur().observe(this, message -> {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -46,6 +58,13 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
 
         // Charger le calendrier
         chargerCalendrier();
+        initNavView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        calendrierVueModele.chargerCalendrier(calendrierVueModele.getCurrentCalendrier().getId());
     }
 
     private void chargerCalendrier() {
@@ -76,12 +95,6 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
     public void initNavView() {
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
-        // Les vues qui vont apparaitre dans le frame
-        calendrierFragment = new CalendrierFragment();
-        planificateurFragment = new PlanificateurFragment();
-
-        setCurrentFragment(calendrierFragment);
         bottomNavigationView.setSelectedItemId(R.id.calendrier);
 
         // Les actions des boutons de la barre de navigation
@@ -92,9 +105,20 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(intent);
             } else if (itemId == R.id.calendrier) {
                 setCurrentFragment(calendrierFragment);
+                View calendrierFragmentViews = calendrierFragment.getView();
+                if (calendrierFragmentViews != null) {
+                    CalendrierView calendrierView = calendrierFragmentViews.findViewById(R.id.calendrierJour);
+                    calendrierView.setElements(elements);
+                }
                 return true;
             } else if (itemId == R.id.planificateur) {
                 setCurrentFragment(planificateurFragment);
+                View planificateurFragmentViews = planificateurFragment.getView();
+                if (planificateurFragmentViews != null) {
+                    ListView llPlanificateur = planificateurFragmentViews.findViewById(R.id.llPlanificateur);
+                    PlanificateurAdaptateur adaptateur = new PlanificateurAdaptateur(this, R.layout.layout_planif, elements);
+                    llPlanificateur.setAdapter(adaptateur);
+                }
                 return true;
             } else if (itemId == R.id.profil){
                 Intent intent = new Intent(this, ProfilActivity.class);

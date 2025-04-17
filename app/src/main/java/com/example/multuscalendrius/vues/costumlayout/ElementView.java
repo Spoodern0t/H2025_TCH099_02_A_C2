@@ -27,7 +27,7 @@ public class ElementView extends FrameLayout {
         tvHeures = findViewById(R.id.tvHeures);
 
         // Set up background and click behavior
-        setBackgroundColor(Color.parseColor("#2196F3")); // Default color
+        setBackgroundColor(Color.parseColor("#2196F3"));
         setClickable(true);
 
         // Set element name
@@ -42,18 +42,18 @@ public class ElementView extends FrameLayout {
                 LayoutParams.MATCH_PARENT,
                 calculerHauteur(blocHauteur, element)
         );
-        params.leftMargin = largeurColTemps;
-        params.topMargin = calculerTop(blocHauteur, element);
+        params.leftMargin = largeurColTemps;  // Left margin after the time column
+        params.topMargin = calculerTop(blocHauteur, element);  // Top margin based on start time
         setLayoutParams(params);
     }
 
+    // Format the start and end time for the event
     private String formatTimeRange(Element element) {
-        LocalDateTime debut = element.getDateDebut();
-        LocalDateTime fin = element.getDateFin();
 
-        if (debut == null || fin == null) {
-            return "Invalid times";
-        }
+        LocalDateTime debut = element.getDateDebut() != null
+                ? element.getDateDebut()
+                : element.getDateFin().minusMinutes(5);
+        LocalDateTime fin = element.getDateFin();
 
         String debutTime = String.format("%02d:%02d", debut.getHour(), debut.getMinute());
         String finTime = String.format("%02d:%02d", fin.getHour(), fin.getMinute());
@@ -61,20 +61,23 @@ public class ElementView extends FrameLayout {
         return debutTime + " - " + finTime;
     }
 
+    // Calculate the top margin based on the event's start time
     private int calculerTop(int blocHauteur, Element element) {
         LocalDateTime debut = element.getDateDebut() != null ? element.getDateDebut() : element.getDateFin();
         return (int) ((debut.getHour() + debut.getMinute() / 60f) * blocHauteur);
     }
 
+    // Calculate the height of the event based on its duration
     private int calculerHauteur(int blocHauteur, Element element) {
-        LocalDateTime debut = element.getDateDebut();
+
+        LocalDateTime debut = element.getDateDebut() != null
+                ? element.getDateDebut()
+                : element.getDateFin().minusMinutes(5);
         LocalDateTime fin = element.getDateFin();
 
-        if (debut == null || fin == null) return blocHauteur; // height by default
-
-        float dureeHeures = (float) (fin.getHour() + fin.getMinute() / 60f)
+        float dureeHeures = (fin.getHour() + fin.getMinute() / 60f)
                 - (debut.getHour() + debut.getMinute() / 60f);
 
-        return (int) (dureeHeures * blocHauteur);
+        return (int) (dureeHeures * blocHauteur);  // Return height based on duration
     }
 }

@@ -37,7 +37,9 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
     private CalendrierView calendrierView;
     private View popupView;
     private NumberPicker pickerMonth, pickerYear;
-    private int year, month;
+    private int year = LocalDate.now().getYear();
+    private int month = LocalDate.now().getMonthValue();
+    private int day = LocalDate.now().getDayOfMonth();
     private PopupWindow popupWindow;
 
     @Nullable
@@ -54,13 +56,6 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
 
         calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
         List<Element> elements = calendrierVueModele.getCurrentCalendrier().getElements();
-        Element element = new Element();
-        element.setNom("yess");
-        element.setDateDebut(LocalDateTime.now());
-        element.setDateFin(LocalDateTime.now().plusHours(1));
-        elements.add(element);
-
-        calendrierView.setElements(elements);
 
         btnAnneeMois.setOnClickListener(v -> {
             int anchorWidth = btnAnneeMois.getWidth();
@@ -75,6 +70,7 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
         creerPopUp();
         dateListe();
 
+
         return view;
     }
 
@@ -83,8 +79,9 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
         tvDate.setTextColor(getResources().getColor(R.color.couleur_primaire, null));
         tvDate.setBackgroundResource(R.drawable.round_background);
 
-        LocalDate date = LocalDate.of(year, month, Integer.parseInt((String) tvDate.getText()));
+        day = Integer.parseInt((String) tvDate.getText());
 
+        LocalDate date = LocalDate.of(year, month, day);
         List<Element> elements = calendrierVueModele.getCurrentCalendrier().getElementsByDate(date);
         calendrierView.setElements(elements);
     }
