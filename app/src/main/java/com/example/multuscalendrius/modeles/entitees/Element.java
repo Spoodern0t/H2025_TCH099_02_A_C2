@@ -15,9 +15,9 @@ public class Element {
     private String nom;
     @JsonProperty("description")
     private String description;
-    @JsonIgnore
+    @JsonProperty("evenement")
     private Evenement evenement;
-    @JsonProperty("id_evenement")
+    @JsonIgnore
     private Integer evenementId;
     @JsonProperty("date_debut")
     private LocalDateTime dateDebut;
