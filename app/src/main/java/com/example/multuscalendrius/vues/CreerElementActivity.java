@@ -22,7 +22,8 @@ import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.modeles.entitees.Evenement;
 import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
-import com.example.multuscalendrius.vues.adaptateurs.EvenementAdaptateur;
+import com.example.multuscalendrius.vues.adaptateurs.EvenementAdaptateurefeffefe;
+import com.example.multuscalendrius.vues.adaptateurs.EvenementAdaptor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,7 +47,7 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
     private LocalDateTime debutElement, finElement;
     private Integer evenementId;
     private List<Evenement> evenements;
-    private EvenementAdaptateur adaptateur;
+    private EvenementAdaptor adaptateur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +102,10 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
         });
 
         evenements = calendrierVueModele.getCurrentCalendrier().getEvenements();
-        adaptateur = new EvenementAdaptateur(this, R.layout.layout_evenement, evenements);
-        evenementSpinner.setAdapter(adaptateur);
+        if (evenements != null) {
+            adaptateur = new EvenementAdaptor(this, R.layout.layout_evenement, evenements);
+            evenementSpinner.setAdapter(adaptateur);
+        }
 
         Intent intent = getIntent();
         int elementId = intent.getIntExtra("ID", -1);
@@ -138,16 +141,16 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
 
         elementSwitch.setChecked(deadline);
         if (!deadline) {
-            debutDP.updateDate(debutElement.getYear(), debutElement.getMonthValue(), debutElement.getDayOfMonth());
+            debutDP.updateDate(debutElement.getYear(), debutElement.getMonthValue() - 1, debutElement.getDayOfMonth());
             debutTP.setHour(debutElement.getHour());
             debutTP.setMinute(debutElement.getMinute());
         } else {
             // Set les picker 1h avant la date limite au cas où l'utilisateur change pour une période
-            debutDP.updateDate(debutElement.getYear(), debutElement.getMonthValue(), debutElement.getDayOfMonth());
+            debutDP.updateDate(debutElement.getYear(), debutElement.getMonthValue() - 1, debutElement.getDayOfMonth());
             debutTP.setHour(debutElement.getHour());
             debutTP.setMinute(debutElement.getMinute());
         }
-        finDP.updateDate(finElement.getYear(), finElement.getMonthValue(), finElement.getDayOfMonth());
+        finDP.updateDate(finElement.getYear(), finElement.getMonthValue() - 1, finElement.getDayOfMonth());
         finTP.setHour(finElement.getHour());
         finTP.setMinute(finElement.getMinute());
 
@@ -158,9 +161,10 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
     protected void onResume() {
         super.onResume();
         evenements = calendrierVueModele.getCurrentCalendrier().getEvenements();
-        adaptateur = new EvenementAdaptateur(this, R.layout.layout_evenement, evenements);
-        evenementSpinner.setAdapter(adaptateur);
-        //evenementSpinner.setSelection(adaptateur.getCount() - 1);
+        if (evenements != null) {
+            adaptateur = new EvenementAdaptor(this, R.layout.layout_evenement, evenements);
+            evenementSpinner.setAdapter(adaptateur);
+        }
     }
 
     @Override
@@ -179,10 +183,10 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
                 description = "";
             }
 
-            finElement = LocalDateTime.of(finDP.getYear(), finDP.getMonth(), finDP.getDayOfMonth(), finTP.getHour(), finTP.getMinute());
+            finElement = LocalDateTime.of(finDP.getYear(), finDP.getMonth() + 1, finDP.getDayOfMonth(), finTP.getHour(), finTP.getMinute());
             deadline = elementSwitch.isChecked();
             if (!deadline) {
-                debutElement = LocalDateTime.of(debutDP.getYear(), debutDP.getMonth(), debutDP.getDayOfMonth(), debutTP.getHour(), debutTP.getMinute());
+                debutElement = LocalDateTime.of(debutDP.getYear(), debutDP.getMonth() + 1, debutDP.getDayOfMonth(), debutTP.getHour(), debutTP.getMinute());
                 if (finElement.isBefore(debutElement)) {
                     Toast.makeText(this, "La fin de la période doit être postérieure au début !", Toast.LENGTH_SHORT).show();
                     return;

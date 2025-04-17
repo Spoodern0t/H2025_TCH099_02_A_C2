@@ -2,7 +2,6 @@ package com.example.multuscalendrius.vues.adaptateurs;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +16,14 @@ import com.example.multuscalendrius.modeles.entitees.Evenement;
 
 import java.util.List;
 
-public class EvenementAdaptateur extends ArrayAdapter<Evenement> {
+public class EvenementAdaptor extends ArrayAdapter<Evenement> {
 
     private List<Evenement> evenements;
     private Context contexte;
     private int viewResourceId;
     private Resources resources;
 
-    public EvenementAdaptateur(@NonNull Context context, int viewResourceId, @NonNull List<Evenement> evenements) {
+    public EvenementAdaptor(@NonNull Context context, int viewResourceId, @NonNull List<Evenement> evenements) {
         super(context, viewResourceId, evenements);
         this.contexte = context;
         this.viewResourceId = viewResourceId;
@@ -52,10 +51,10 @@ public class EvenementAdaptateur extends ArrayAdapter<Evenement> {
 
         if (evenement != null) {
             View couleurEvenement = view.findViewById(R.id.couleurEvenement);
-            TextView tvNom = view.findViewById(R.id.tvNom);
+            TextView tvEvenementNom = view.findViewById(R.id.tvEvenementNom);
 
             couleurEvenement.setBackgroundColor(Integer.parseInt(evenement.getCouleur(), 16));
-            tvNom.setText(evenement.getTitre());
+            tvEvenementNom.setText(evenement.getTitre());
         }
         return view;
     }

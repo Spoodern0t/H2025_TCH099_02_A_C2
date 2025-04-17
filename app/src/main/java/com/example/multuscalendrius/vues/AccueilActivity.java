@@ -64,7 +64,7 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        calendrierVueModele.chargerCalendrier(calendrierVueModele.getCurrentCalendrier().getId());
+        //calendrierVueModele.chargerCalendrier(calendrierVueModele.getCurrentCalendrier().getId());
     }
 
     private void chargerCalendrier() {
@@ -105,20 +105,9 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(intent);
             } else if (itemId == R.id.calendrier) {
                 setCurrentFragment(calendrierFragment);
-                View calendrierFragmentViews = calendrierFragment.getView();
-                if (calendrierFragmentViews != null) {
-                    CalendrierView calendrierView = calendrierFragmentViews.findViewById(R.id.calendrierJour);
-                    calendrierView.setElements(elements);
-                }
                 return true;
             } else if (itemId == R.id.planificateur) {
                 setCurrentFragment(planificateurFragment);
-                View planificateurFragmentViews = planificateurFragment.getView();
-                if (planificateurFragmentViews != null) {
-                    ListView llPlanificateur = planificateurFragmentViews.findViewById(R.id.llPlanificateur);
-                    PlanificateurAdaptateur adaptateur = new PlanificateurAdaptateur(this, R.layout.layout_planif, elements);
-                    llPlanificateur.setAdapter(adaptateur);
-                }
                 return true;
             } else if (itemId == R.id.profil){
                 Intent intent = new Intent(this, ProfilActivity.class);

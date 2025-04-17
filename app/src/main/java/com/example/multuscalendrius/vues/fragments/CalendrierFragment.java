@@ -5,11 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.multuscalendrius.R;
+import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
 import com.example.multuscalendrius.vues.adaptateurs.JourAdaptateur;
@@ -25,7 +26,6 @@ import com.example.multuscalendrius.vues.costumlayout.CalendrierView;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -55,7 +55,12 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
         calendrierView = view.findViewById(R.id.calendrierJour);
 
         calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
-        List<Element> elements = calendrierVueModele.getCurrentCalendrier().getElements();
+        calendrierVueModele.getCalendrier().observe(getViewLifecycleOwner(), calendrier -> {
+            vueDuJour();
+        });
+        calendrierVueModele.getErreur().observe(getViewLifecycleOwner(), message -> {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        });
 
         btnAnneeMois.setOnClickListener(v -> {
             int anchorWidth = btnAnneeMois.getWidth();
@@ -70,8 +75,16 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
         creerPopUp();
         dateListe();
 
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Calendrier calendrier = calendrierVueModele.getCurrentCalendrier();
+        if (calendrier != null)
+            calendrierVueModele.chargerCalendrier(calendrier.getId());
     }
 
     @Override
@@ -81,6 +94,10 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
 
         day = Integer.parseInt((String) tvDate.getText());
 
+        vueDuJour();
+    }
+
+    private void vueDuJour() {
         LocalDate date = LocalDate.of(year, month, day);
         List<Element> elements = calendrierVueModele.getCurrentCalendrier().getElementsByDate(date);
         calendrierView.setElements(elements);
@@ -111,7 +128,6 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
             dateListe();
             popupWindow.dismiss();
         });
-        popupWindow.setOnDismissListener(this::dateListe);
     }
 
     // Appliquer les filtres depuis le popup
@@ -125,6 +141,8 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
             int daysInMonth = yearMonth.lengthOfMonth();
             JourAdaptateur jourAdaptateur = new JourAdaptateur(daysInMonth, this);
             rvJours.setAdapter(jourAdaptateur);
+
+            vueDuJour();
         }
     }
 }

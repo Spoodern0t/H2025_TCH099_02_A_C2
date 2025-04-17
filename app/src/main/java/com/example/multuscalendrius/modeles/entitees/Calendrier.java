@@ -17,9 +17,9 @@ public class Calendrier {
     @JsonProperty("auteur")
     private String auteur;
     @JsonProperty("element")
-    private List<Element> elements;
+    private List<Element> elements = new ArrayList<>();
     @JsonProperty("evenement")
-    private List<Evenement> evenements;
+    private List<Evenement> evenements = new ArrayList<>();
 
     // Getters & Setters classiques pour le mapping JSON
     public int getId() { return id; }

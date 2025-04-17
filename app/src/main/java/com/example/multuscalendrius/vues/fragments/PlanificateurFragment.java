@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,11 +20,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.multuscalendrius.R;
+import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
 import com.example.multuscalendrius.vues.CreerElementActivity;
 import com.example.multuscalendrius.vues.adaptateurs.PlanificateurAdaptateur;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlanificateurFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
@@ -33,6 +36,7 @@ public class PlanificateurFragment extends Fragment implements View.OnClickListe
     private ListView llPlanificateur;
     private View popupView;
     private PopupWindow popupWindow;
+    private List<Element> elements;
 
     @Nullable
     @Override
@@ -49,9 +53,28 @@ public class PlanificateurFragment extends Fragment implements View.OnClickListe
         llPlanificateur.setOnItemClickListener(this);
         imgBtnFiltre.setOnClickListener(this);
 
+        calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
+        elements = calendrierVueModele.getCurrentCalendrier().getElements();
+
+        calendrierVueModele.getCalendrier().observe(getViewLifecycleOwner(), calendrier -> {
+            elements = calendrier.getElements();
+            PlanificateurAdaptateur adaptateur = new PlanificateurAdaptateur(getContext(), R.layout.layout_planif, elements);
+            llPlanificateur.setAdapter(adaptateur);
+        });
+        calendrierVueModele.getErreur().observe(getViewLifecycleOwner(), message -> {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        });
         creerPopUpFiltre();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Calendrier calendrier = calendrierVueModele.getCurrentCalendrier();
+        if (calendrier != null)
+            calendrierVueModele.chargerCalendrier(calendrier.getId());
     }
 
     private void creerPopUpFiltre() {

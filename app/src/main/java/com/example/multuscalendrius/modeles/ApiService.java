@@ -489,7 +489,7 @@ public class ApiService {
             json.put("calendrierId", element.getCalendrierId());
             json.put("nom", element.getNom());
             json.put("description", element.getDescription());
-            json.put("evenement", new JSONObject(mapper.writeValueAsString(element.getEvenement())));
+            json.put("evenement", element.getEvenement());
             json.put("dateDebut", element.getDateDebut().toString() );
             json.put("dateFin", element.getDateFin().toString() );
 
