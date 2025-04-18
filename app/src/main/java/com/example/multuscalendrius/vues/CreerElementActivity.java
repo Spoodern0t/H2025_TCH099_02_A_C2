@@ -22,8 +22,7 @@ import com.example.multuscalendrius.modeles.entitees.Calendrier;
 import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.modeles.entitees.Evenement;
 import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
-import com.example.multuscalendrius.vues.adaptateurs.EvenementAdaptateurefeffefe;
-import com.example.multuscalendrius.vues.adaptateurs.EvenementAdaptor;
+import com.example.multuscalendrius.vues.adaptateurs.EvenementAdaptateur;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,8 +45,7 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
     private boolean deadline;
     private LocalDateTime debutElement, finElement;
     private Integer evenementId;
-    private List<Evenement> evenements;
-    private EvenementAdaptor adaptateur;
+    private EvenementAdaptateur adaptateur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +67,15 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
         btnAnnuler = findViewById(R.id.btnAnnuler);
 
         calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
+        calendrierVueModele.getCalendrier().observe(this, calendrier -> {
+            List<Evenement> evenements = calendrier.getEvenements();
+            if (evenements != null) {
+                int position = evenementSpinner.getSelectedItemPosition();
+                adaptateur = new EvenementAdaptateur(this, R.layout.layout_evenement, evenements);
+                evenementSpinner.setAdapter(adaptateur);
+                evenementSpinner.setSelection(position);
+            }
+        });
         calendrierVueModele.getSucces().observe(this, succes -> {
             if (succes) {
                 setResult(RESULT_OK);
@@ -82,6 +89,7 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
         // Change le picker pour être sur 24 heures
         debutTP.setIs24HourView(true);
         finTP.setIs24HourView(true);
+        debutTP.setHour(LocalDateTime.now().getHour() - 1);
 
         btnCreer.setOnClickListener(this);
         btnAnnuler.setOnClickListener(this);
@@ -100,12 +108,6 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
                 debutCL.setVisibility(View.VISIBLE);
             }
         });
-
-        evenements = calendrierVueModele.getCurrentCalendrier().getEvenements();
-        if (evenements != null) {
-            adaptateur = new EvenementAdaptor(this, R.layout.layout_evenement, evenements);
-            evenementSpinner.setAdapter(adaptateur);
-        }
 
         Intent intent = getIntent();
         int elementId = intent.getIntExtra("ID", -1);
@@ -146,9 +148,9 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
             debutTP.setMinute(debutElement.getMinute());
         } else {
             // Set les picker 1h avant la date limite au cas où l'utilisateur change pour une période
-            debutDP.updateDate(debutElement.getYear(), debutElement.getMonthValue() - 1, debutElement.getDayOfMonth());
-            debutTP.setHour(debutElement.getHour());
-            debutTP.setMinute(debutElement.getMinute());
+            debutDP.updateDate(finElement.getYear(), finElement.getMonthValue() - 1, finElement.getDayOfMonth());
+            debutTP.setHour(finElement.getHour() - 1);
+            debutTP.setMinute(finElement.getMinute());
         }
         finDP.updateDate(finElement.getYear(), finElement.getMonthValue() - 1, finElement.getDayOfMonth());
         finTP.setHour(finElement.getHour());
@@ -160,10 +162,9 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onResume() {
         super.onResume();
-        evenements = calendrierVueModele.getCurrentCalendrier().getEvenements();
-        if (evenements != null) {
-            adaptateur = new EvenementAdaptor(this, R.layout.layout_evenement, evenements);
-            evenementSpinner.setAdapter(adaptateur);
+        Calendrier calendrier = calendrierVueModele.getCurrentCalendrier();
+        if (calendrier != null) {
+            calendrierVueModele.chargerCalendrier(calendrier.getId());
         }
     }
 

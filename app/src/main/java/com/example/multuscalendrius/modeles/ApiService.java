@@ -384,7 +384,7 @@ public class ApiService {
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/evenements/" + evenement.getId())
+                    .url(BASE_URL + "/evenement/" + evenement.getId())
                     .put(body)
                     .build();
 
@@ -418,7 +418,7 @@ public class ApiService {
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
-                    .url(BASE_URL + "/evenements/" + evenement.getId())
+                    .url(BASE_URL + "/evenement/" + evenement.getId())
                     .delete(body)
                     .build();
 
@@ -451,8 +451,8 @@ public class ApiService {
             json.put("token", token);
             json.put("nom", element.getNom());
             json.put("description", element.getDescription());
-            json.put("evenement-id", element.getEvenementId());
-            json.put("dateDebut", element.getDateDebut().toString());
+            json.put("id_evenement", element.getEvenementId());
+            json.put("dateDebut", element.getDateDebut() != null ? element.getDateDebut().toString() : null);
             json.put("dateFin", element.getDateFin().toString());
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
@@ -489,9 +489,9 @@ public class ApiService {
             json.put("calendrierId", element.getCalendrierId());
             json.put("nom", element.getNom());
             json.put("description", element.getDescription());
-            json.put("evenement", element.getEvenement());
-            json.put("dateDebut", element.getDateDebut().toString() );
-            json.put("dateFin", element.getDateFin().toString() );
+            json.put("id_evenement", element.getEvenementId());
+            json.put("dateDebut", element.getDateDebut() != null ? element.getDateDebut().toString() : null);
+            json.put("dateFin", element.getDateFin().toString());
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
@@ -510,7 +510,7 @@ public class ApiService {
                     if (response.code() == 200) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de la mise à jour de la deadline: " + response.code());
+                        callback.onFailure("Échec de la mise à jour de l'élément: " + response.code());
                     }
                 }
             });

@@ -26,8 +26,9 @@ import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
 import com.example.multuscalendrius.vues.CreerElementActivity;
 import com.example.multuscalendrius.vues.adaptateurs.PlanificateurAdaptateur;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlanificateurFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -58,7 +59,8 @@ public class PlanificateurFragment extends Fragment implements View.OnClickListe
 
         calendrierVueModele.getCalendrier().observe(getViewLifecycleOwner(), calendrier -> {
             elements = calendrier.getElements();
-            PlanificateurAdaptateur adaptateur = new PlanificateurAdaptateur(getContext(), R.layout.layout_planif, elements);
+            List<Element> elementsFiltres = elements.stream().filter(element -> element.getDateFin().isAfter(LocalDateTime.now())).collect(Collectors.toList());
+            PlanificateurAdaptateur adaptateur = new PlanificateurAdaptateur(getContext(), R.layout.layout_planif, elementsFiltres);
             llPlanificateur.setAdapter(adaptateur);
         });
         calendrierVueModele.getErreur().observe(getViewLifecycleOwner(), message -> {
@@ -92,6 +94,19 @@ public class PlanificateurFragment extends Fragment implements View.OnClickListe
 
         btnCharger.setOnClickListener(v -> {
 
+            if (cbPeriodes.isChecked() && cbDeadlines.isChecked()) {
+                List<Element> elementsFiltres = elements.stream().filter(element -> element.getDateFin().isAfter(LocalDateTime.now())).collect(Collectors.toList());
+                PlanificateurAdaptateur adaptateur = new PlanificateurAdaptateur(getContext(), R.layout.layout_planif, elementsFiltres);
+                llPlanificateur.setAdapter(adaptateur);
+            } else if (cbPeriodes.isChecked()) {
+                List<Element> elementsFiltres = elements.stream().filter(element -> element.getDateDebut() != null && element.getDateFin().isAfter(LocalDateTime.now())).collect(Collectors.toList());
+                PlanificateurAdaptateur adaptateur = new PlanificateurAdaptateur(getContext(), R.layout.layout_planif, elementsFiltres);
+                llPlanificateur.setAdapter(adaptateur);
+            } else if (cbDeadlines.isChecked()) {
+                List<Element> elementsFiltres = elements.stream().filter(element -> element.getDateDebut() == null && element.getDateFin().isAfter(LocalDateTime.now())).collect(Collectors.toList());
+                PlanificateurAdaptateur adaptateur = new PlanificateurAdaptateur(getContext(), R.layout.layout_planif, elementsFiltres);
+                llPlanificateur.setAdapter(adaptateur);
+            }
             popupWindow.dismiss();
         });
     }

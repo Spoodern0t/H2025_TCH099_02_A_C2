@@ -83,7 +83,7 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
         super.onResume();
 
         Calendrier calendrier = calendrierVueModele.getCurrentCalendrier();
-        if (calendrier != null)
+        if (calendrier != null && calendrier.getId() > 0)
             calendrierVueModele.chargerCalendrier(calendrier.getId());
     }
 

@@ -2,6 +2,7 @@ package com.example.multuscalendrius.vues.adaptateurs;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,23 +55,34 @@ public class PlanificateurAdaptateur extends ArrayAdapter<Element> {
         if (element != null) {
             View couleurEvenement = view.findViewById(R.id.couleurEvenement);
             TextView tvNom = view.findViewById(R.id.tvNom);
+            TextView tvDates = view.findViewById(R.id.tvDates);
             TextView tvHeures = view.findViewById(R.id.tvHeures);
 
             Evenement evenement = element.getEvenement();
+
             String titre = "";
             if (evenement != null) {
-                couleurEvenement.setBackgroundColor(0);
+                couleurEvenement.setBackgroundColor(Color.parseColor("#" + evenement.getCouleur()));
                 titre = evenement.getTitre() + " : ";
+            } else {
+                couleurEvenement.setBackground(null);
             }
             tvNom.setText(titre + element.getNom());
-            String debut = "";
+
+            String dateDebut = "";
+            String heureDebut = "";
             LocalDateTime elementDebut = element.getDateDebut();
             if (elementDebut != null) {
-                debut = elementDebut.getHour() + "h" + elementDebut.getMinute() + " -> ";
+                dateDebut = elementDebut.toLocalDate().toString();
+                heureDebut = elementDebut.getHour() + "h" + elementDebut.getMinute() + " -> ";
             }
             LocalDateTime elementFin = element.getDateFin();
-            String fin = elementFin.getHour() + "h" + elementFin.getMinute();
-            tvHeures.setText(debut + fin);
+            String dateFin = elementFin.toLocalDate().toString();
+            String heureFin = elementFin.getHour() + "h" + elementFin.getMinute();
+
+            String date = !dateDebut.equals(dateFin) && !dateDebut.isEmpty() ? dateDebut + " -> " + dateFin : dateFin;
+            tvDates.setText(date);
+            tvHeures.setText(heureDebut + heureFin);
         }
         return view;
     }

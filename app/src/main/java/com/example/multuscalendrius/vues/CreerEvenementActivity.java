@@ -72,14 +72,17 @@ public class CreerEvenementActivity extends AppCompatActivity implements View.On
         imgBtnSuppEvenement.setVisibility(View.VISIBLE);
         btnCreer.setText(R.string.modifier);
 
-
-
         imgBtnSuppEvenement.setOnClickListener(v -> {
             calendrierVueModele.deleteEvenement(evenement);
         });
 
         nom = evenement.getTitre() != null ? evenement.getTitre() : "";
         description = evenement.getDescription() != null ? evenement.getDescription() : "";
+        if (evenement.getCouleur() != null) {
+            viewCouleur.setBackgroundColor(Color.parseColor("#" + evenement.getCouleur()));
+        } else {
+            viewCouleur.setBackgroundColor(1);
+        }
 
         textNom.setText(nom);
         textDescription.setText(description);
