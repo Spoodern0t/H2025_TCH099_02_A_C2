@@ -5,21 +5,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:padding="24dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/couleur_background">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textSize="20sp"
-        android:textColor="@color/couleur_texte"
-        android:text="@string/creez_un_nouveau_calendrier"
-        android:layout_marginVertical="10dp"/>
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/textCreerElement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/creez_un_nouvel_element"
+            android:textColor="@color/couleur_texte"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imgBtnSuppElement"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/imgBtnSuppElement"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:scaleType="fitCenter"
+            android:background="@android:color/transparent"
+            android:importantForAccessibility="no"
+            android:src="@drawable/trash_icon"
+            android:layout_margin="5dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="10dp"
         android:hint="@string/nom"
         app:boxBackgroundColor="@color/couleur_primaire"
         app:hintTextColor="@color/couleur_texte"
@@ -27,72 +54,189 @@
         app:boxStrokeColor="@color/couleur_texte">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextEmail"
+            android:id="@+id/textNom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             android:textColor="@color/couleur_texte"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/elementSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:text="Choisir une date :"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:text="@string/creer_une_date_limite"
+        app:switchPadding="10dp"
+        android:checked="false"
+        android:textColor="@color/couleur_texte"/>
 
-    <DatePicker
-        android:id="@+id/popupDatePicker"
+    <TextView
+        android:id="@+id/debutTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:datePickerMode="spinner"
-        android:calendarViewShown="false"/>
+        android:textSize="16sp"
+        android:layout_gravity="start"
+        android:text="@string/choisir_une_date_heure_de_debut"
+        android:textColor="@color/couleur_texte"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/debutCL"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="@drawable/rounded_rectangle">
+
+        <DatePicker
+            android:id="@+id/debutDP"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:scaleX=".75"
+            android:scaleY=".85"
+            android:calendarTextColor="@color/couleur_texte"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/debutGuideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/debutGuideline"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TimePicker
+            android:id="@+id/debutTP"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleX=".75"
+            android:scaleY=".85"
+            android:numbersTextColor="@color/couleur_texte"
+            android:numbersSelectorColor="@color/couleur_texte"
+            android:numbersInnerTextColor="@color/couleur_texte"
+            android:numbersBackgroundColor="@color/couleur_bouton"
+            android:timePickerMode="spinner"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/debutGuideline"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
         android:layout_gravity="start"
-        android:text="Choisir une période :"
-        android:textSize="16sp" />
+        android:text="@string/choisir_une_date_heure_de_fin"
+        android:textColor="@color/couleur_texte"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="@drawable/rounded_rectangle">
+
+        <DatePicker
+            android:id="@+id/finDP"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:scaleX=".75"
+            android:scaleY=".85"
+            android:calendarTextColor="@color/couleur_texte"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/finGuideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/finGuideline"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TimePicker
+            android:id="@+id/finTP"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleX=".75"
+            android:scaleY=".85"
+            android:numbersTextColor="@color/couleur_texte"
+            android:numbersSelectorColor="@color/couleur_texte"
+            android:numbersInnerTextColor="@color/couleur_texte"
+            android:numbersBackgroundColor="@color/couleur_bouton"
+            android:timePickerMode="spinner"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/finGuideline"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_gravity="start"
+        android:text="@string/associer_un_evenement"
+        android:textColor="@color/couleur_texte"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp"
+        android:background="@drawable/rounded_rectangle">
 
-        <TimePicker
+        <Spinner
+            android:id="@+id/evenementSpinner"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:timePickerMode="spinner" />
+            android:minHeight="50dp"
+            android:textColor="@color/couleur_texte"/>
 
-        <TimePicker
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:timePickerMode="spinner" />
+        <ImageButton
+            android:id="@+id/btnAddEvenement"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/round_background"
+            android:importantForAccessibility="no"
+            android:src="@drawable/add_icon"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:padding="10dp"/>
 
     </LinearLayout>
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="10dp"
         android:hint="@string/description"
         app:boxBackgroundColor="@color/couleur_primaire"
         app:hintTextColor="@color/couleur_texte"
         android:textColorHint="@color/couleur_texte"
-        app:boxStrokeColor="@color/couleur_texte"
-        android:layout_marginTop="10dp">
+        app:boxStrokeColor="@color/couleur_texte">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/textDescription"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="start"
@@ -102,21 +246,23 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/buttonCreer"
+        android:id="@+id/btnCreer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/creer"
         android:minHeight="48dp"
         android:textSize="20sp"
+        android:textColor="@color/couleur_primaire"
         android:backgroundTint="@color/couleur_bouton" />
 
     <Button
-        android:id="@+id/buttonAnnuler"
+        android:id="@+id/btnAnnuler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/annuler"
         android:minHeight="48dp"
         android:textSize="20sp"
+        android:textColor="@color/couleur_primaire"
         android:backgroundTint="@color/couleur_bouton" />
 
 </LinearLayout>

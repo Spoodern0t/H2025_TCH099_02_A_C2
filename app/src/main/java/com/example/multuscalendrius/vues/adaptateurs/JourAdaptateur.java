@@ -1,8 +1,5 @@
 package com.example.multuscalendrius.vues.adaptateurs;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,39 +9,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.multuscalendrius.R;
 
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JourAdaptateur extends RecyclerView.Adapter<JourAdaptateur.ViewHolder> {
 
-    private List<String> localDataSet;
-
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder)
-     */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
-
-        public ViewHolder(View view) {
-            super(view);
-            // Define click listener for the ViewHolder's View
-
-            textView = (TextView) view.findViewById(R.id.jour);
-        }
-
-        public TextView getTextView() {
-            return textView;
-        }
+    public interface OnItemClickListener {
+        void onItemClick(TextView date);
     }
 
-    /**
-     * Initialize the dataset of the Adapter
-     *
-     * @param dataSet String[] containing the data to populate views to be used
-     * by RecyclerView
-     */
-    public JourAdaptateur(List<String> dataSet) {
-        localDataSet = dataSet;
+    private List<String> jours;
+    private OnItemClickListener listener;
+    private int selectedPosition = LocalDate.now().getDayOfMonth() - 1;
+
+    public JourAdaptateur(int nbJour, OnItemClickListener listener) {
+        List<String> jours = new ArrayList<>();
+        for (int i=1; i < nbJour; i++) {
+            DecimalFormat formatter = new DecimalFormat("00");
+            String jour = formatter.format(i);
+            jours.add(jour);
+        }
+        this.jours = jours;
+        this.listener = listener;
     }
 
     // Create new views (invoked by the layout manager)
@@ -60,15 +48,45 @@ public class JourAdaptateur extends RecyclerView.Adapter<JourAdaptateur.ViewHold
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
-        viewHolder.getTextView().setText(localDataSet.get(position));
+        viewHolder.bind(jours.get(position), listener, position == selectedPosition);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return localDataSet.size();
+        return jours.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView textView;
+        public ViewHolder(View view) {
+            super(view);
+            textView = itemView.findViewById(R.id.jour);
+        }
+
+        public void bind(final String item, final OnItemClickListener listener, boolean isSelected) {
+            textView.setText(item);
+
+            // Change appearance based on selection
+            if (isSelected) {
+                textView.setBackgroundResource(R.drawable.round_background);
+                textView.setTextColor(textView.getResources().getColor(R.color.couleur_primaire, null));
+            } else {
+                textView.setBackground(null);
+                textView.setTextColor(textView.getResources().getColor(R.color.couleur_texte, null));
+            }
+
+            itemView.setOnClickListener(v -> {
+                int oldPosition = selectedPosition;
+                selectedPosition = getAdapterPosition();
+
+                // Notify old and new selected item to redraw
+                notifyItemChanged(oldPosition);
+                notifyItemChanged(selectedPosition);
+
+                listener.onItemClick(textView);
+            });
+        }
     }
 }

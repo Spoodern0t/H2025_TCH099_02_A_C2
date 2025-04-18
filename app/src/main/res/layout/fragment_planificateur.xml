@@ -7,14 +7,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:background="@color/couleur_primaire"
+        android:padding="10dp">
 
         <androidx.appcompat.widget.SearchView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-        </androidx.appcompat.widget.SearchView>
+            android:layout_weight="1"/>
 
         <ImageButton
             android:id="@+id/imgBtnFiltre"
@@ -28,11 +28,12 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/voyagesListView"
+        android:id="@+id/llPlanificateur"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
-        android:entries="@array/Elements"/>
+        android:padding="10dp"
+        android:background="@color/couleur_background"/>
 
 </LinearLayout>
