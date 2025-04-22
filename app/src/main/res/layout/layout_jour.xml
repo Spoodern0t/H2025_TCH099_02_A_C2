@@ -5,10 +5,11 @@
 
     <TextView
         android:id="@+id/jour"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:textSize="24sp"
-        android:padding="10dp"
-        android:background="@drawable/round_background"/>
+        android:gravity="center"
+        android:textColor="@color/couleur_bouton"
+        android:layout_marginHorizontal="5dp"/>
 
 </LinearLayout>

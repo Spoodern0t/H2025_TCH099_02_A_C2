@@ -4,16 +4,43 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="24dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/couleur_background">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textSize="20sp"
-        android:textColor="@color/couleur_texte"
-        android:text="@string/creez_un_nouveau_calendrier"
-        android:layout_marginVertical="10dp"/>
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/textCreerCalendrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/creez_un_nouveau_calendrier"
+            android:textColor="@color/couleur_texte"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imgBtnSuppCalendrier"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/imgBtnSuppCalendrier"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:scaleType="fitCenter"
+            android:background="@android:color/transparent"
+            android:importantForAccessibility="no"
+            android:src="@drawable/trash_icon"
+            android:layout_margin="5dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -26,10 +53,10 @@
         app:boxStrokeColor="@color/couleur_texte">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextEmail"
+            android:id="@+id/textNom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             android:textColor="@color/couleur_texte"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -46,7 +73,7 @@
         app:boxStrokeColor="@color/couleur_texte">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/textDescription"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="start"
@@ -56,22 +83,23 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/buttonCreer"
+        android:id="@+id/btnCreer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/creer"
         android:minHeight="48dp"
-        android:layout_marginVertical="20dp"
         android:textSize="20sp"
+        android:textColor="@color/couleur_primaire"
         android:backgroundTint="@color/couleur_bouton" />
 
     <Button
-        android:id="@+id/buttonAnnuler"
+        android:id="@+id/btnAnnuler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/annuler"
         android:minHeight="48dp"
         android:textSize="20sp"
+        android:textColor="@color/couleur_primaire"
         android:backgroundTint="@color/couleur_bouton" />
 
 </LinearLayout>

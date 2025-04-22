@@ -2,32 +2,51 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/couleur_primaire"
+    android:paddingTop="20dp">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/couleur_background"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:layout_gravity="right"
-            android:layout_margin="5dp"
-            android:contentDescription="@string/hint_logo"
-            android:src="@drawable/logo_icon" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/titreCalendrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nom Calendrier"
+                android:textColor="@color/couleur_texte"
+                android:textSize="22sp"
+                android:layout_marginStart="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/hint_logo"
+                android:src="@drawable/logo_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
             android:id="@+id/flFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
-
-        </FrameLayout>
+            android:layout_weight="1"
+            android:background="@color/couleur_background"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
@@ -42,10 +61,11 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/btnCreer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/couleur_bouton"
+        android:backgroundTint="@color/couleur_bouton"
+        app:tint="@color/couleur_primaire"
         android:contentDescription="@string/bouton_de_creation"
         android:src="@drawable/add_icon"
         android:translationY="10dp"

@@ -4,9 +4,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="purple_500">#6200EE</color>
 
-    <color name="couleur_primaire">#A3CAE9</color>
+    <color name="couleur_primaire">#84A9BA</color>
     <color name="couleur_background">#E9ECEE</color>
-    <color name="couleur_icon">#ACACAC</color>
-    <color name="couleur_bouton">#395A7F</color>
+    <color name="couleur_icon">#606060</color>
+    <color name="couleur_bouton">#3F403B</color>
     <color name="couleur_texte">#606060</color>
+    <color name="couleur_rouge">#F44336</color>
 </resources>
