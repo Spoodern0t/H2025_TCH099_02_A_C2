@@ -86,15 +86,28 @@ public class ElementView extends FrameLayout {
                 : element.getDateFin().minusMinutes(5);
         fin = element.getDateFin();
 
-        String heureDebut = "";
         LocalDateTime elementDebut = element.getDateDebut();
-        if (elementDebut != null) {
-            heureDebut = String.format("%02d:%02d", elementDebut.getHour(), elementDebut.getMinute()) + " -> ";
-        }
         LocalDateTime elementFin = element.getDateFin();
-        String heureFin = String.format("%02d:%02d", elementFin.getHour(), elementFin.getMinute());
 
-        return heureDebut + heureFin;
+        String heureDebut, heureFin, dateDebut, dateFin;
+        heureDebut = heureFin = dateDebut = dateFin = "";
+
+        if (elementDebut != null) {
+            heureDebut = String.format("%02d:%02d", elementDebut.getHour(), elementDebut.getMinute()) +" -> ";
+            if (!elementDebut.toLocalDate().isEqual(elementFin.toLocalDate())){
+                dateDebut = elementDebut.getMonthValue() +"/" +elementDebut.getDayOfMonth();
+                dateFin = elementFin.getMonthValue() +"/" +elementFin.getDayOfMonth();
+                if (elementDebut.getYear() != elementFin.getYear()){
+                    dateDebut += "/" +elementDebut.getYear();
+                    dateFin += "/" +elementFin.getYear();
+                }
+                dateDebut += " ";
+                dateFin += " ";
+            }
+        }
+        heureFin = String.format("%02d:%02d", elementFin.getHour(), elementFin.getMinute());
+
+        return dateDebut + heureDebut + dateFin + heureFin;
     }
 
     private int calculerTop(float hauteur) {
