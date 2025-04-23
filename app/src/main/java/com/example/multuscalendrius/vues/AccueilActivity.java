@@ -18,6 +18,7 @@ import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
 import com.example.multuscalendrius.vues.adaptateurs.PlanificateurAdaptateur;
 import com.example.multuscalendrius.vues.costumlayout.CalendrierView;
 import com.example.multuscalendrius.vues.fragments.CalendrierFragment;
+import com.example.multuscalendrius.vues.fragments.MenuCalendrierFragment;
 import com.example.multuscalendrius.vues.fragments.PlanificateurFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -29,8 +30,7 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
     private TextView titreCalendrier;
     private ImageButton imgBtnCreate;
     private BottomNavigationView bottomNavigationView;
-    private Fragment calendrierFragment, planificateurFragment;
-    private List<Element> elements;
+    private Fragment menuCalendrierFragment, calendrierFragment, planificateurFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +38,10 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_accueil);
 
         // Les vues qui vont apparaitre dans le frame
+        menuCalendrierFragment = new MenuCalendrierFragment();
         calendrierFragment = new CalendrierFragment();
         planificateurFragment = new PlanificateurFragment();
-        setCurrentFragment(calendrierFragment);
+        planificateurFragment = new PlanificateurFragment();
 
         titreCalendrier = findViewById(R.id.titreCalendrier);
         imgBtnCreate = findViewById(R.id.btnCreer);
@@ -50,28 +51,21 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
         calendrierVueModele.getCalendrier().observe(this, calendrier -> {
             titreCalendrier.setText(calendrier.getNom());
-            elements = calendrier.getElements();
+            setCurrentFragment(calendrierFragment);
         });
         calendrierVueModele.getErreur().observe(this, message -> {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
 
-        // Charger le calendrier
-        chargerCalendrier();
+        Intent resultIntent = getIntent();
+        int calendrierId = resultIntent.getIntExtra("ID", -1);
+        if (calendrierId > 0)
+            chargerCalendrier(calendrierId);
         initNavView();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //calendrierVueModele.chargerCalendrier(calendrierVueModele.getCurrentCalendrier().getId());
-    }
-
-    private void chargerCalendrier() {
-        Intent resultIntent = getIntent();
-        int calendrierId = resultIntent.getIntExtra("ID", -1);
-        if (calendrierId >= 0)
-            calendrierVueModele.chargerCalendrier(calendrierId);
+    private void chargerCalendrier(int calendrierId) {
+        calendrierVueModele.chargerCalendrier(calendrierId);
     }
 
     // Changer la vue du frame
@@ -101,8 +95,8 @@ public class AccueilActivity extends AppCompatActivity implements View.OnClickLi
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.menu){
-                Intent intent = new Intent(this, MenuCalendriersActivity.class);
-                startActivity(intent);
+                setCurrentFragment(menuCalendrierFragment);
+                return true;
             } else if (itemId == R.id.calendrier) {
                 setCurrentFragment(calendrierFragment);
                 return true;

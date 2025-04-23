@@ -1,83 +1,131 @@
 package com.example.multuscalendrius.vues.costumlayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.entitees.Element;
+import com.example.multuscalendrius.modeles.entitees.Evenement;
+import com.example.multuscalendrius.vues.CreerElementActivity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ElementView extends FrameLayout {
 
+    private final Element element;
+    private final LocalDate date;
+    private LocalDateTime debut, fin;
+    private final float blocHauteur;
+    private RelativeLayout llElement;
     private TextView tvNom;
     private TextView tvHeures;
+    private View elementRect;
+    private LayoutParams params;
 
-    public ElementView(Context context, Element element, int blocHauteur, int largeurTotal, int largeurColTemps) {
+    public ElementView(Context context, LocalDate date, Element element, float blocHauteur, float largeurTotal, float largeurColTemps) {
         super(context);
+        this.element = element;
+        this.date = date;
+        this.blocHauteur = blocHauteur;
 
-        // Inflate the custom layout
         LayoutInflater.from(context).inflate(R.layout.layout_element, this, true);
 
-        // Initialize TextViews
+        llElement = findViewById(R.id.llElement);
         tvNom = findViewById(R.id.tvNom);
         tvHeures = findViewById(R.id.tvHeures);
+        elementRect = findViewById(R.id.elementRect);
 
-        // Set up background and click behavior
-        setBackgroundColor(Color.parseColor("#2196F3"));
+        Evenement evenement = element.getEvenement();
+        if (evenement != null)
+            elementRect.setBackgroundColor(Color.parseColor("#99" + evenement.getCouleur()));
         setClickable(true);
 
-        // Set element name
         tvNom.setText(element.getNom());
 
-        // Calculate and set the time duration
-        String timeRange = formatTimeRange(element);
+        String timeRange = formatTimeRange();
         tvHeures.setText(timeRange);
 
-        // Set LayoutParams based on calculations
-        LayoutParams params = new LayoutParams(
-                LayoutParams.MATCH_PARENT,
-                calculerHauteur(blocHauteur, element)
+        elementRect.setMinimumHeight(calculerHauteur());
+
+        params = new LayoutParams(
+                (int) (largeurTotal - largeurColTemps),
+                ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        params.leftMargin = largeurColTemps;  // Left margin after the time column
-        params.topMargin = calculerTop(blocHauteur, element);  // Top margin based on start time
+
+        params.leftMargin = (int) largeurColTemps;
         setLayoutParams(params);
+
+        post(() -> {
+            int height = getHeight();
+            params.topMargin = calculerTop(height);
+            setLayoutParams(params);
+        });
+
+        elementRect.setOnClickListener(v -> ecouteurClick());
+        tvNom.setOnClickListener(v -> ecouteurClick());
     }
 
-    // Format the start and end time for the event
-    private String formatTimeRange(Element element) {
+    private void ecouteurClick() {
+        Intent intent = new Intent(getContext(), CreerElementActivity.class);
+        intent.putExtra("ID", element.getId());
+        getContext().startActivity(intent);
+    }
 
-        LocalDateTime debut = element.getDateDebut() != null
+    private String formatTimeRange() {
+
+        debut = element.getDateDebut() != null
                 ? element.getDateDebut()
                 : element.getDateFin().minusMinutes(5);
-        LocalDateTime fin = element.getDateFin();
+        fin = element.getDateFin();
 
-        String debutTime = String.format("%02d:%02d", debut.getHour(), debut.getMinute());
-        String finTime = String.format("%02d:%02d", fin.getHour(), fin.getMinute());
+        String heureDebut = "";
+        LocalDateTime elementDebut = element.getDateDebut();
+        if (elementDebut != null) {
+            heureDebut = String.format("%02d:%02d", elementDebut.getHour(), elementDebut.getMinute()) + " -> ";
+        }
+        LocalDateTime elementFin = element.getDateFin();
+        String heureFin = String.format("%02d:%02d", elementFin.getHour(), elementFin.getMinute());
 
-        return debutTime + " - " + finTime;
+        return heureDebut + heureFin;
     }
 
-    // Calculate the top margin based on the event's start time
-    private int calculerTop(int blocHauteur, Element element) {
-        LocalDateTime debut = element.getDateDebut() != null ? element.getDateDebut() : element.getDateFin();
-        return (int) ((debut.getHour() + debut.getMinute() / 60f) * blocHauteur);
+    private int calculerTop(float hauteur) {
+        LocalDate debutDate = debut.toLocalDate();
+        LocalDate finDate = fin.toLocalDate();
+        if (date.isEqual(debutDate)) {
+            float vueDebut = (debut.getHour() + debut.getMinute() / 60f) * blocHauteur;
+            float vueFin = (blocHauteur * CalendrierView.NB_HEURE);
+            if (date.isEqual(finDate))
+                vueFin = (fin.getHour() + fin.getMinute() / 60f) * blocHauteur;
+            float marge = hauteur - (vueFin - vueDebut);
+            return (int) (vueDebut - marge);
+        } else {
+            return 0;
+        }
     }
 
-    // Calculate the height of the event based on its duration
-    private int calculerHauteur(int blocHauteur, Element element) {
+    private int calculerHauteur() {
 
-        LocalDateTime debut = element.getDateDebut() != null
-                ? element.getDateDebut()
-                : element.getDateFin().minusMinutes(5);
-        LocalDateTime fin = element.getDateFin();
-
-        float dureeHeures = (fin.getHour() + fin.getMinute() / 60f)
-                - (debut.getHour() + debut.getMinute() / 60f);
-
-        return (int) (dureeHeures * blocHauteur);  // Return height based on duration
+        LocalDate debutDate = debut.toLocalDate();
+        LocalDate finDate = fin.toLocalDate();
+        float vueDebut = (debut.getHour() + debut.getMinute() / 60f) * blocHauteur;
+        float vueFin = (fin.getHour() + fin.getMinute() / 60f) * blocHauteur;
+        if (date.isBefore(finDate) && date.isAfter(debutDate)) {
+            return (int) (blocHauteur * CalendrierView.NB_HEURE);
+        } else if (date.isBefore(finDate)) {
+            return (int) (blocHauteur * CalendrierView.NB_HEURE - vueDebut);
+        } else if (date.isAfter(debutDate)) {
+            return (int) vueFin;
+        } else {
+            return (int) (vueFin - vueDebut);
+        }
     }
 }

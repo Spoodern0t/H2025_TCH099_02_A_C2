@@ -71,13 +71,14 @@ public class Calendrier {
     public List<Element> getElementsByDate(LocalDate date) {
         List<Element> elementsFiltres = new ArrayList<>();
         for (Element element: elements) {
-            boolean debutEgal = false;
+            LocalDate debutDate = element.getDateFin().toLocalDate();
+            LocalDate finDate = element.getDateFin().toLocalDate();
             if (element.getDateDebut() != null) {
-                LocalDate debut = element.getDateDebut().toLocalDate();
-                debutEgal = debut.equals(date);
+                debutDate = element.getDateDebut().toLocalDate();
             }
-            LocalDate fin = element.getDateFin().toLocalDate();
-            if (debutEgal || fin.equals(date)) {
+            if (date.isEqual(debutDate)
+                    || (date.isAfter(debutDate) && date.isBefore(finDate))
+                    || date.isEqual(finDate)) {
                 elementsFiltres.add(element);
             }
         }

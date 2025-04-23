@@ -100,7 +100,7 @@ public class CalendrierFragment extends Fragment implements JourAdaptateur.OnIte
     private void vueDuJour() {
         LocalDate date = LocalDate.of(year, month, day);
         List<Element> elements = calendrierVueModele.getCurrentCalendrier().getElementsByDate(date);
-        calendrierView.setElements(elements);
+        calendrierView.setElements(date, elements);
     }
 
 

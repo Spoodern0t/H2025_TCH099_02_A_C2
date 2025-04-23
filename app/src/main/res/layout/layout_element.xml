@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/llElement"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    android:minHeight="50dp">
 
     <TextView
         android:id="@+id/tvNom"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/couleur_texte"
+        android:background="@color/white"
+        android:textSize="14sp"
         android:textStyle="bold"
-        android:textSize="14sp" />
+        android:padding="1dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="8dp"
+        android:translationZ="5dp"/>
 
     <TextView
         android:id="@+id/tvHeures"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNom"
+        android:padding="1dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/couleur_texte"
+        android:background="@color/white"
+        android:textSize="12sp"
+        android:translationZ="5dp"/>
+
+    <View
+        android:id="@+id/elementRect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textSize="12sp" />
-</LinearLayout>
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

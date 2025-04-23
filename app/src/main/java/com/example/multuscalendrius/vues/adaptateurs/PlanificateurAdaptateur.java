@@ -74,11 +74,11 @@ public class PlanificateurAdaptateur extends ArrayAdapter<Element> {
             LocalDateTime elementDebut = element.getDateDebut();
             if (elementDebut != null) {
                 dateDebut = elementDebut.toLocalDate().toString();
-                heureDebut = elementDebut.getHour() + "h" + elementDebut.getMinute() + " -> ";
+                heureDebut = String.format("%02d:%02d", elementDebut.getHour(), elementDebut.getMinute()) + " -> ";
             }
             LocalDateTime elementFin = element.getDateFin();
             String dateFin = elementFin.toLocalDate().toString();
-            String heureFin = elementFin.getHour() + "h" + elementFin.getMinute();
+            String heureFin = String.format("%02d:%02d", elementFin.getHour(), elementFin.getMinute());
 
             String date = !dateDebut.equals(dateFin) && !dateDebut.isEmpty() ? dateDebut + " -> " + dateFin : dateFin;
             tvDates.setText(date);
