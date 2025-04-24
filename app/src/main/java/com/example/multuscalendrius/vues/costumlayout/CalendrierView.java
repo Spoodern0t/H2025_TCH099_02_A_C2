@@ -14,14 +14,14 @@ import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.entitees.Element;
 import com.example.multuscalendrius.vues.CreerElementActivity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class CalendrierView extends ViewGroup {
 
     private Paint paint;
-    private final int NB_HEURE = 24;
-    private int largeur, hauteur, blocHauteur;
-    private int largeurColTemps;
+    public static final int NB_HEURE = 24;
+    private float largeur, hauteur, blocHauteur, largeurColTemps;
 
     public CalendrierView(Context context) {
         super(context);
@@ -45,11 +45,10 @@ public class CalendrierView extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = MeasureSpec.getSize(heightMeasureSpec) * 2; // double scroll space
+        int height = MeasureSpec.getSize(heightMeasureSpec) * 2;
 
         setMeasuredDimension(width, height);
 
-        // Measure all child views
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
@@ -75,10 +74,8 @@ public class CalendrierView extends ViewGroup {
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
-        // Draw vertical time column separator
         canvas.drawLine(largeurColTemps, 0, largeurColTemps, hauteur, paint);
 
-        // Draw hour lines and labels
         for (int i = 0; i < NB_HEURE; i++) {
             float y = i * blocHauteur;
             canvas.drawLine(0, y, largeur, y, paint);
@@ -93,22 +90,16 @@ public class CalendrierView extends ViewGroup {
         super.onSizeChanged(w, h, oldw, oldh);
         largeur = w;
         hauteur = h;
-        blocHauteur = h / NB_HEURE;
-        largeurColTemps = w / 5;
+        blocHauteur = (float) h / NB_HEURE;
+        largeurColTemps = (float) w / 5;
     }
 
-    public void setElements(List<Element> elements) {
+    public void setElements(LocalDate date, List<Element> elements) {
         removeAllViews();
 
         for (Element element : elements) {
-            ElementView ev = new ElementView(getContext(), element, blocHauteur, largeur, largeurColTemps);
-            ev.setOnClickListener(v -> {
-                Intent intent = new Intent(getContext(), CreerElementActivity.class);
-                intent.putExtra("ID", element.getId());
-                getContext().startActivity(intent);
-            });
-
-            addView(ev);
+            ElementView elementView = new ElementView(getContext(), date, element, blocHauteur, largeur, largeurColTemps);
+            addView(elementView);
         }
         requestLayout();
         invalidate();

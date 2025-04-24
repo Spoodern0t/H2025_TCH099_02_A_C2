@@ -26,7 +26,7 @@ public class JourAdaptateur extends RecyclerView.Adapter<JourAdaptateur.ViewHold
 
     public JourAdaptateur(int nbJour, OnItemClickListener listener) {
         List<String> jours = new ArrayList<>();
-        for (int i=1; i < nbJour; i++) {
+        for (int i=1; i <= nbJour; i++) {
             DecimalFormat formatter = new DecimalFormat("00");
             String jour = formatter.format(i);
             jours.add(jour);

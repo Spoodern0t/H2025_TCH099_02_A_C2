@@ -34,7 +34,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         userVueModele = new ViewModelProvider(this).get(UserVueModele.class);
         userVueModele.getUser().observe(this, user -> {
-            Intent intent = new Intent(this, MenuCalendriersActivity.class);
+            int calendrierId = user.getUserCalendars().get(0).getCalendarId();
+            Intent intent = new Intent(this, AccueilActivity.class);
+            intent.putExtra("ID", calendrierId);
             startActivity(intent);
             finish();
         });
