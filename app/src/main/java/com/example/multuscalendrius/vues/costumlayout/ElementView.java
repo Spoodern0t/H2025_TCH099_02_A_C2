@@ -98,13 +98,12 @@ public class ElementView extends FrameLayout {
         if (elementDebut != null) {
             heureDebut = String.format("%02d:%02d", elementDebut.getHour(), elementDebut.getMinute()) +" -> ";
             if (!elementDebut.toLocalDate().isEqual(elementFin.toLocalDate())){
-                if (elementDebut.getYear() != elementFin.getYear()){
-                    dateDebut += String.format("%02d", elementDebut.getYear()) + "/";
-                    dateFin += String.format("%02d", elementFin.getYear()) + "/";
-                }
                 dateDebut += String.format("%02d/%02d", elementDebut.getMonthValue(), elementDebut.getDayOfMonth());
                 dateFin += String.format("%02d/%02d", elementFin.getMonthValue(), elementFin.getDayOfMonth());
-
+                if (elementDebut.getYear() != elementFin.getYear()){
+                    dateDebut += "/" + String.format("%02d", elementDebut.getYear());
+                    dateFin += "/" + String.format("%02d", elementFin.getYear());
+                }
                 dateDebut += " ";
                 dateFin += " ";
             }
