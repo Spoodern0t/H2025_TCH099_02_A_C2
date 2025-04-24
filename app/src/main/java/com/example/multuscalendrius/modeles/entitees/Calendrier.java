@@ -84,4 +84,13 @@ public class Calendrier {
         }
         return elementsFiltres;
     }
+
+    public int getEvenementPosition(int evenementId) {
+        for (int i = 0; i < evenements.size(); i++) {
+            if (evenements.get(i).getId() == evenementId) {
+                return i + 1;
+            }
+        }
+        return -1;
+    }
 }

@@ -59,7 +59,7 @@ public class EvenementAdaptateur extends ArrayAdapter<Evenement> {
             if (evenement.getCouleur() != null) {
                 couleurEvenement.setBackgroundColor(Color.parseColor("#" + evenement.getCouleur()));
             } else {
-                couleurEvenement.setBackgroundColor(1);
+                couleurEvenement.setBackground(null);
             }
             tvEvenementNom.setText(evenement.getTitre());
 
@@ -86,8 +86,11 @@ public class EvenementAdaptateur extends ArrayAdapter<Evenement> {
         if (evenement != null) {
             View couleurEvenement = view.findViewById(R.id.couleurEvenement);
             TextView tvEvenementNom = view.findViewById(R.id.tvEvenementNom);
-
-            couleurEvenement.setBackgroundColor(Color.parseColor("#" + evenement.getCouleur()));
+            if (evenement.getCouleur() != null) {
+                couleurEvenement.setBackgroundColor(Color.parseColor("#" + evenement.getCouleur()));
+            } else {
+                couleurEvenement.setBackground(null);
+            }
             tvEvenementNom.setText(evenement.getTitre());
             view.setBackgroundResource(R.color.couleur_primaire);
         }

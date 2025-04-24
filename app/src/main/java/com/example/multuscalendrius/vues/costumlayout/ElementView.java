@@ -44,8 +44,11 @@ public class ElementView extends FrameLayout {
         elementRect = findViewById(R.id.elementRect);
 
         Evenement evenement = element.getEvenement();
-        if (evenement != null)
+        if (evenement != null) {
             elementRect.setBackgroundColor(Color.parseColor("#99" + evenement.getCouleur()));
+        } else {
+            elementRect.setBackgroundResource(R.color.element_defaut);
+        }
         setClickable(true);
 
         tvNom.setText(element.getNom());
@@ -95,17 +98,18 @@ public class ElementView extends FrameLayout {
         if (elementDebut != null) {
             heureDebut = String.format("%02d:%02d", elementDebut.getHour(), elementDebut.getMinute()) +" -> ";
             if (!elementDebut.toLocalDate().isEqual(elementFin.toLocalDate())){
-                dateDebut = elementDebut.getMonthValue() +"/" +elementDebut.getDayOfMonth();
-                dateFin = elementFin.getMonthValue() +"/" +elementFin.getDayOfMonth();
                 if (elementDebut.getYear() != elementFin.getYear()){
-                    dateDebut += "/" +elementDebut.getYear();
-                    dateFin += "/" +elementFin.getYear();
+                    dateDebut += String.format("%02d", elementDebut.getYear()) + "/";
+                    dateFin += String.format("%02d", elementFin.getYear()) + "/";
                 }
+                dateDebut += String.format("%02d/%02d", elementDebut.getMonthValue(), elementDebut.getDayOfMonth());
+                dateFin += String.format("%02d/%02d", elementFin.getMonthValue(), elementFin.getDayOfMonth());
+
                 dateDebut += " ";
                 dateFin += " ";
             }
         }
-        heureFin = String.format("%02d:%02d", elementFin.getHour(), elementFin.getMinute());
+        heureFin += String.format("%02d:%02d", elementFin.getHour(), elementFin.getMinute());
 
         return dateDebut + heureDebut + dateFin + heureFin;
     }

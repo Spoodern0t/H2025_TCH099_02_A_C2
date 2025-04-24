@@ -15,6 +15,9 @@
         android:id="@+id/tvEvenementNom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/aucun_evenement"
+        android:textSize="16sp"
+        android:textStyle="bold"
         android:singleLine="true"
         android:textColor="@color/couleur_texte"
         android:layout_marginStart="10dp"/>

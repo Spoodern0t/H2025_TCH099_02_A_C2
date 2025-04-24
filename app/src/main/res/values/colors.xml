@@ -10,4 +10,5 @@
     <color name="couleur_bouton">#3F403B</color>
     <color name="couleur_texte">#606060</color>
     <color name="couleur_rouge">#F44336</color>
+    <color name="element_defaut">#9984A9BA</color>
 </resources>

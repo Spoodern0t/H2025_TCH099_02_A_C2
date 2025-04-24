@@ -57,4 +57,5 @@
     <string name="modifiez_votre_element">Modifiez votre élément !</string>
     <string name="voir_periodes">Voir périodes</string>
     <string name="voir_dates_limites">Voir dates limites</string>
+    <string name="aucun_evenement">Aucun événement</string>
 </resources>

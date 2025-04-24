@@ -3,6 +3,7 @@ package com.example.multuscalendrius.vues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -25,6 +26,7 @@ import com.example.multuscalendrius.vuemodele.CalendrierVueModele;
 import com.example.multuscalendrius.vues.adaptateurs.EvenementAdaptateur;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreerElementActivity extends AppCompatActivity implements View.OnClickListener {
@@ -68,13 +70,21 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
 
         calendrierVueModele = new ViewModelProvider(this).get(CalendrierVueModele.class);
         calendrierVueModele.getCalendrier().observe(this, calendrier -> {
-            List<Evenement> evenements = calendrier.getEvenements();
-            if (evenements != null) {
-                int position = evenementSpinner.getSelectedItemPosition();
-                adaptateur = new EvenementAdaptateur(this, R.layout.layout_evenement, evenements);
-                evenementSpinner.setAdapter(adaptateur);
-                evenementSpinner.setSelection(position);
+            List<Evenement> evenements = new ArrayList<>(calendrier.getEvenements());
+
+            Evenement aucun = new Evenement();
+            aucun.setId(-1);
+            aucun.setTitre("Aucun événement");
+            evenements.add(0, aucun);
+
+            Evenement evenement = element.getEvenement();
+            int evenementPosition = 0;
+            if (evenement != null) {
+                evenementPosition = calendrierVueModele.getCurrentCalendrier().getEvenementPosition(evenement.getId());
             }
+            adaptateur = new EvenementAdaptateur(this, R.layout.layout_evenement, evenements);
+            evenementSpinner.setAdapter(adaptateur);
+            evenementSpinner.setSelection(evenementPosition);
         });
         calendrierVueModele.getSucces().observe(this, succes -> {
             if (succes) {
@@ -136,7 +146,6 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
         debutElement = element.getDateDebut();
         finElement = element.getDateFin();
         deadline = (debutElement == null);
-        evenementId = element.getEvenementId() != null ? element.getEvenementId() : 0;
 
         textNom.setText(nom);
         textDescription.setText(description);
@@ -155,8 +164,6 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
         finDP.updateDate(finElement.getYear(), finElement.getMonthValue() - 1, finElement.getDayOfMonth());
         finTP.setHour(finElement.getHour());
         finTP.setMinute(finElement.getMinute());
-
-        evenementSpinner.setSelection(evenementId);
     }
 
     @Override
@@ -197,7 +204,7 @@ public class CreerElementActivity extends AppCompatActivity implements View.OnCl
             }
 
             Evenement selectedEvenement = (Evenement) evenementSpinner.getSelectedItem();
-            evenementId = selectedEvenement != null ? selectedEvenement.getId() : null;
+            evenementId = selectedEvenement.getId() > 0 ? selectedEvenement.getId() : null;
 
             element.setCalendrierId(calendrier.getId());
             element.setNom(nom);
