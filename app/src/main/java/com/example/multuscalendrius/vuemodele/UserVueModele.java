@@ -1,5 +1,7 @@
 package com.example.multuscalendrius.vuemodele;
 
+import android.widget.Toast;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -7,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.multuscalendrius.modeles.dao.UserDao;
 import com.example.multuscalendrius.modeles.entitees.User;
 import com.example.multuscalendrius.modeles.entitees.UserCalendar;
+import com.example.multuscalendrius.vues.SignUpActivity;
 
 import java.util.List;
 
@@ -38,6 +41,20 @@ public class UserVueModele extends ViewModel {
         return userDao.getUser();
     }
 
+    public void inscription(String email, String username, String password) {
+        userDao.inscription(email, username, password, new ApiCallback<>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
+                    succesLiveData.postValue(true);
+                }
+            }
+            @Override
+            public void onFailure(String errorMsg) {
+                erreurLiveData.postValue(errorMsg);
+            }
+        });
+    }
 
     // Wrapper pour la connexion (login)
     public void syncLogin(String email, String password) {

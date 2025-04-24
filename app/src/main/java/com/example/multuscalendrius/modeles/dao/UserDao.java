@@ -35,6 +35,10 @@ public class UserDao {
         return user;
     }
 
+    public void inscription(String email, String username, String password, ApiCallback<Boolean> apiCallback) {
+        api.inscription(email, username, password, apiCallback);
+    }
+
     public void connexion(String email, String password, ApiCallback<User> apiCallback) {
         api.connexion(email, password, apiCallback);
     }

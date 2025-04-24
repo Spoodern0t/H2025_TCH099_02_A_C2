@@ -43,9 +43,9 @@ public class ElementView extends FrameLayout {
         tvHeures = findViewById(R.id.tvHeures);
         elementRect = findViewById(R.id.elementRect);
 
-        Evenement evenement = element.getEvenement();
-        if (evenement != null) {
-            elementRect.setBackgroundColor(Color.parseColor("#99" + evenement.getCouleur()));
+        String couleur = element.getEvenement() != null ? element.getEvenement().getCouleur() : null;
+        if (couleur != null) {
+            elementRect.setBackgroundColor(Color.parseColor("#99" + couleur));
         } else {
             elementRect.setBackgroundResource(R.color.element_defaut);
         }

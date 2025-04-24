@@ -61,8 +61,9 @@ public class PlanificateurAdaptateur extends ArrayAdapter<Element> {
             Evenement evenement = element.getEvenement();
 
             String titre = "";
-            if (evenement != null) {
-                couleurEvenement.setBackgroundColor(Color.parseColor("#" + evenement.getCouleur()));
+            String couleur = element.getEvenement() != null ? element.getEvenement().getCouleur() : null;
+            if (couleur != null) {
+                couleurEvenement.setBackgroundColor(Color.parseColor("#" + couleur));
                 titre = evenement.getTitre() + " : ";
             } else {
                 couleurEvenement.setBackground(null);
