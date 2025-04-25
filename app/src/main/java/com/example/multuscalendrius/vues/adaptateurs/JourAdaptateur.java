@@ -35,23 +35,19 @@ public class JourAdaptateur extends RecyclerView.Adapter<JourAdaptateur.ViewHold
         this.listener = listener;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.layout_jour, viewGroup, false);
 
         return new ViewHolder(view);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.bind(jours.get(position), listener, position == selectedPosition);
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return jours.size();
@@ -68,7 +64,6 @@ public class JourAdaptateur extends RecyclerView.Adapter<JourAdaptateur.ViewHold
         public void bind(final String item, final OnItemClickListener listener, boolean isSelected) {
             textView.setText(item);
 
-            // Change appearance based on selection
             if (isSelected) {
                 textView.setBackgroundResource(R.drawable.round_background);
                 textView.setTextColor(textView.getResources().getColor(R.color.couleur_primaire, null));
@@ -81,7 +76,6 @@ public class JourAdaptateur extends RecyclerView.Adapter<JourAdaptateur.ViewHold
                 int oldPosition = selectedPosition;
                 selectedPosition = getAdapterPosition();
 
-                // Notify old and new selected item to redraw
                 notifyItemChanged(oldPosition);
                 notifyItemChanged(selectedPosition);
 

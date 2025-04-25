@@ -1,23 +1,27 @@
 package com.example.multuscalendrius.vues;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.multuscalendrius.R;
 import com.example.multuscalendrius.modeles.ApiService;
 import com.example.multuscalendrius.vuemodele.ApiCallback;
+import com.example.multuscalendrius.vuemodele.UserVueModele;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    private final String FORMAT_EMAIL = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+    private UserVueModele userVueModele;
     private EditText editTextEmail, editTextUsername, editTextPassword, editTextConfirmPassword;
     private Button buttonSignUp;
     private TextView textViewLogin;
-
-    private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +36,15 @@ public class SignUpActivity extends AppCompatActivity {
         buttonSignUp = findViewById(R.id.buttonSignUp);
         textViewLogin = findViewById(R.id.textViewLogin);
 
-        // Initialisation de l'ApiService
-        apiService = new ApiService();
+        userVueModele = new ViewModelProvider(this).get(UserVueModele.class);
+        userVueModele.getSucces().observe(this, user -> {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
+        userVueModele.getErreur().observe(this, message -> {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        });
 
         // Action lors du clic sur le bouton d'inscription
         buttonSignUp.setOnClickListener(v -> registerUser());
@@ -53,6 +64,11 @@ public class SignUpActivity extends AppCompatActivity {
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
         // Vérification des champs obligatoires
+        if (!email.matches(FORMAT_EMAIL)) {
+            editTextEmail.setError("Veuillez remplir un format d'email valide");
+            Toast.makeText(this, "Veuillez remplir un format d'email valide", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (email.isEmpty()) {
             editTextEmail.setError("Veuillez remplir votre email");
             Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
@@ -78,32 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        // Appel de la méthode inscription de l'ApiService
-        apiService.inscription(email, username, password, new ApiCallback<>() {
-            @Override
-            public void onSuccess(Boolean resultat) {
-                // Vérification de la validité du token retourné
-                if (resultat) {  // Ici, getToken() doit retourner un booléen indiquant le succès
-                    runOnUiThread(() -> {
-                        Toast.makeText(SignUpActivity.this, "Inscription réussie", Toast.LENGTH_SHORT).show();
-                        // Redirection vers la page de connexion
-                        setResult(RESULT_OK);
-                        finish();
-                    });
-                } else {
-                    runOnUiThread(() ->
-                            Toast.makeText(SignUpActivity.this, "Inscription échouée: token invalide", Toast.LENGTH_SHORT).show()
-                    );
-                }
-            }
-
-            @Override
-            public void onFailure(String errorMessage) {
-                runOnUiThread(() ->
-                        Toast.makeText(SignUpActivity.this, errorMessage, Toast.LENGTH_SHORT).show()
-                );
-            }
-        });
+        userVueModele.inscription(email, username, password);
     }
 }
 

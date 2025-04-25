@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -68,19 +69,25 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful() && response.body() != null) {
+                public void onResponse(Call call, Response response) {
+                    if (response.isSuccessful()) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de l'inscription: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch(Exception e) {
-            callback.onFailure("Erreur lors de la création de la requête: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création de la requête");
         }
     }
 
@@ -104,7 +111,7 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
@@ -114,15 +121,21 @@ public class ApiService {
                             User user = mapper.readValue(responseBody, User.class);
                             callback.onSuccess(user);
                         } catch (JsonProcessingException e) {
-                            callback.onFailure("Erreur de parsing JSON: " + e.getMessage());
+                            callback.onFailure("Erreur de mapping JSON");
                         }
                     } else {
-                        callback.onFailure("Échec de la connexion: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création de la requête: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création de la requête");
         }
     }
 
@@ -143,19 +156,25 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) {
-                    if (response.code() == 200 || response.code() == 204) {
+                    if (response.isSuccessful()) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de la suppression: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création du JSON: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création du JSON");
         }
     }
 
@@ -173,7 +192,7 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
@@ -183,15 +202,21 @@ public class ApiService {
                             List<UserCalendar> calendars = Arrays.asList(mapper.readValue(responseBody, UserCalendar[].class));
                             callback.onSuccess(calendars);
                         } catch (JsonProcessingException e) {
-                            callback.onFailure("Erreur de parsing JSON: " + e.getMessage());
+                            callback.onFailure("Erreur de mapping JSON");
                         }
                     } else {
-                        callback.onFailure("Échec de la connexion: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création de la requête: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création de la requête");
         }
     }
 
@@ -209,7 +234,7 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
 
                 @Override
@@ -220,15 +245,21 @@ public class ApiService {
                             Calendrier calendrier = mapper.readValue(jsonResponse, Calendrier.class);
                             callback.onSuccess(calendrier);
                         } catch (JsonProcessingException e) {
-                            callback.onFailure("Erreur de parsing JSON: " + e.getMessage());
+                            callback.onFailure("Erreur de mapping JSON");
                         }
                     } else {
-                        callback.onFailure("Échec du chargement du calendrier: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création de la requête: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création de la requête");
         }
     }
 
@@ -249,19 +280,25 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) {
-                    if (response.isSuccessful() && response.body() != null) {
+                    if (response.isSuccessful()) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de la création du calendrier: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création du JSON: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création du JSON");
         }
     }
 
@@ -283,20 +320,26 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) {
                     // On s'attend à recevoir uniquement un code HTTP 200 OK comme réponse
-                    if (response.code() == 200) {
+                    if (response.isSuccessful()) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de la mise à jour: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création du JSON: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création du JSON");
         }
     }
 
@@ -319,19 +362,25 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) {
-                    if (response.code() == 200 || response.code() == 204) {
+                    if (response.isSuccessful()) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de la suppression: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création du JSON: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création du JSON");
         }
     }
 
@@ -356,19 +405,25 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) {
-                    if (response.isSuccessful() && response.body() != null) {
+                    if (response.isSuccessful()) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de la création de l'événement: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création du JSON: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création du JSON");
         }
     }
 
@@ -381,6 +436,7 @@ public class ApiService {
             json.put("calendrierId", evenement.getCalendrierId());
             json.put("titre", evenement.getTitre());
             json.put("description", evenement.getDescription());
+            json.put("couleur", evenement.getCouleur());
 
             RequestBody body = RequestBody.create(json.toString(), MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder()
@@ -391,20 +447,26 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) {
                     // On s'attend à recevoir uniquement un code HTTP 200 OK
-                    if (response.code() == 200) {
+                    if (response.isSuccessful()) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de la mise à jour de l'événement: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création du JSON: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création du JSON");
         }
     }
 
@@ -425,19 +487,25 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) {
-                    if (response.code() == 200) {
+                    if (response.isSuccessful()) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de la suppression de l'événement: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création du JSON: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création du JSON");
         }
     }
 
@@ -464,19 +532,25 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) {
-                    if(response.isSuccessful() && response.body() != null) {
+                    if (response.isSuccessful()) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de la création de la deadline: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création du JSON: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création du JSON");
         }
     }
 
@@ -502,20 +576,26 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) {
                     // On s'attend à recevoir uniquement un code HTTP 200 OK
-                    if (response.code() == 200) {
+                    if (response.isSuccessful()) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de la mise à jour de l'élément: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création du JSON: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création du JSON");
         }
     }
 
@@ -536,21 +616,25 @@ public class ApiService {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure("Erreur réseau: " + e.getMessage());
+                    callback.onFailure("Erreur de connexion");
                 }
                 @Override
                 public void onResponse(Call call, Response response) {
-                    if(response.code() == 200) {
+                    if (response.isSuccessful()) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure("Échec de la suppression de la deadline: " + response.code());
+                        try {
+                            String responseBody = response.body() != null ? response.body().string() : "Une erreur s'est produite";
+                            String erreurMessage = new JSONObject(responseBody).getString("message");
+                            callback.onFailure(erreurMessage);
+                        } catch (JSONException | IOException e) {
+                            callback.onFailure("une erreur s'est produite");
+                        }
                     }
                 }
             });
         } catch (Exception e) {
-            callback.onFailure("Erreur lors de la création du JSON: " + e.getMessage());
+            callback.onFailure("Erreur lors de la création du JSON");
         }
     }
-
-
 }
